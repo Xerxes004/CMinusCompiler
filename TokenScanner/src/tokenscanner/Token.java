@@ -23,16 +23,9 @@ public class Token {
     }
     
     public enum TokenType {
-        ELSE, 
-        IF, 
-        WHILE,
-        INT, VOID, 
-        RETURN, 
-        PLUS, MINUS, 
-        MULTIPLY, DIVIDE, 
-        LESSTHAN, LESSTHAN_EQUAL, 
-        GREATERTHAN, GREATERTHAN_EQUAL, 
-        EQUAL, NOT_EQUAL, 
+        ELSE, IF, WHILE, INT, VOID, RETURN, 
+        PLUS, MINUS, MULTIPLY, DIVIDE, 
+        LTHAN, LTHAN_EQUAL, GTHAN, GTHAN_EQUAL, EQUAL, NOT_EQUAL, 
         ASSIGN, 
         SEMICOLON, 
         COMMA,

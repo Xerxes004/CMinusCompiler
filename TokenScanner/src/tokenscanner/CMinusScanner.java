@@ -56,10 +56,20 @@ public class CMinusScanner implements Scanner
     private enum TokenState 
     {
         START, DONE, EOF, 
-        IN_ID, IN_NUM, IN_EQUIVALENT, IN_NOTEQUAL, 
-        IN_LESSEQUAL, IN_GREATEREQUAL,
+        IN_ID, IN_NUM, IN_EQUIVALENT, IN_ERR,
+        IN_NOTEQUAL, IN_LESSEQUAL, IN_GREATEREQUAL,
         BEGIN_COMMENT, IN_COMMENT, END_COMMENT
     }
+    
+    private static final Token[] RESERVED_TOKENS = 
+    {
+        new Token(TokenType.ELSE, "else"),
+        new Token(TokenType.IF, "if"), 
+        new Token(TokenType.INT, "int"), 
+        new Token(TokenType.RETURN, "return"),
+        new Token(TokenType.VOID, "void"), 
+        new Token(TokenType.WHILE, "while")
+    };
     
     private BufferedReader inFile;
     private int fileLength;
@@ -84,6 +94,36 @@ public class CMinusScanner implements Scanner
         return this.nextToken;
     }
     
+    private Token getReservedWithID(String id)
+    {
+        Token reservedToken = null;
+        
+        for (Token reserved : RESERVED_TOKENS)
+        {
+            if (id.equals(reserved.getData()))
+            {
+                reservedToken = reserved;
+            }
+        }
+        
+        return reservedToken;
+    }
+    
+    public boolean isReserved(String id)
+    {
+        boolean isReserved = false;
+        
+        for (Token reserved : RESERVED_TOKENS)
+        {
+            if (id.equals(reserved.getData()))
+            {
+                isReserved = true;
+            }
+        }
+        
+        return isReserved;
+    }
+    
     private Token scanToken()
     {
         Token scannedToken = null;
@@ -100,8 +140,10 @@ public class CMinusScanner implements Scanner
             
             while (state != TokenState.DONE)
             {
-                // whether or not we should append the current scanned char 
+                // whether or not we should append the current scanned character
                 boolean appendChar = true;
+                // mark this location in the stream so we can repent later if
+                // needed
                 inFile.mark(fileLength);
                 char currChar = (char)inFile.read();
                 
@@ -119,7 +161,6 @@ public class CMinusScanner implements Scanner
                     else if (Character.isWhitespace(currChar))
                     {
                         appendChar = false;
-                        state = TokenState.START;
                     }
                     else
                     {
@@ -195,9 +236,9 @@ public class CMinusScanner implements Scanner
                             break;
                             
                         default:
-                            String msg =
-                                "Character not recognized: " + currChar;
+                            String msg = "Char not recognized: " + currChar;
                             System.out.println(msg);
+                            System.exit(1);
                             break;
                         }
                     }
@@ -206,21 +247,48 @@ public class CMinusScanner implements Scanner
                 case IN_NUM:
                     if (!Character.isDigit(currChar))
                     {
-                        state = TokenState.DONE;
-                        tokenType = TokenType.NUM;
-                        appendChar = false;
-                        inFile.reset();
-                    } 
-                    else if (currChar == EOFChar)
-                    {
-                        state = TokenState.DONE;
-                        tokenType = TokenType.EOF;
+                        if (Character.isAlphabetic(currChar))
+                        {
+                            state = TokenState.IN_ERR;
+                            tokenType = TokenType.ERROR;
+                        }
+                        else
+                        {
+                            state = TokenState.DONE;
+                            tokenType = TokenType.NUM;
+                            appendChar = false;
+                            inFile.reset();
+                        }
                     }
+                    // else, it's a digit so we loop back to IN_NUM
                     break;
                     
                 case IN_ID:
-                    System.out.println("\nID not supported yet, aborting");
-                    System.exit(1);
+                    if (!Character.isAlphabetic(currChar))
+                    {
+                        if (Character.isDigit(currChar))
+                        {
+                            state = TokenState.IN_ERR;
+                            tokenType = TokenType.ERROR;
+                        }
+                        else
+                        {
+                            state = TokenState.DONE;
+                            tokenType = TokenType.ID;
+                            appendChar = false;
+                            inFile.reset();
+                        }
+                    }
+                    break;
+                    
+                case IN_ERR:
+                    if (!Character.isDigit(currChar) || 
+                        !Character.isAlphabetic(currChar))
+                    {
+                        state = TokenState.DONE;
+                        appendChar = false;
+                        inFile.reset();
+                    }
                     break;
                     
                 case IN_LESSEQUAL:
@@ -228,11 +296,11 @@ public class CMinusScanner implements Scanner
                     
                     if (currChar == '=')
                     {
-                        tokenType = TokenType.LESSTHAN_EQUAL;
+                        tokenType = TokenType.LTHAN_EQUAL;
                     }
                     else
                     {
-                        tokenType = TokenType.LESSTHAN;
+                        tokenType = TokenType.LTHAN;
                         appendChar = false;
                         inFile.reset();
                     }
@@ -243,11 +311,11 @@ public class CMinusScanner implements Scanner
                     
                     if (currChar == '=')
                     {
-                        tokenType = TokenType.GREATERTHAN_EQUAL;
+                        tokenType = TokenType.GTHAN_EQUAL;
                     }
                     else
                     {
-                        tokenType = TokenType.GREATERTHAN;
+                        tokenType = TokenType.GTHAN;
                         appendChar = false;
                         inFile.reset();
                     }
@@ -274,11 +342,6 @@ public class CMinusScanner implements Scanner
                         state = TokenState.IN_COMMENT;
                         appendChar = false;
                     } 
-                    else if (currChar == EOFChar)
-                    {
-                        state = TokenState.DONE;
-                        tokenType = TokenType.EOF;
-                    }
                     else
                     {
                         state = TokenState.DONE;
@@ -334,8 +397,12 @@ public class CMinusScanner implements Scanner
                 
                 if (state == TokenState.DONE)
                 {
-                    //TODO: check for reserved keywords
                     scannedToken = new Token(tokenType, tokenString);
+                    
+                    if ((tokenType == TokenType.ID) && isReserved(tokenString))
+                    {
+                        scannedToken = getReservedWithID(tokenString);
+                    }
                 }
                 
             }
@@ -348,15 +415,129 @@ public class CMinusScanner implements Scanner
         return scannedToken;
     }
     
-    public void printToken(Token token)
+    public void printFullTokenInfo(Token token)
     {
         TokenType type = token.getType();
+        String typeString = "";
         String data = (String)token.getData();
         
+        switch (type)
+        {
+            case ASSIGN:
+                typeString = "ASSIGN";
+                break;
+            case COMMA:
+                typeString = "COMMA";
+                break;
+            case DIVIDE:
+                typeString = "DIVIDE";
+                break;
+            case ELSE:
+                typeString = "ELSE";
+                break;
+            case EOF:
+                typeString = "EOF";
+                break;
+            case EQUAL:
+                typeString = "EQUAL";
+                break;
+            case ERROR:
+                typeString = "ERROR";
+                break;
+            case GTHAN:
+                typeString = "GTHAN";
+                break;
+            case GTHAN_EQUAL:
+                typeString = "GTHANEQ";
+                break;
+            case ID:
+                typeString = "ID";
+                break;
+            case IF:
+                typeString = "IF";
+                break;
+            case INT:
+                typeString = "INT";
+                break;
+            case LBRACKET:
+                typeString = "LBRACKET";
+                break;
+            case LCURLYBRACE:
+                typeString = "LCURLY";
+                break;
+            case LTHAN:
+                typeString = "LTHAN";
+                break;
+            case LTHAN_EQUAL:
+                typeString = "LTHANEQ";
+                break;
+            case LPAREN:
+                typeString = "LPAREN";
+                break;
+            case MINUS:
+                typeString = "MINUS";
+                break;
+            case MULTIPLY:
+                typeString = "MULT";
+                break;
+            case NOT_EQUAL:
+                typeString = "NOTEQUAL";
+                break;
+            case NUM:
+                typeString = "NUM";
+                break;
+            case PLUS:
+                typeString = "PLUS";
+                break;
+            case RBRACKET:
+                typeString = "RBRACKET";
+                break;
+            case RCURLYBRACE:
+                typeString = "RCURLY";
+                break;
+            case RETURN:
+                typeString = "RETURN";
+                break;
+            case RPAREN:
+                typeString = "RPAREN";
+                break;
+            case SEMICOLON:
+                typeString = "SEMICOLON";
+                break;
+            case VOID:
+                typeString = "VOID";
+                break;
+            case WHILE:
+                typeString = "WHILE";
+                break;
+            default:
+                typeString = "INVALID TYPE FOUND";
+                break;
+        }
+        
+        System.out.print("[" + typeString + ":" + data + "]");
+    }
+    
+    public void printTokenData(Token token)
+    {
+        String data = (String)token.getData();
         System.out.print(data);
     }
     
-    
+    public static boolean staticIsReserved(String id)
+    {
+        boolean isReserved = false;
+        
+        for (Token reserved : RESERVED_TOKENS)
+        {
+            if (id.equals(reserved.getData()))
+            {
+                isReserved = true;
+            }
+        }
+        
+        return isReserved;
+    }
     
     /**
      * @param args the command line arguments
@@ -369,8 +550,14 @@ public class CMinusScanner implements Scanner
         
         while (token.getType() != TokenType.EOF)
         {
-            scanner.printToken(token);
-            System.out.print(", ");
+            scanner.printTokenData(token);
+            TokenType type = token.getType();
+            if (type == TokenType.ID || 
+                type == TokenType.NUM || 
+                staticIsReserved((String)token.getData()))
+            {
+                System.out.print(" ");
+            }
             token = scanner.getNextToken();
         }
     }
