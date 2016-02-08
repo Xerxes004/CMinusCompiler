@@ -158,6 +158,11 @@ public class CMinusScanner implements Scanner
                     {
                         state = TokenState.IN_ID;
                     }
+                    else if (currChar == EOFChar)
+                    {
+                        state = TokenState.DONE;
+                        tokenType = TokenType.EOF;
+                    }
                     else if (Character.isWhitespace(currChar))
                     {
                         appendChar = false;
@@ -168,10 +173,6 @@ public class CMinusScanner implements Scanner
                         
                         switch (currChar)
                         {
-                        case EOFChar:
-                            tokenType = TokenType.EOF;
-                            break;
-                            
                         case '+':
                             tokenType = TokenType.PLUS;
                             break;
@@ -286,7 +287,7 @@ public class CMinusScanner implements Scanner
                     break;
                     
                 case IN_ERR:
-                    if (!Character.isDigit(currChar) || 
+                    if (!Character.isDigit(currChar) && 
                         !Character.isAlphabetic(currChar))
                     {
                         state = TokenState.DONE;
@@ -364,8 +365,11 @@ public class CMinusScanner implements Scanner
                     else
                     {
                         state = TokenState.DONE;
-                        tokenType = TokenType.DIVIDE;
+                        // have to force this character to be taken, because
+                        // we opted not to take it in the START state to avoid
+                        // having to un-get it if we enter IN_COMMENT state
                         currChar = '/';
+                        tokenType = TokenType.DIVIDE;
                         inFile.reset();
                     }
                     break;
@@ -376,6 +380,8 @@ public class CMinusScanner implements Scanner
                     {
                         state = TokenState.END_COMMENT;
                     }
+                    // if we reach EOF while in a comment, we need to generate
+                    // an EOF token and quit
                     else if (currChar == EOFChar)
                     {
                         state = TokenState.DONE;
@@ -393,6 +399,8 @@ public class CMinusScanner implements Scanner
                     {
                         state = TokenState.IN_COMMENT;
                     }
+                    // if we reach EOF while in a comment, we need to generate
+                    // an EOF token and quit
                     else if (currChar == EOFChar)
                     {
                         state = TokenState.DONE;
@@ -456,6 +464,7 @@ public class CMinusScanner implements Scanner
                 break;
             case EOF:
                 typeString = "EOF";
+                data = "EOF";
                 break;
             case EQUAL:
                 typeString = "EQUAL";
@@ -534,12 +543,16 @@ public class CMinusScanner implements Scanner
                 break;
         }
         
-        System.out.print("[" + typeString + ":" + data + "]");
+        System.out.println("[" + typeString + ":" + data + "]");
     }
     
     public void printTokenData(Token token)
     {
         String data = (String)token.getData();
+        if (token.getType() == TokenType.EOF)
+        {
+            data = "EOF";
+        }
         System.out.print(data);
     }
     
@@ -563,21 +576,19 @@ public class CMinusScanner implements Scanner
      */
     public static void main(String[] args)
     {
-        CMinusScanner scanner = new CMinusScanner("gcd.c");
+        CMinusScanner scanner = new CMinusScanner("testfile.txt");
         
-        Token token = scanner.getNextToken();
+        Token token = scanner.peekNextToken();
         
         while (token.getType() != TokenType.EOF)
         {
-            scanner.printFullTokenInfo(token);
-            TokenType type = token.getType();
-            if (type == TokenType.ID || 
-                type == TokenType.NUM || 
-                staticIsReserved((String)token.getData()))
-            {
-                System.out.print(" ");
-            }
             token = scanner.getNextToken();
+            
+            System.out.print("");
+            
+            scanner.printFullTokenInfo(token);
+            
+            System.out.print("");
         }
     }
     
