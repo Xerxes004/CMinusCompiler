@@ -203,6 +203,10 @@ public class CMinusScanner implements Scanner
                             state = TokenState.IN_EQUIVALENT;
                             break;
                             
+                        case '!':
+                            state = TokenState.IN_NOTEQUAL;
+                            break;
+                            
                         case ';':
                             tokenType = TokenType.SEMICOLON;
                             break;
@@ -331,6 +335,21 @@ public class CMinusScanner implements Scanner
                     else
                     {
                         tokenType = TokenType.ASSIGN;
+                        appendChar = false;
+                        inFile.reset();
+                    }
+                    break;
+                    
+                case IN_NOTEQUAL:
+                    state = TokenState.DONE;
+                    
+                    if (currChar == '=')
+                    {
+                        tokenType = TokenType.NOT_EQUAL;
+                    }
+                    else
+                    {
+                        tokenType = TokenType.ERROR;
                         appendChar = false;
                         inFile.reset();
                     }
@@ -544,13 +563,13 @@ public class CMinusScanner implements Scanner
      */
     public static void main(String[] args)
     {
-        CMinusScanner scanner = new CMinusScanner("testfile.txt");
+        CMinusScanner scanner = new CMinusScanner("gcd.c");
         
         Token token = scanner.getNextToken();
         
         while (token.getType() != TokenType.EOF)
         {
-            scanner.printTokenData(token);
+            scanner.printFullTokenInfo(token);
             TokenType type = token.getType();
             if (type == TokenType.ID || 
                 type == TokenType.NUM || 
