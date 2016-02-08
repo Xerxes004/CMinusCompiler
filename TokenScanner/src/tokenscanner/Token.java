@@ -23,23 +23,24 @@ public class Token {
     }
     
     public enum TokenType {
-        ELSE_TOKEN, IF_TOKEN, 
-        INT_TOKEN, VOID_TOKEN, 
-        RETURN_TOKEN, 
-        WHILE_TOKEN,
-        PLUS_TOKEN, 
-        MINUS_TOKEN, 
-        MULTIPLY_TOKEN, DIVIDE_TOKEN, 
-        LESSTHAN_TOKEN, LESSTHANEQUAL_TOKEN, 
-        GREATERTHAN_TOKEN, GREATERTHANEQUAL_TOKEN, 
-        EQUAL_TOKEN, NOTEQUAL_TOKEN, 
-        ASSIGN_TOKEN, 
-        SEMICOLON_TOKEN, 
-        COMMA_TOKEN, 
-        OPENPAREN_TOKEN, CLOSEPAREN_TOKEN, 
-        OPENBRACKET_TOKEN, CLOSEBRACKET_TOKEN, 
-        OPENCURLYBRACE_TOKEN, CLOSECURLYBRACE_TOKEN, 
-        ERROR_TOKEN, EOF_TOKEN
+        ELSE, 
+        IF, 
+        WHILE,
+        INT, VOID, 
+        RETURN, 
+        PLUS, MINUS, 
+        MULTIPLY, DIVIDE, 
+        LESSTHAN, LESSTHAN_EQUAL, 
+        GREATERTHAN, GREATERTHAN_EQUAL, 
+        EQUAL, NOT_EQUAL, 
+        ASSIGN, 
+        SEMICOLON, 
+        COMMA,
+        ID, NUM,
+        LPAREN, RPAREN, 
+        LBRACKET, RBRACKET, 
+        LCURLYBRACE, RCURLYBRACE, 
+        ERROR, EOF
     }
     
     private final TokenType type;
