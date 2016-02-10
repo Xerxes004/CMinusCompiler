@@ -1,15 +1,15 @@
-
 /**
- * @author Wesley Kelly
+ * @author Wesley Kelly, Jimmy Von Eiff
  * @version 1.0
  *
- * File: __NAME__.java 
- * Created: __DATE__, __TIME__
+ * File: CMinusScanner.java 
+ * Created: 6 February, 2016
  *
- * Copyright {YEAR!!!} Cedarville University, its Computer Science faculty, and
+ * Copyright 2016 Cedarville University, its Computer Science faculty, and
  * the authors. All rights reserved.
  *
- * Description:
+ * Description: This class implements the Scanner interface, and scans for C-
+ * language tokens.
  */
 
 package tokenscanner;
@@ -19,37 +19,45 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class CMinusScanner implements Scanner
 {
+    /**
+     * Initializes the class using the given filename.
+     * @param fileName the name of the input file to be scanned for tokens
+     * @throws java.io.FileNotFoundException if the input file is not found
+     * @throws java.io.IOException if the BufferedReader fails
+     */
     public CMinusScanner (String fileName)
+        throws FileNotFoundException, IOException
     {
+        inFile = new BufferedReader(new FileReader(fileName));
+            
+        BufferedReader tempFile = 
+            new BufferedReader(new FileReader(fileName));
+
+        int temp = 0;
+
+        while ((tempFile.read() > -1) && tempFile.ready())
+        {
+            temp++;
+        }
+
+        fileLength = temp;
+
+        tempFile.close();
+
         try
         {
-            inFile = new BufferedReader(new FileReader(fileName));
-            
-            BufferedReader tempFile = 
-                new BufferedReader(new FileReader(fileName));
-            
-            fileLength = 0;
-            
-            while ((tempFile.read() > -1) && tempFile.ready())
-            {
-                fileLength++;
-            }
-            
-            tempFile.close();
-            
             nextToken = scanToken();
-            
         }
-        catch (FileNotFoundException ex)
+        catch (CMinusScannerException ex)
         {
-            System.out.println("Input file not found, aborting.");
-        }
-        catch (IOException ex)
-        {
-            System.out.println("Could not mark BufferedReader index to 0.");
+            System.out.println(ex.getMessage());
+            System.exit(1);
         }
     }
     
@@ -71,10 +79,15 @@ public class CMinusScanner implements Scanner
         new Token(TokenType.WHILE, "while")
     };
     
-    private BufferedReader inFile;
-    private int fileLength;
+    private final BufferedReader inFile;
+    // used to mark the entire BufferedReader
+    private final int fileLength;
     private Token nextToken;
     
+    /**
+     * Gets the next token in the file, consuming it.
+     * @return the next token
+     */
     @Override
     public Token getNextToken()
     {
@@ -82,18 +95,35 @@ public class CMinusScanner implements Scanner
         
         if (nextToken.getType() != TokenType.EOF)
         {
-            nextToken = scanToken();
+            try
+            {
+                nextToken = scanToken();
+            }
+            catch (CMinusScannerException ex)
+            {
+                System.out.println(ex.getMessage());
+                System.exit(1);
+            }
         }
         
         return returnToken;
     }
     
+    /**
+     * Peeks at the next token without consuming it.
+     * @return the next token
+     */
     @Override
     public Token peekNextToken()
     {
         return this.nextToken;
     }
     
+    /**
+     * Returns the reserved Token that corresponds to the given ID.
+     * @param id the ID of the reserved Token to be returned
+     * @return the reserved Token, null if not found
+     */
     private Token getReservedWithID(String id)
     {
         Token reservedToken = null;
@@ -109,7 +139,8 @@ public class CMinusScanner implements Scanner
         return reservedToken;
     }
     
-    public boolean isReserved(String id)
+    
+    public static boolean isReserved(String id)
     {
         boolean isReserved = false;
         
@@ -125,6 +156,7 @@ public class CMinusScanner implements Scanner
     }
     
     private Token scanToken()
+        throws CMinusScannerException
     {
         Token scannedToken = null;
         
@@ -242,12 +274,11 @@ public class CMinusScanner implements Scanner
                             
                         default:
                             String msg = "Char not recognized: " + currChar;
-                            System.out.println(msg);
-                            System.exit(1);
-                            break;
+                            throw new CMinusScannerException(msg);
                         }
                     }
                     break;
+                // end of START state    
                     
                 case IN_NUM:
                     if (!Character.isDigit(currChar))
@@ -375,7 +406,10 @@ public class CMinusScanner implements Scanner
                     break;
                     
                 case IN_COMMENT:
+                    
+                    // if we're in a comment, we don't want to collect any data
                     appendChar = false;
+                    
                     if (currChar == '*')
                     {
                         state = TokenState.END_COMMENT;
@@ -384,13 +418,17 @@ public class CMinusScanner implements Scanner
                     // an EOF token and quit
                     else if (currChar == EOFChar)
                     {
-                        state = TokenState.DONE;
-                        tokenType = TokenType.EOF;
+                        state = TokenState.START;
+                        inFile.reset();
                     }
                     break;
                 
                 case END_COMMENT:
+                    
+                    // if we're in a comment, we don't want to collect any data
                     appendChar = false;
+                    
+                    // consume the last slash and start finding tokens again
                     if (currChar == '/')
                     {
                         state = TokenState.START;
@@ -403,18 +441,16 @@ public class CMinusScanner implements Scanner
                     // an EOF token and quit
                     else if (currChar == EOFChar)
                     {
-                        state = TokenState.DONE;
-                        tokenType = TokenType.EOF;
+                        state = TokenState.START;
+                        inFile.reset();
                     }
                     // else stay in END_COMMENT state
                     break;
                     
                 default:
-                    System.out.println("");
-                    System.out.println("ERROR, default reached in while loop!");
-                    System.out.println("A token isn't being recognized.");
-                    System.exit(1);
-                    break;
+                    String msg = "ERROR, default reached in while loop!\n";
+                           msg+= "A token isn't being recognized.\n";
+                    throw new CMinusScannerException(msg);
                 }
                 
                 if (appendChar)
@@ -437,6 +473,16 @@ public class CMinusScanner implements Scanner
         catch (IOException ex)
         {
             System.out.println("An error occured when reading a character.");
+        }
+        
+        if (scannedToken != null)
+        {
+            if (scannedToken.getType() == TokenType.ERROR)
+            {
+                String msg  = "Error token found: ";
+                       msg += scannedToken.getData();
+                throw new CMinusScannerException(msg);
+            }
         }
         
         return scannedToken;
@@ -549,46 +595,40 @@ public class CMinusScanner implements Scanner
     public void printTokenData(Token token)
     {
         String data = (String)token.getData();
+        
         if (token.getType() == TokenType.EOF)
         {
             data = "EOF";
         }
+        
         System.out.print(data);
     }
     
-    public static boolean staticIsReserved(String id)
-    {
-        boolean isReserved = false;
-        
-        for (Token reserved : RESERVED_TOKENS)
-        {
-            if (id.equals(reserved.getData()))
-            {
-                isReserved = true;
-            }
-        }
-        
-        return isReserved;
-    }
-    
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args)
     {
-        CMinusScanner scanner = new CMinusScanner("testfile.txt");
-        
-        Token token = scanner.peekNextToken();
-        
-        while (token.getType() != TokenType.EOF)
+        try
         {
-            token = scanner.getNextToken();
+            CMinusScanner scanner = new CMinusScanner("testfile.txt");
             
-            System.out.print("");
+            Token token = scanner.peekNextToken();
             
-            scanner.printFullTokenInfo(token);
+            if (token.getType() == TokenType.EOF)
+            {
+                scanner.printFullTokenInfo(token);
+            }
             
-            System.out.print("");
+            while (token.getType() != TokenType.EOF)
+            {
+                token = scanner.getNextToken();
+                
+                scanner.printFullTokenInfo(token);
+            }
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(
+                CMinusScanner.class.getName()).log(
+                    Level.SEVERE, null, ex);
         }
     }
     
