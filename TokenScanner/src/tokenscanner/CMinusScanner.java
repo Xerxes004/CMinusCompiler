@@ -19,8 +19,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class CMinusScanner implements Scanner
@@ -50,6 +48,8 @@ public class CMinusScanner implements Scanner
 
         tempFile.close();
 
+        // load nextToken with the first token in the file. Note that this 
+        // results in an EOF Token if the file is empty.
         try
         {
             nextToken = scanToken();
@@ -124,7 +124,7 @@ public class CMinusScanner implements Scanner
      * @param id the ID of the reserved Token to be returned
      * @return the reserved Token, null if not found
      */
-    private Token getReservedWithID(String id)
+    private Token getReservedTokenWithID(String id)
     {
         Token reservedToken = null;
         
@@ -139,7 +139,11 @@ public class CMinusScanner implements Scanner
         return reservedToken;
     }
     
-    
+    /**
+     * Detects if a String equates to a reserved word in the C Minus language.
+     * @param id the identifier being checked
+     * @return whether or not the value is reserved
+     */
     public static boolean isReserved(String id)
     {
         boolean isReserved = false;
@@ -155,13 +159,19 @@ public class CMinusScanner implements Scanner
         return isReserved;
     }
     
+    /**
+     * Scans the input file for the next Token and returns it, consuming the 
+     * string used to build it.
+     * @return the next token found
+     * @throws CMinusScannerException 
+     */
     private Token scanToken()
         throws CMinusScannerException
     {
         Token scannedToken = null;
         
         // BufferedReader read() method returns -1 as a signal that the EOF has
-        // been reached.
+        // been reached. This constant is used to check for that.
         final char EOFChar = (char) -1;
         
         try
@@ -174,6 +184,7 @@ public class CMinusScanner implements Scanner
             {
                 // whether or not we should append the current scanned character
                 boolean appendChar = true;
+                
                 // mark this location in the stream so we can repent later if
                 // needed
                 inFile.mark(fileLength);
@@ -197,6 +208,7 @@ public class CMinusScanner implements Scanner
                     }
                     else if (Character.isWhitespace(currChar))
                     {
+                        // don't store white space
                         appendChar = false;
                     }
                     else
@@ -283,11 +295,16 @@ public class CMinusScanner implements Scanner
                 case IN_NUM:
                     if (!Character.isDigit(currChar))
                     {
+                        // if we find an alphabetical character, it's a lexical
+                        // error
                         if (Character.isAlphabetic(currChar))
                         {
                             state = TokenState.IN_ERR;
                             tokenType = TokenType.ERROR;
                         }
+                        // if it's not an alphabetical character, we're done
+                        // building the NUM and need to back up the input and
+                        // start the next token
                         else
                         {
                             state = TokenState.DONE;
@@ -302,11 +319,15 @@ public class CMinusScanner implements Scanner
                 case IN_ID:
                     if (!Character.isAlphabetic(currChar))
                     {
+                        // if we find a numeric character, it's a lexical error
                         if (Character.isDigit(currChar))
                         {
                             state = TokenState.IN_ERR;
                             tokenType = TokenType.ERROR;
                         }
+                        // if it's not a numeric character, we're done
+                        // building the NUM and need to back up the input and
+                        // start the next token
                         else
                         {
                             state = TokenState.DONE;
@@ -315,9 +336,17 @@ public class CMinusScanner implements Scanner
                             inFile.reset();
                         }
                     }
+                    // else, it's an alphabetical character so we loop back to
+                    // IN_ID
                     break;
                     
                 case IN_ERR:
+                    // this error case is the same for both ID and NUM lexical
+                    // errors, so both are directed here if an error is found
+                    
+                    // We stop looping back to IN_ERR once we find a non-alpha,
+                    // non-numeric character, and then back up the input to 
+                    // start finding the next token
                     if (!Character.isDigit(currChar) && 
                         !Character.isAlphabetic(currChar))
                     {
@@ -415,7 +444,10 @@ public class CMinusScanner implements Scanner
                         state = TokenState.END_COMMENT;
                     }
                     // if we reach EOF while in a comment, we need to generate
-                    // an EOF token and quit
+                    // an EOF token and quit, otherwise the EOF token won't be
+                    // generated. We chose to do this rather than generate an
+                    // error token because it doesn't hurt anything in the
+                    // Parse step.  
                     else if (currChar == EOFChar)
                     {
                         state = TokenState.START;
@@ -424,7 +456,6 @@ public class CMinusScanner implements Scanner
                     break;
                 
                 case END_COMMENT:
-                    
                     // if we're in a comment, we don't want to collect any data
                     appendChar = false;
                     
@@ -447,9 +478,11 @@ public class CMinusScanner implements Scanner
                     // else stay in END_COMMENT state
                     break;
                     
+                // this should never happen
                 default:
                     String msg = "ERROR, default reached in while loop!\n";
                            msg+= "A token isn't being recognized.\n";
+                           msg+= ":" + tokenString + "\n";
                     throw new CMinusScannerException(msg);
                 }
                 
@@ -458,36 +491,57 @@ public class CMinusScanner implements Scanner
                     tokenString += currChar;
                 }
                 
+                // if we're done finding this token, we need to package it up
+                // for return.
                 if (state == TokenState.DONE)
                 {
-                    scannedToken = new Token(tokenType, tokenString);
-                    
+                    // ID's have the potential to be a reserved word
                     if ((tokenType == TokenType.ID) && isReserved(tokenString))
                     {
-                        scannedToken = getReservedWithID(tokenString);
+                        // generate a reserved token, discarding the wrongly-
+                        // labeled ID token with data equal to a reserved word
+                        scannedToken = getReservedTokenWithID(tokenString);
+                    } 
+                    else
+                    {
+                        scannedToken = new Token(tokenType, tokenString);
                     }
                 }
-                
             }
         }
         catch (IOException ex)
         {
-            System.out.println("An error occured when reading a character.");
+            String msg = "An error occured when generating a Token. ";
+                   msg+= ex.getMessage();
+            System.out.println(msg);
         }
         
         if (scannedToken != null)
         {
+            // This exception is caught in the getNextToken() function.
             if (scannedToken.getType() == TokenType.ERROR)
             {
                 String msg  = "Error token found: ";
                        msg += scannedToken.getData();
+                       msg += " caused a lexical error.";
                 throw new CMinusScannerException(msg);
             }
+        } 
+        else
+        // this should never happen, but we check just in case.
+        {
+            String msg = "No token was found in input file.";
+            throw new CMinusScannerException(msg);
         }
         
         return scannedToken;
     }
     
+    /**
+     * Prints the token type and value on its own line.
+     * This function is helpful for visually checking Scanner operation.
+     * @param token the token to be printed
+     */
     public void printFullTokenInfo(Token token)
     {
         TokenType type = token.getType();
@@ -592,13 +646,19 @@ public class CMinusScanner implements Scanner
         System.out.println("[" + typeString + ":" + data + "]");
     }
     
+    /**
+     * Prints the data of a token to the screen, not on its own line.
+     * This function is useful for seeing which token strings exist in the
+     * input file.
+     * @param token the token whose data is printed to the screen
+     */
     public void printTokenData(Token token)
     {
         String data = (String)token.getData();
         
         if (token.getType() == TokenType.EOF)
         {
-            data = "EOF";
+            data = "<<EOF>>";
         }
         
         System.out.print(data);
@@ -608,7 +668,7 @@ public class CMinusScanner implements Scanner
     {
         try
         {
-            CMinusScanner scanner = new CMinusScanner("testfile.txt");
+            CMinusScanner scanner = new CMinusScanner("gcd.c");
             
             Token token = scanner.peekNextToken();
             
@@ -626,9 +686,8 @@ public class CMinusScanner implements Scanner
         }
         catch (IOException ex)
         {
-            Logger.getLogger(
-                CMinusScanner.class.getName()).log(
-                    Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+            System.exit(1);
         }
     }
     
