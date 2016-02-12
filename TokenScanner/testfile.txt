@@ -2,8 +2,8 @@ else if int return void while
 + - * / < <= > >= == != = ; , ( ) [ ] { } /* */
 elseifintreturnvoidwhile
 12345
-else12345
-12345else
+/*else12345*/
+/*12345else*/
 
 //* this should be a single divide token */
 
