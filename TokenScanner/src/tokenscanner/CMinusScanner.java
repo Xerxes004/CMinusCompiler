@@ -675,6 +675,7 @@ public class CMinusScanner implements Scanner
             if (token.getType() == TokenType.EOF)
             {
                 scanner.printFullTokenInfo(token);
+                System.out.print(" ");
             }
             
             while (token.getType() != TokenType.EOF)
@@ -682,7 +683,9 @@ public class CMinusScanner implements Scanner
                 token = scanner.getNextToken();
                 
                 scanner.printFullTokenInfo(token);
+                System.out.print(" ");
             }
+            System.out.println("");
         }
         catch (IOException ex)
         {
