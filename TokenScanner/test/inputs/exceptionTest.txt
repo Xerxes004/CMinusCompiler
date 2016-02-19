@@ -1,0 +1,23 @@
+/*exceptionTest.txt
+  This to test for exception throwing, fixing and adding errors as needed,
+  as once an error is reached, an exception is thrown and the program stops*/
+int fa3ct(int x )
+/* recursive factorial function */
+{ if (x > 1)
+    ret24urn x * fact(x-1);
+  else
+    int abc = 35d;
+    2return 1;
+}
+
+void main( void )
+{ int x;
+  x = read();
+  if (x > 0) write( fact(x) );
+}
+
+if(a!=b){}
+else if (c!d){}
+else if (e ! f){}
+&s = 5;
+thisi#snotanid

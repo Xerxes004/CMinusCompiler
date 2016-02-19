@@ -1,0 +1,14 @@
+else if int return void while
++ - * / < <= > >= == != = ; , ( ) [ ] { } /* */
+elseifintreturnvoidwhile
+12345
+/*else12345*/
+/*12345else*/
+
+//* this should be a single divide token */
+
+/***this should not show up in the output***/
+/* neither should this */ 
+/* and neither should this
+
+or this*/
