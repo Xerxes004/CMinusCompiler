@@ -13,7 +13,7 @@ import java.io.*;
 public class Test {
     
     public static void main(String [] args){
-        String fileName = "C:\\Users\\Racci\\Source\\Repos\\Compiler\\TokenScanner\\src\\tokenscanner\\test.txt";
+        String fileName = "C:\\Users\\Racci\\Source\\Repos\\Compiler\\TokenScanner\\src\\tokenscanner\\exceptionTest.txt";
         String saveName = "C:\\Users\\Racci\\Source\\Repos\\Compiler\\TokenScanner\\src\\tokenscanner\\JFLEXoutput.txt";
         
         scan(fileName, saveName);
