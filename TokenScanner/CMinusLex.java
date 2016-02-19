@@ -2,27 +2,74 @@
  * @author Wesley Kelly, James Von Eiff, Johnathan Coraccio
  * @version 1.0
  *
- * File: Token.java 
- * Created: 7 February 2016
+ * Origin File: CMinusLex.flex
+ * Generated File: JFlex_CMinusScanner.java
+ * Created: 19 February 2016
  *
  * Copyright 2016 Cedarville University, its Computer Science faculty, and the
  * authors. All rights reserved.
  *
- * Description: This class defines a Token object for the C- compiler.
+ * Description: This class defines the Scanner for the C- compiler.
  */
 
-%{
 package tokenscanner;
-import Token.*;
-%}
+import tokenscanner.Token.*;
 
 %%
 
 %class JFlex_CMinusScanner
 %unicode
+%type Token
+
+%init{
+	/*zzReader needs to be initialized before yylex() is run*/
+	this.zzReader = in;
+	try
+	{
+		nextToken = yylex();
+	}
+	catch (java.io.IOException ex)
+	{
+		System.out.println(ex.getMessage());
+		System.exit(1);
+	}
+%init}
 
 %{
-	StringBuffer string = new StringBuffer();	
+	private Token nextToken;
+	
+	/**
+     * Gets the next token in the file, consuming it.
+     * @return the next token
+     */
+	public Token getNextToken()
+    {
+        Token returnToken = nextToken;
+        
+        if (nextToken.getType() != TokenType.EOF)
+        {
+            try
+            {
+                nextToken = yylex();
+            }
+            catch (java.io.IOException ex)
+            {
+                System.out.println(ex.getMessage());
+                System.exit(1);
+            }
+        }
+        
+        return returnToken;
+    }
+    
+    /**
+     * Peeks at the next token without consuming it.
+     * @return the next token
+     */
+    public Token peekNextToken()
+    {
+        return this.nextToken;
+    }
 %}
 
 digit = [0-9]
@@ -32,8 +79,9 @@ NUM = {digit}+
 whitespace = [ \t\n\r]+
 comment = "/*" [^*] ~"*/" | "/*" "*"+ "/"
 
+%%
 
-<YYINITIAL> { 
+<YYINITIAL> {
 	/* keywords */
 	"else"			{ return new Token(TokenType.ELSE, 	"else"); }
 	"if"            { return new Token(TokenType.IF, 	"if"); }
@@ -65,10 +113,13 @@ comment = "/*" [^*] ~"*/" | "/*" "*"+ "/"
 	"["				{ return new Token(TokenType.LBRACKET, 		"["); }
 	"]"				{ return new Token(TokenType.RBRACKET, 		"]"); }
 	"{"				{ return new Token(TokenType.LCURLYBRACE, 	"{"); }
-	"}"				{ return new Token(TokenType.RCULRYBRACE, 	"}"); }
+	"}"				{ return new Token(TokenType.RCURLYBRACE, 	"}"); }
 	
 	{ ID }			{ return new Token(TokenType.ID, 			yytext()); }
 	{ NUM }			{ return new Token(TokenType.NUM, 			yytext()); }
+	
+	/* EOF */
+	<<EOF>>			{ return new Token(TokenType.EOF,			null); }
 	
 	/* error fallback */
 	[^]				{throw new Error("Char not recognized: " + yytext()); }
