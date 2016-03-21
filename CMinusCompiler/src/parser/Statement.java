@@ -18,18 +18,11 @@ import java.util.*;
 
 public abstract class Statement{
     
-    public Statement(Expression input) {
-        this.expr = input;
-    }
-    private Expression expr;
-    
-    public void printStatement() {
+    public Statement() {
         
     }
     
-    public String toString() {
-        return this.expr.toString();
-    }
+    public abstract String toString();
     
     
 }

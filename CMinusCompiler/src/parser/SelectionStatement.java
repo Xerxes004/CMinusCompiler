@@ -15,7 +15,21 @@ package parser;
 
 public class SelectionStatement extends Statement {
 
-    public SelectionStatement(Expression input) {
-       super(input);
+    public SelectionStatement(
+            Expression input, Statement inputIf, Statement inputElse) {
+        this.expr = input;
+        this.ifPart = inputIf;
+        this.elsePart = inputElse;
     }
+    
+    private Expression expr;
+    private Statement ifPart;
+    private Statement elsePart;
+    
+    public String toString() {
+        return (this.expr.toString() + " "
+                +this.ifPart.toString() + " "
+                +this.elsePart.toString());
+    }
+    
 }

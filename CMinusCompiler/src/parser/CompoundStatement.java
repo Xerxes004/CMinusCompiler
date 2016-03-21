@@ -13,8 +13,27 @@
 
 package parser;
 
+import java.util.*;
+
 public class CompoundStatement extends Statement {
-    public CompoundStatement(Expression input) {
-       super(input);
+    public CompoundStatement(ArrayList localInput, ArrayList inputStmt) {
+       this.localDecl = localInput;
+       this.stmtList = inputStmt;
+    }
+    
+    private ArrayList localDecl;
+    private ArrayList stmtList;
+    
+    public String toString() {
+        String toOutput = null;
+        for(int i = 0; i < this.localDecl.size(); i++) {
+            toOutput += this.localDecl.get(i).toString();
+            toOutput += " ";
+        }
+        for(int i = 0; i < this.stmtList.size(); i++) {
+            toOutput += this.stmtList.get(i).toString();
+            toOutput += " ";
+        }
+        return toOutput;
     }
 }

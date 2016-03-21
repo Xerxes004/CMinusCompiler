@@ -2,7 +2,7 @@
  * @author Jimmy Von Eiff
  * @version 1
  * 
- * File: ExpressionStatement.java
+ * File: ReturnStatement.java
  * Created: March 21 2016
  * 
  * Copyright 2016 Cedarville University, its Computer Science faculty, and the
@@ -12,15 +12,14 @@
  */
 package parser;
 
-public class ExpressionStatement extends Statement{
-    
-    public ExpressionStatement(Expression input) {
+public class ReturnStatement extends Statement{
+    public ReturnStatement(Expression input) {
         this.expr = input;
     }
+    
     private Expression expr;
     
     public String toString() {
         return this.expr.toString();
     }
-    
 }
