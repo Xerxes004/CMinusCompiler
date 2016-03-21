@@ -27,6 +27,8 @@ public class AssignExpression extends Expression
     @Override
     public String toString()
     {
-        return var.toString() + " = " + expression.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(var.toString()).append(" = ").append(expression.toString());
+        return sb.toString();
     }
 }

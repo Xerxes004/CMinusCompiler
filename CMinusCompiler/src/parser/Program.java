@@ -27,13 +27,13 @@ public class Program
     @Override
     public String toString()
     {
-        String string = "";
+        StringBuilder sb = new StringBuilder();
         
         for (Declaration d : declarations)
         {
-            string += d.toString();
+            sb.append(d.toString());
         }
         
-        return string;
+        return sb.toString();
     }
 }
