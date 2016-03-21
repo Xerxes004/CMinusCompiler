@@ -13,6 +13,26 @@
 
 package parser;
 
+
+
 public class BinaryExpression extends Expression{
+    public BinaryExpression(
+            Expression inputFirst, Operator inputOp, Expression inputSecond) {
+        this.firstExpr = inputFirst;
+        this.op = inputOp;
+        this.secondExpr = inputSecond;
+    }
+            
+    private Expression firstExpr;
+    private Expression secondExpr;
+    private Operator op;
+    private enum Operator{RELOP, ADDOP, MULOP};
+    
+    public String toString() {
+        return(this.firstExpr.toString() + " "
+               + this.op.toString() + " " 
+               + this.secondExpr.toString());
+    }
+    
     
 }
