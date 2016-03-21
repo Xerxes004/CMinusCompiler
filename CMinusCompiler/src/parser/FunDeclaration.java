@@ -29,21 +29,21 @@ public class FunDeclaration extends Declaration
     
     private String paramsString()
     {
-        String string = "";
+        StringBuilder sb = new StringBuilder();
         
         if (params.size() > 0)
         {
             ArrayList<Param> temp = params;
             
-            string += temp.get(0);
+            sb.append(temp.get(0));
             temp.remove(0);
             
             for (Param p : temp)
             {
-                string += ", " + p.toString();
+                sb.append(", ").append(p.toString());
             }
         }
         
-        return string;
+        return sb.toString();
     }
 }

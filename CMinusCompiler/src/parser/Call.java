@@ -13,22 +13,27 @@
 
 package parser;
 
-public class AssignExpression extends Expression
-{
-    public AssignExpression(Var var, Expression expression)
-    {
-        this.var = var;
-        this.expression = expression;
-    }
+import java.util.ArrayList;
 
-    Var var;
-    Expression expression;
+public class Call 
+{
+    public Call(ArrayList<Expression> args)
+    {
+        this.args = args;
+    }
+    
+    ArrayList<Expression> args;
     
     @Override
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(var.toString()).append(" = ").append(expression.toString());
+        
+        for (Expression e : args)
+        {
+            sb.append(e.toString());
+        }
+        
         return sb.toString();
     }
 }

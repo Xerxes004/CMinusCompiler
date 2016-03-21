@@ -37,6 +37,10 @@ public class Param
     @Override
     public String toString()
     {
-        return "int " + ID + (isArray ? " [ " + arraySize + " ] " : "");
+        StringBuilder sb = new StringBuilder();
+        sb.append("int ")
+          .append(ID)
+          .append(isArray ? " [ " + arraySize + " ] " : "");
+        return sb.toString();
     }
 }
