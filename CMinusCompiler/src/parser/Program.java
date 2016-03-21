@@ -15,11 +15,25 @@ package parser;
 
 import java.util.ArrayList;
 
-public class Program {
+public class Program 
+{
     public Program()
     {
         declarations = new ArrayList<>();
     }
     
-    private ArrayList<Declaration> declarations;
+    private final ArrayList<Declaration> declarations;
+    
+    @Override
+    public String toString()
+    {
+        String string = "";
+        
+        for (Declaration d : declarations)
+        {
+            string += d.toString();
+        }
+        
+        return string;
+    }
 }
