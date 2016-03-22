@@ -13,16 +13,23 @@
 
 package parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Program 
 {
-    public Program()
+    public Program() 
+        throws IOException
     {
         declarations = new ArrayList<>();
     }
     
     private final ArrayList<Declaration> declarations;
+    
+    public void addDeclaration(Declaration declaration)
+    {
+        declarations.add(declaration);
+    }
     
     @Override
     public String toString()

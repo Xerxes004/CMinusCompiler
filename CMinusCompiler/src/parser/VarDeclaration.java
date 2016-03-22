@@ -4,23 +4,17 @@ import scanner.Token.TokenType;
 
 public class VarDeclaration extends Declaration 
 {
-    public VarDeclaration(String typeSpecifier, TokenType typeSpecifierType, String ID)
+    public VarDeclaration(String ID)
     {
-        super(typeSpecifier, typeSpecifierType, ID);
+        super("int", TokenType.INT, ID);
         this.arraySize = -1;
         this.isArray = false;
     }
         
-    public VarDeclaration(String typeSpecifier, TokenType typeSpecifierType, String ID, int arraySize) 
+    public VarDeclaration(String ID, int arraySize) 
         throws CMinusParserError
     {
-        super(typeSpecifier, typeSpecifierType, ID);
-        
-        if (typeSpecifierType != TokenType.INT)
-        {
-            throw new CMinusParserError("Type specifier of " + ID + " is not int!");
-        }
-        
+        super("int", TokenType.INT, ID);
         this.arraySize = arraySize;
         this.isArray = true;
     }
