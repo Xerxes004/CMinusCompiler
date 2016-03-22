@@ -19,6 +19,11 @@ public class FunDeclaration extends Declaration
     private final ArrayList<Param> params;
     private final CompoundStatement compoundStmt;
     
+    public boolean hasParams()
+    {
+        return params != null;
+    }
+    
     @Override
     public String toString()
     {
@@ -31,7 +36,7 @@ public class FunDeclaration extends Declaration
     {
         StringBuilder sb = new StringBuilder();
         
-        if (params.size() > 0)
+        if (hasParams())
         {
             ArrayList<Param> temp = params;
             
@@ -42,6 +47,10 @@ public class FunDeclaration extends Declaration
             {
                 sb.append(", ").append(p.toString());
             }
+        }
+        else
+        {
+            sb.append("void");
         }
         
         return sb.toString();
