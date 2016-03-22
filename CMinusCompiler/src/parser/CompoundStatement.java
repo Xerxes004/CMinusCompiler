@@ -15,23 +15,26 @@ package parser;
 
 import java.util.*;
 
-public class CompoundStatement extends Statement {
-    public CompoundStatement(ArrayList localInput, ArrayList inputStmt) {
-       this.localDecl = localInput;
-       this.stmtList = inputStmt;
+public class CompoundStatement extends Statement 
+{
+    public CompoundStatement(ArrayList<Declaration> localDeclarations, 
+                             ArrayList<Statement> statementList) 
+    {
+       this.localDeclarations = localDeclarations;
+       this.statementList = statementList;
     }
     
-    private ArrayList localDecl;
-    private ArrayList stmtList;
+    private ArrayList<Declaration> localDeclarations;
+    private ArrayList<Statement> statementList;
     
     public String toString() {
         String toOutput = null;
-        for(int i = 0; i < this.localDecl.size(); i++) {
-            toOutput += this.localDecl.get(i).toString();
+        for(int i = 0; i < this.localDeclarations.size(); i++) {
+            toOutput += this.localDeclarations.get(i).toString();
             toOutput += " ";
         }
-        for(int i = 0; i < this.stmtList.size(); i++) {
-            toOutput += this.stmtList.get(i).toString();
+        for(int i = 0; i < this.statementList.size(); i++) {
+            toOutput += this.statementList.get(i).toString();
             toOutput += " ";
         }
         return toOutput;
