@@ -388,7 +388,7 @@ public class CMinusParser
         throws CMinusParserError
     {
         matchToken(TokenType.RETURN);
-        return parseExpressionStatement();
+        return new ReturnStatement(parseExpressionStatement());
     }
     
     private Expression parseExpression() 
@@ -397,7 +397,10 @@ public class CMinusParser
         switch (getToken().getType())
         {
             case NUM:
-                Num num = new Num(Integer.parseInt(matchToken(TokenType.NUM).getData()));
+                Num num = new Num(
+                    Integer.parseInt(matchToken(TokenType.NUM).getData())
+                );
+                
                 return parseSimpleExpressionPrime(num);
 
             case LPAREN:
@@ -406,11 +409,15 @@ public class CMinusParser
                 matchToken(TokenType.RPAREN);
                 Expression rSide = parseSimpleExpressionPrime(lSide);
 
-                return new BinaryExpression(lSide, BinaryExpression.Operator.PARENTHESIZED, rSide);
+                return new BinaryExpression(
+                    lSide, 
+                    BinaryExpression.Operator.PARENTHESIZED, 
+                    rSide
+                );
 
             case ID:
-                Token idToken = matchToken(TokenType.ID);
-                return parseExpressionPrime(idToken);
+                String id = matchToken(TokenType.ID).getData();
+                return parseExpressionPrime(id);
 
             default:
                 throw new CMinusParserError("Failed in parseExpression");
@@ -420,34 +427,20 @@ public class CMinusParser
     private Expression parseSimpleExpressionPrime(Expression lSide) 
         throws CMinusParserError
     {
-        Expression addExprPrime = parseAdditiveExpressionPrime(lSide);
+        Expression simpleExpressionPrime = parseAdditiveExpressionPrime(lSide);
         
-        
-        /*Expression expression = null;
-        
-        BinaryExpression expression = parseAdditiveExpressionPrime(lSide);
-        
-        if (isInFollowSetOfAdditiveExpressionPrime(getToken().getType()))
+        if (relop.contains(getToken().getType()))
         {
-            BinaryExpression.Operator operator = isRelop(getToken().getType());
-
-            if (operator == BinaryExpression.Operator.SIMPLE_EXPRESSION)
-            {
-                expression = new BinaryExpression(rSide, operator, null);
-            }
-            else
-            {
-                advanceTokenPointer();
-                expression = new BinaryExpression(
-                    rSide, operator, parseAdditiveExpression());
-            }
+            matchToken(getToken().getType());
+            
+            simpleExpressionPrime = new BinaryExpression(
+                simpleExpressionPrime, 
+                getOperator(getToken().getType()), 
+                parseAdditiveExpression()
+            );
         }
-        else
-        {
-            throw new CMinusParserError("Token is not in follow set of Additive Expression Prime");
-        }*/
         
-        return addExprPrime;
+        return simpleExpressionPrime;
     }
     
     private Expression parseAdditiveExpressionPrime(Expression lSide) 
@@ -457,24 +450,32 @@ public class CMinusParser
         
         while (addop.contains(getToken().getType()))
         {
-            switch (getToken().getType())
+            TokenType operator = getToken().getType();
+            
+            switch (operator)
             {
                 case PLUS:
-                    matchToken(TokenType.PLUS);
+                case MINUS:
+                    matchToken(operator);
+                    
                     termPrime = new BinaryExpression(
                         termPrime, 
-                        Operator.PLUS, 
+                        getOperator(operator), 
                         parseTerm()
                     );
+                    break;
+                    
+                // should never happen
+                default:
+                    throw new CMinusParserError("Died in parseAdditiveExpressionPrime");
             }
         }
         
         return termPrime;
     }
     
-    
     // GOOD EXAMPLE
-    // NEEDS LPAREN CASE
+    // NEEDS LPAREN CASE?
     private Expression parseTerm() 
         throws CMinusParserError
     {
@@ -482,16 +483,19 @@ public class CMinusParser
         
         while (mulop.contains(getToken().getType()))
         {
-            TokenType operator = null;
+            TokenType operator = getToken().getType();
             
-            switch (getToken().getType())
+            switch (operator)
             {
                 case MULTIPLY:
-                    operator = matchToken(TokenType.MULTIPLY).getType();
-                    break;
-                    
                 case DIVIDE:
-                    operator = matchToken(TokenType.DIVIDE).getType();
+                    matchToken(operator);
+                    
+                    term = new BinaryExpression(
+                            term, 
+                            getOperator(operator),
+                            parseFactor()
+                        );
                     break;
                     
                 // should never happen
@@ -501,14 +505,7 @@ public class CMinusParser
                         "Token does not follow term: " + 
                         tokenString(getToken())
                     );
-            }
-            
-            term = new BinaryExpression(
-                    term, 
-                    getOperator(operator),
-                    parseFactor()
-                );
-            
+            }   
         }
         
         return term;
@@ -521,23 +518,18 @@ public class CMinusParser
         
         while (mulop.contains(getToken().getType()))
         {
-            switch (getToken().getType())
+            TokenType operator = getToken().getType();
+            
+            switch (operator)
             {
                 case MULTIPLY:
-                    matchToken(TokenType.MULTIPLY);
-                    termPrime = new BinaryExpression(
-                        lSide, 
-                        Operator.MULTIPLY, 
-                        parseTerm()
-                    );
-                    break;
-
                 case DIVIDE:
-                    matchToken(TokenType.DIVIDE);
+                    matchToken(operator);
+                    
                     termPrime = new BinaryExpression(
-                            lSide, 
-                            Operator.DIVIDE, 
-                            parseTerm()
+                        termPrime, 
+                        getOperator(operator), 
+                        parseTerm()
                     );
                     break;
 
@@ -589,6 +581,7 @@ public class CMinusParser
                 int value = Integer.parseInt(numToken.getData());
                 
                 factor = new Num(value);
+                break;
                 
             default:
                 throw new CMinusParserError(
@@ -605,21 +598,21 @@ public class CMinusParser
         return (mulop.contains(token) || relop.contains(token));
     }
     
-    private Expression parseExpressionPrime(Token idToken) 
+    private Expression parseExpressionPrime(String id) 
         throws CMinusParserError
     {
         switch (getToken().getType())
         {
             case ASSIGN:
                 matchToken(TokenType.ASSIGN);
-                return parseExpression();
+                return new AssignExpression(new Var(id), parseExpression());
 
             case LBRACKET:
                 matchToken(TokenType.LBRACKET);
                 Expression expression = parseExpression();
                 matchToken(TokenType.RBRACKET);
 
-                if (getToken().getType() == TokenType.ASSIGN)
+                /*if (getToken().getType() == TokenType.ASSIGN)
                 {
                     matchToken(TokenType.ASSIGN);
                     return new AssignExpression(expression, parseExpression());
@@ -627,7 +620,7 @@ public class CMinusParser
                 else
                 {
 
-                }
+                }*/
 
             case LPAREN:
             case MULTIPLY:
