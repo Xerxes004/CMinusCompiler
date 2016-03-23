@@ -795,6 +795,9 @@ public class CMinusParser
                 
                 return args;
                 
+            case RPAREN:
+                return null;
+                
             default:
                 throw new CMinusParserError(
                     "Invalid token in ParseArgs: " + 
@@ -904,8 +907,9 @@ public class CMinusParser
     
     /**
      * Parse an additive expression.
-     * @return
-     * @throws CMinusParserError 
+     * @return an Expression
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
      */
     private Expression parseAdditiveExpression() 
         throws CMinusParserError
@@ -955,8 +959,13 @@ public class CMinusParser
         return additiveExpression;
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parse an additive expression prime.
+     * @param lSide the lefthand side of an additive expression.
+     * @return an Expression
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private Expression parseAdditiveExpressionPrime(Expression lSide) 
         throws CMinusParserError
     {
@@ -987,12 +996,26 @@ public class CMinusParser
     }
     
     
+    /**
+     * Gets the operator associated with the given token.
+     * @param token the token to associate with an operator
+     * @return a BinaryExpression.Operator
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private BinaryExpression.Operator getOperator(Token token) 
         throws CMinusParserError
     {
         return getOperator(token.getType());
     }
   
+    /**
+     * Gets the operator associated with the given token.
+     * @param token the token to associate with an operator
+     * @return a BinaryExpression.Operator
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private BinaryExpression.Operator getOperator(TokenType token) 
         throws CMinusParserError
     {
@@ -1024,11 +1047,28 @@ public class CMinusParser
         }
     }
     
+    /**
+     * Gets the current token.
+     * @return the current Token
+     */
     private Token getToken()
     {
         return tokens.get(tokenPointer);
     }
     
+    /**
+     * Returns the type of the current token.
+     * @return the TokenType of the current token
+     */
+    private TokenType getTokenType()
+    {
+        return getToken().getType();
+    }
+    
+    /**
+     * Advances the token pointer, consuming a token.
+     * @return the consumed Token
+     */
     private Token advanceTokenPointer()
     {
         Token token = getToken();
@@ -1037,6 +1077,14 @@ public class CMinusParser
         return token;
     }
     
+    /**
+     * Matches the given param with the current token, consuming the current 
+     * token.
+     * @param type the TokenType to check
+     * @return the consumed token
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax.  
+     */
     private Token matchToken(Token.TokenType type)
         throws CMinusParserError
     {
@@ -1052,11 +1100,21 @@ public class CMinusParser
         }
     }
     
+    /**
+     * Returns the string value of the token.
+     * @param token 
+     * @return String of token
+     */
     private String tokenString(Token token)
     {
         return tokenString(token.getType());
     }
     
+    /**
+     * Returns the string value of the token.
+     * @param token 
+     * @return String of token
+     */
     private String tokenString(Token.TokenType type)
     {
         String typeString = "";
@@ -1156,11 +1214,6 @@ public class CMinusParser
         }
         
         return typeString;
-    }
-    
-    private TokenType getTokenType()
-    {
-        return getToken().getType();
     }
     
     public static void main (String[] args)
