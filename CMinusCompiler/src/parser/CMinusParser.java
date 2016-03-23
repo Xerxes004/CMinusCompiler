@@ -876,7 +876,10 @@ public class CMinusParser
      * @throws CMinusParserError throws errors when the file does not have
      * correct syntax. 
      */
-    private Expression parseExpressionDoublePrime(String id, Expression inBrackets) 
+    private Expression parseExpressionDoublePrime(
+        String id, 
+        Expression inBrackets
+    ) 
         throws CMinusParserError
     {
         Expression expressionDoublePrime = null;
@@ -953,7 +956,9 @@ public class CMinusParser
             {
                 if (!followTerm.contains(getTokenType()))
                 {
-                    throw new CMinusParserError("Died in parseAdditiveExpression. Token is not in Follow(Term)");
+                    throw new CMinusParserError(
+                        "Died in parseAdditiveExpression. " +
+                            "Token is not in Follow(Term)");
                 }
             }
             
@@ -1047,7 +1052,10 @@ public class CMinusParser
             return Operator.DIVIDE;
         
         default:
-            throw new CMinusParserError("Operator not found: " + tokenString(token));
+            throw new CMinusParserError(
+                "Operator not found: " + 
+                tokenString(token)
+            );
         }
     }
     
@@ -1224,7 +1232,7 @@ public class CMinusParser
     {
         
         try {
-            CMinusParser parser = new CMinusParser("./test/inputs/test.txt");
+            CMinusParser parser = new CMinusParser("./test/inputs/gcd.c");
             try {
                 Program parsed = parser.parseProgram();
                 parsed.printMe();
