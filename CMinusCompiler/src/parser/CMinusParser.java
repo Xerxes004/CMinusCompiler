@@ -2,6 +2,7 @@ package parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import parser.BinaryExpression.Operator;
 import scanner.CMinusScanner;
 import scanner.Token;
 import scanner.Token.TokenType;
@@ -29,9 +30,10 @@ public class CMinusParser
     private int tokenPointer;
     private final scanner.CMinusScanner scanner;
     
-    public Program parseProgram() throws CMinusParserError, IOException
+    public Program parseProgram() 
+        throws CMinusParserError, IOException
     {
-        Program program = new Program();
+        ArrayList<Declaration> declarations = new ArrayList<>();
         TokenType token = advanceTokenPointer().getType();
         
         while (token != TokenType.EOF)
@@ -42,7 +44,7 @@ public class CMinusParser
             {
             case INT:        
             case VOID:
-                program.addDeclaration(parseDeclaration());
+                declarations.add(parseDeclaration());
                 break;
                 
             case EOF:
@@ -55,24 +57,33 @@ public class CMinusParser
             }
         }
         
-        return program;
+        return new Program(declarations);
     }
     
-    private Declaration parseDeclaration() throws CMinusParserError
+    // FINISHED
+    private Declaration parseDeclaration() 
+        throws CMinusParserError
     {
         Declaration declaration = null;
         
         switch(getToken().getType())
         {
             case INT:
-                Token typeToken = matchToken(TokenType.INT);
-                Token idToken   = matchToken(TokenType.ID);
+                Token intToken = matchToken(TokenType.INT);
+                Token varIdToken  = matchToken(TokenType.ID);
                 
-                declaration = parseDeclarationPrime(typeToken, idToken);
+                declaration = parseDeclarationPrime(intToken, varIdToken);
                 break;
                 
             case VOID:
-                matchToken(TokenType.VOID);
+                Token voidToken = matchToken(TokenType.VOID);
+                Token funIdToken = matchToken(TokenType.ID);
+                
+                declaration = parseFunDeclarationPrime(voidToken, funIdToken);
+                break;
+                
+            default:
+                throw new CMinusParserError("Died in parseDeclaration");
         }
         
         return declaration;
@@ -119,23 +130,23 @@ public class CMinusParser
         
         switch(getToken().getType())
         {
-        case VOID:
-            matchToken(TokenType.VOID);
-            break;
-            
-        case INT:
-            params = parseParams();
-            break;
-        }
-        
-        matchToken(TokenType.RPAREN);
-        
-        return new FunDeclaration(
-            (String)typeToken.getData(), 
-            typeToken.getType(),
-            (String)idToken.getData(),
-            params, 
-            parseCompoundStatement());
+            case VOID:
+                matchToken(TokenType.VOID);
+                break;
+
+            case INT:
+                params = parseParams();
+                break;
+            }
+
+            matchToken(TokenType.RPAREN);
+
+            return new FunDeclaration(
+                (String)typeToken.getData(), 
+                typeToken.getType(),
+                (String)idToken.getData(),
+                params, 
+                parseCompoundStatement());
     }
     
     // FINISHED
@@ -226,18 +237,18 @@ public class CMinusParser
     {
         switch (token)
         {
-        case NUM:
-        case LPAREN:
-        case ID:
-        case SEMICOLON:
-        case LCURLYBRACE:
-        case IF:
-        case WHILE:
-        case RETURN:
-            return true;
-            
-        default:
-            return false;
+            case NUM:
+            case LPAREN:
+            case ID:
+            case SEMICOLON:
+            case LCURLYBRACE:
+            case IF:
+            case WHILE:
+            case RETURN:
+                return true;
+
+            default:
+                return false;
         }
     }
     
@@ -246,26 +257,26 @@ public class CMinusParser
     {
         switch (getToken().getType())
         {
-        case NUM:
-        case LPAREN:
-        case ID:
-        case SEMICOLON:
-            return parseExpressionStatement();
-            
-        case LCURLYBRACE:
-            return parseCompoundStatement();
-            
-        case IF:
-            return parseSelectionStatement();
-            
-        case WHILE:
-            return parseIterationStatement();
-            
-        case RETURN:
-            return parseReturnStatement();
-            
-        default:
-            throw new CMinusParserError("Failed in parseStatement");
+            case NUM:
+            case LPAREN:
+            case ID:
+            case SEMICOLON:
+                return parseExpressionStatement();
+
+            case LCURLYBRACE:
+                return parseCompoundStatement();
+
+            case IF:
+                return parseSelectionStatement();
+
+            case WHILE:
+                return parseIterationStatement();
+
+            case RETURN:
+                return parseReturnStatement();
+
+            default:
+                throw new CMinusParserError("Failed in parseStatement");
         }
     }
     
@@ -277,14 +288,14 @@ public class CMinusParser
         
         switch (getToken().getType())
         {
-        case NUM:
-        case LPAREN:
-        case ID:
-            expressionStatement = new ExpressionStatement(parseExpression());
-            break;
-        
-        default:
-            break;
+            case NUM:
+            case LPAREN:
+            case ID:
+                expressionStatement = new ExpressionStatement(parseExpression());
+                break;
+
+            default:
+                break;
         }
         
         matchToken(TokenType.SEMICOLON);
@@ -361,24 +372,24 @@ public class CMinusParser
     {
         switch (getToken().getType())
         {
-        case NUM:
-            Num num = new Num(Integer.parseInt((String)matchToken(TokenType.NUM).getData()));
-            return parseSimpleExpressionPrime(num);
-            
-        case LPAREN:
-            matchToken(TokenType.LPAREN);
-            Expression lSide = parseExpression();
-            matchToken(TokenType.RPAREN);
-            Expression rSide = parseSimpleExpressionPrime(lSide);
-            
-            return new BinaryExpression(lSide, BinaryExpression.Operator.PARENTHESIZED, rSide);
-            
-        case ID:
-            Token idToken = matchToken(TokenType.ID);
-            return parseExpressionPrime(idToken);
-            
-        default:
-            throw new CMinusParserError("Failed in parseExpression");
+            case NUM:
+                Num num = new Num(Integer.parseInt((String)matchToken(TokenType.NUM).getData()));
+                return parseSimpleExpressionPrime(num);
+
+            case LPAREN:
+                matchToken(TokenType.LPAREN);
+                Expression lSide = parseExpression();
+                matchToken(TokenType.RPAREN);
+                Expression rSide = parseSimpleExpressionPrime(lSide);
+
+                return new BinaryExpression(lSide, BinaryExpression.Operator.PARENTHESIZED, rSide);
+
+            case ID:
+                Token idToken = matchToken(TokenType.ID);
+                return parseExpressionPrime(idToken);
+
+            default:
+                throw new CMinusParserError("Failed in parseExpression");
         }
     }
     
@@ -417,46 +428,70 @@ public class CMinusParser
     {
         switch (getToken().getType())
         {
-        case ASSIGN:
-            matchToken(TokenType.ASSIGN);
-            return parseExpression();
-            
-        case LBRACKET:
-            matchToken(TokenType.LBRACKET);
-            Expression expression = parseExpression();
-            matchToken(TokenType.RBRACKET);
-            
-            if (getToken().getType() == TokenType.ASSIGN)
-            {
+            case ASSIGN:
                 matchToken(TokenType.ASSIGN);
-                return new AssignExpression(expression, parseExpression());
-            }
-            else
-            {
-                
-            }
-            
-        case LPAREN:
-        case MULTIPLY:
-        case DIVIDE:
-        case PLUS:
-        case MINUS:
-        case LTHAN:
-        case LTHAN_EQUAL:
-        case GTHAN:
-        case GTHAN_EQUAL:
-        case EQUAL:
-        case NOT_EQUAL:
-        case SEMICOLON:
-        case RPAREN:
-        case COMMA:
-        case ELSE:
-        case RBRACKET:
+                return parseExpression();
+
+            case LBRACKET:
+                matchToken(TokenType.LBRACKET);
+                Expression expression = parseExpression();
+                matchToken(TokenType.RBRACKET);
+
+                if (getToken().getType() == TokenType.ASSIGN)
+                {
+                    matchToken(TokenType.ASSIGN);
+                    return new AssignExpression(expression, parseExpression());
+                }
+                else
+                {
+
+                }
+
+            case LPAREN:
+            case MULTIPLY:
+            case DIVIDE:
+            case PLUS:
+            case MINUS:
+            case LTHAN:
+            case LTHAN_EQUAL:
+            case GTHAN:
+            case GTHAN_EQUAL:
+            case EQUAL:
+            case NOT_EQUAL:
+            case SEMICOLON:
+            case RPAREN:
+            case COMMA:
+            case ELSE:
+            case RBRACKET:
             
         }
     }
     
-    
+    private Expression parseAdditiveExpression()
+    {
+        Expression lSide = null;
+        
+        switch (getToken().getType())
+        {
+            case LPAREN: 
+            case ID:
+            case NUM:
+                lSide = parseTerm();
+                break;
+            }
+
+            switch (getToken().getType())
+            {
+            case PLUS:
+                operator = Operator.ADD;
+                return new BinaryExpression(lSide, operator, parseTerm());
+
+            case MINUS:
+                operator = Operator.SUB;
+                return new BinaryExpression(lSide, operator, parseTerm());
+        }
+        
+    }
     
     
     
