@@ -14,11 +14,12 @@ package parser;
 
 public class ReturnStatement extends Statement
 {
-    public ReturnStatement(Statement input) {
-        this.expressionStatement = input;
+    public ReturnStatement(Statement expressionStatement) 
+    {
+        this.expressionStatement = expressionStatement;
     }
     
-    private Statement expressionStatement;
+    private final Statement expressionStatement;
     
     public boolean hasExpression()
     {
