@@ -2,8 +2,6 @@ package parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import parser.BinaryExpression.Operator;
 import scanner.CMinusScanner;
 import scanner.Token;
@@ -907,50 +905,6 @@ public class CMinusParser
             throw new CMinusParserError("Operator not found: " + tokenString(token));
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    private boolean isInFollowSetOfAdditiveExpressionPrime(TokenType token) 
-        throws CMinusParserError
-    {
-        switch (token)
-        {
-        case LTHAN:
-        case LTHAN_EQUAL:
-        case GTHAN:
-        case GTHAN_EQUAL:
-        case NOT_EQUAL:
-        case EQUAL:
-        case SEMICOLON:
-        case RPAREN:
-        case COMMA:
-        case ELSE:
-        case RBRACKET:
-            return true;
-            
-        default:
-            return false;
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     private Token getToken()
     {
