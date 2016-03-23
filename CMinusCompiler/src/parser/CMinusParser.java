@@ -425,7 +425,7 @@ public class CMinusParser
         Expression addExprPrime = parseAdditiveExpressionPrime(lSide);
         
         
-        /*Expression expression = null;
+        Expression expression = null;
         
         BinaryExpression expression = parseAdditiveExpressionPrime(lSide);
         
@@ -447,7 +447,7 @@ public class CMinusParser
         else
         {
             throw new CMinusParserError("Token is not in follow set of Additive Expression Prime");
-        }*/
+        }
         
         return addExprPrime;
     }
