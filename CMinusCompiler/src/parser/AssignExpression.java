@@ -38,7 +38,7 @@ public class AssignExpression extends Expression
         System.out.println(spaces + "AssignExpression");
         spaces += "    ";
         this.var.printMe(spaces);
-        System.out.println(spaces + "=");
+        System.out.println(spaces + "ASSIGN");
         this.expression.printMe(spaces);
         System.out.println(spaces + ";");
     }
