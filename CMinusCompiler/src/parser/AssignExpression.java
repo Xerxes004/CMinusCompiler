@@ -1,15 +1,16 @@
-/*
- * 
- * @author Wesley Kelly
+/**
+ * @author Wesley Kelly, Jimmy Von Eiff, Johnathan Coraccio
  * @version 1.0
  *
- * File: GameBoard.java Created: 27 October 2015
+ * File: AssignExpression.java 
+ * Created: 21 February, 2016
  *
- * Copyright Cedarville University, its Computer Science faculty, and the
- * authors. All rights reserved.
+ * Copyright 2016 Cedarville University, its Computer Science faculty, and
+ * the authors. All rights reserved.
  *
- * Description: 
+ * Description: This class is used to define an assignment expression.
  */
+
 
 package parser;
 
@@ -32,6 +33,7 @@ public class AssignExpression extends Expression
         return sb.toString();
     }
     
+    @Override
     public void printMe(String spaces) {
         System.out.println(spaces + "AssignExpression");
         spaces += "    ";
