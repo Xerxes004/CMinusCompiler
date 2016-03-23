@@ -18,12 +18,14 @@ import java.util.ArrayList;
 public class Call 
     extends Expression
 {
-    public Call(ArrayList<Expression> args)
+    public Call(String id, ArrayList<Expression> args)
     {
+        this.id = id;
         this.args = args;
     }
     
-    ArrayList<Expression> args;
+    private final ArrayList<Expression> args;
+    private final String id;
     
     public boolean hasArgs()
     {
