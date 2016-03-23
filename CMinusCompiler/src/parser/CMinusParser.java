@@ -1,9 +1,21 @@
+/**
+ * @author Wesley Kelly, Jimmy Von Eiff, Johnathan Coraccio
+ * @version 1.0
+ *
+ * File: CMinusParser.java 
+ * Created: 21 February, 2016
+ *
+ * Copyright 2016 Cedarville University, its Computer Science faculty, and
+ * the authors. All rights reserved.
+ *
+ * Description: This class uses a CMinusScanner to read tokens from an input
+ * file and parse them into a tree.
+ */
+
 package parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import parser.BinaryExpression.Operator;
 import scanner.CMinusScanner;
 import scanner.Token;
@@ -11,11 +23,17 @@ import scanner.Token.TokenType;
 
 public class CMinusParser 
 {
+    /**
+     * Constructor for CMinusParser.
+     * @param fileName name of the input file
+     * @throws IOException Throws an exception when errors occur with the input
+     * file.
+     */
     public CMinusParser(String fileName) 
         throws IOException
     {
-        tokens = new ArrayList<>();
-        scanner = new CMinusScanner(fileName);
+        this.tokens = new ArrayList<>();
+        CMinusScanner scanner = new CMinusScanner(fileName);
         tokenPointer = 0;
      
         tokens.add(scanner.peekNextToken());
@@ -27,6 +45,7 @@ public class CMinusParser
         
         tokens.add(scanner.peekNextToken());
         
+        // Relevant First and Follow sets
         
         mulop = new ArrayList<>();
         mulop.add(TokenType.MULTIPLY);
@@ -94,10 +113,12 @@ public class CMinusParser
         followTerm.addAll(followExpression);
     }
     
+    // tokens stored from input file
     private final ArrayList<Token> tokens;
+    // the token pointer to keep track of the current token
     private int tokenPointer;
-    private final scanner.CMinusScanner scanner;
     
+    // Operators, First and Follow sets
     private final ArrayList<TokenType> operators;
     private final ArrayList<TokenType> mulop;
     private final ArrayList<TokenType> addop;
@@ -110,10 +131,14 @@ public class CMinusParser
     private final ArrayList<TokenType> followTerm;
     private final ArrayList<TokenType> followFactor;
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parse the program input to the parser.
+     * @return a Program tree
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax.
+     */
     public Program parseProgram() 
-        throws CMinusParserError, IOException
+        throws CMinusParserError
     {
         ArrayList<Declaration> declarations = new ArrayList<>();
         TokenType token = advanceTokenPointer().getType();
@@ -143,8 +168,11 @@ public class CMinusParser
         return new Program(declarations);
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parses a declaration.
+     * @return a declaration
+     * @throws CMinusParserError 
+     */
     private Declaration parseDeclaration() 
         throws CMinusParserError
     {
@@ -169,8 +197,13 @@ public class CMinusParser
         }
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parses a declaration prime.
+     * @param typeToken
+     * @param id
+     * @return
+     * @throws CMinusParserError 
+     */
     private Declaration parseDeclarationPrime(Token typeToken, String id) 
         throws CMinusParserError
     {
@@ -743,6 +776,8 @@ public class CMinusParser
                 break;
                 
             default:
+                expressionPrime = parseSimpleExpressionPrime(new Var(id));
+                
                 if (!followExpression.contains(getTokenType()))
                 {
                     throw new CMinusParserError(
@@ -907,50 +942,6 @@ public class CMinusParser
             throw new CMinusParserError("Operator not found: " + tokenString(token));
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    private boolean isInFollowSetOfAdditiveExpressionPrime(TokenType token) 
-        throws CMinusParserError
-    {
-        switch (token)
-        {
-        case LTHAN:
-        case LTHAN_EQUAL:
-        case GTHAN:
-        case GTHAN_EQUAL:
-        case NOT_EQUAL:
-        case EQUAL:
-        case SEMICOLON:
-        case RPAREN:
-        case COMMA:
-        case ELSE:
-        case RBRACKET:
-            return true;
-            
-        default:
-            return false;
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     private Token getToken()
     {
