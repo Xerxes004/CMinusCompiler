@@ -45,10 +45,16 @@ public class CompoundStatement extends Statement
         spaces += "    ";
         System.out.println(spaces + "{");
         for(int i = 0; i < this.localDeclarations.size(); i++) {
-            this.localDeclarations.get(i).printMe(spaces);
+            if(this.localDeclarations.get(i)!= null) {
+                this.localDeclarations.get(i).printMe(spaces);
+            }
+            
         }
         for(int i = 0; i < this.statementList.size(); i++) {
-            this.statementList.get(i).printMe(spaces);
+            if(this.statementList.get(i)!= null) {
+                this.statementList.get(i).printMe(spaces);
+            }
+            
         }
         System.out.println(spaces + "}");
     }

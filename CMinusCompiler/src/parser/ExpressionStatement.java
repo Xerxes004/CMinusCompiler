@@ -28,9 +28,11 @@ public class ExpressionStatement extends Statement{
         System.out.println(spaces + "ExpressionStatement");
         spaces += "    ";
         if(this.expr != null) {
-           this.expr.printMe(spaces); 
-        } 
-        System.out.println(spaces + ";");
+           this.expr.printMe(spaces);
+           
+        } else {
+            System.out.println(spaces + ";");
+        }
     }
     
 }

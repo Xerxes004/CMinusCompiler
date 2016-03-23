@@ -1167,7 +1167,7 @@ public class CMinusParser
     {
         
         try {
-            CMinusParser parser = new CMinusParser("./test/inputs/test.txt");
+            CMinusParser parser = new CMinusParser("./test/inputs/gcd.c");
             try {
                 Program parsed = parser.parseProgram();
                 parsed.printMe();

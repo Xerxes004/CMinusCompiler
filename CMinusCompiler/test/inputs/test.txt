@@ -10,30 +10,31 @@ int i (int e, int fe[], int rof) {
    w = 4+ 4;
    w = ((32 - 3)+4);
    while(w == 4) {}
-   return;
+   if (x > 1) {
+    return x;
+   } else
+   {
+      return 1;
+   }
+
+   if( x == 2 )
+   { int x;
+     x = 0;
+     if (x > 0){};
+   }
+/*
+   ident a = 45 + 0;
+   if(z<=23){
+    
+   } 
+   if(y>=z){
+    
+   }
+   if(j<24){
+
+   }
+   return;*/
 }
 int ret [0];
 
 /* recursive factorial function */
-if (x > 1) {
-    return x * fact(x-1);
-}
-  else
-{
-    return 1;
-}
-
-void main( void )
-{ int x;
-  x = read();
-  if (x > 0){};
-}
-
-ident a = 45 + 0;
-if(z<=23){
-    
-} else if(y>=z){
-    
-} else if(j<24){
-
-}
