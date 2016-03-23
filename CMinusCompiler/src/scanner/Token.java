@@ -15,7 +15,7 @@ package scanner;
 
 public class Token {
     
-    public Token(TokenType type, Object data)
+    public Token(TokenType type, String data)
     {
         this.type = type;
         this.data = data;
@@ -36,14 +36,14 @@ public class Token {
     }
     
     private final TokenType type;
-    private final Object data;
+    private final String data;
     
     public TokenType getType()
     {
         return this.type;
     }
     
-    public Object getData()
+    public String getData()
     {
         return this.data;
     }
