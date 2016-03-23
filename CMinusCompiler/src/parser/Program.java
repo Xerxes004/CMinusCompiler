@@ -18,8 +18,7 @@ import java.util.ArrayList;
 
 public class Program 
 {
-    public Program(ArrayList<Declaration> declarations) 
-        throws IOException
+    public Program(ArrayList<Declaration> declarations)
     {
         this.declarations = declarations;
     }
