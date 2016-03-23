@@ -39,4 +39,15 @@ public class CompoundStatement extends Statement
         }
         return toOutput;
     }
+    
+    public void printStatement(String spaces) {
+        System.out.println(spaces + "{");
+        for(int i = 0; i < this.localDeclarations.size(); i++) {
+            this.localDeclarations.get(i).printDeclaration(spaces + "    ");
+        }
+        for(int i = 0; i < this.statementList.size(); i++) {
+            this.statementList.get(i).printStatement(spaces + "    ");
+        }
+        System.out.println(spaces + "}");
+    }
 }

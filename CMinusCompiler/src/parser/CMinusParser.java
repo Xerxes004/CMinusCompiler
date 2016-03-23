@@ -2,6 +2,8 @@ package parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import parser.BinaryExpression.Operator;
 import scanner.CMinusScanner;
 import scanner.Token;
@@ -410,7 +412,7 @@ public class CMinusParser
 
             case ID:
                 Token idToken = matchToken(TokenType.ID);
-                return parseExpressionPrime(idToken);
+//                return parseExpressionPrime(idToken);
 
             default:
                 throw new CMinusParserError("Failed in parseExpression");
@@ -605,7 +607,7 @@ public class CMinusParser
         return (mulop.contains(token) || relop.contains(token));
     }
     
-    private Expression parseExpressionPrime(Token idToken) 
+/*    private Expression parseExpressionPrime(Token idToken) 
         throws CMinusParserError
     {
         switch (getToken().getType())
@@ -674,7 +676,7 @@ public class CMinusParser
         }
         
     }
-    
+ */   
     private BinaryExpression.Operator getOperator(TokenType token) 
         throws CMinusParserError
     {
@@ -904,10 +906,19 @@ public class CMinusParser
         return typeString;
     }
     
-    public static int main (String[] args)
+    public static void main (String[] args)
     {
         
-        
-        return 0;
+        try {
+            CMinusParser parser = new CMinusParser("./test/inputs/test.txt");
+            try {
+                Program parsed = parser.parseProgram();
+                parsed.printProgram();
+            } catch (CMinusParserError ex2) {
+                System.out.println(ex2);
+            }
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
     }
 }

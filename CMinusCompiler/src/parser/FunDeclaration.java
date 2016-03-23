@@ -55,4 +55,26 @@ public class FunDeclaration extends Declaration
         
         return sb.toString();
     }
+    
+    @Override
+    public void printDeclaration(String spaces){
+        System.out.println(spaces + "FunDeclaration");
+        spaces += "    ";
+        System.out.println(spaces + this.typeSpecifier());
+        System.out.println(spaces + "ID: " + this.ID());
+        System.out.println(spaces + "(");
+        if(this.hasParams()){
+            for(int i = 0; i < this.params.size(); i ++) {
+                if(i > 0) {
+                    System.out.println(spaces + ",");
+                }
+                this.params.get(i).printParam(spaces + "    ");
+                
+            } 
+        } else {
+            System.out.println(spaces + "void");
+        }
+        System.out.println(spaces + ")");
+        this.compoundStmt.printStatement(spaces);
+    }
 }

@@ -46,4 +46,16 @@ public class VarDeclaration extends Declaration
         
         return string;
     }
+    
+    public void printDeclaration(String spaces) {
+        System.out.println(spaces + "int");
+        System.out.println(spaces + "ID: " + this.typeSpecifier());
+        if(this.isArray()) {
+            System.out.println(spaces + "[");
+            System.out.println(spaces + "NUM: " + this.arraySize());
+            System.out.println(spaces + "]");
+        }
+        System.out.println(spaces + ";");
+    }
+    
 }

@@ -36,4 +36,6 @@ public abstract class Declaration
     {
         return this.IDType;
     }
+    
+    public abstract void printDeclaration(String spaces);
 }
