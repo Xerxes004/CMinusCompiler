@@ -26,7 +26,7 @@ public class BinaryExpression extends Expression{
     private Expression firstExpr;
     private Expression secondExpr;
     private Operator op;
-    private enum Operator{RELOP, ADDOP, MULOP};
+    public enum Operator{RELOP, ADDOP, MULOP, PARENTHESIZED};
     
     public String toString() {
         return(this.firstExpr.toString() + " "
