@@ -1,7 +1,15 @@
 /* test.txt */
-int fact(int x )
+int x [9];
+int b [100];
+int r (void) {}
+int i (int e, int fe[], int rof) {
+   int w;
+   int we[7];
+   {int y;}
+}
+int ret [0];
 /* recursive factorial function */
-{ if (x > 1)
+/*{ if (x > 1)
     return x * fact(x-1);
   else
     return 1;
@@ -13,7 +21,7 @@ void main( void )
   if (x > 0) write( fact(x) );
 }
 
-/*Continuing the * test with*more cases for potential mess up**/
+Continuing the * test with*more cases for potential mess up*
 ident a = 45 + 0;
 if(z<=23){
     
@@ -21,4 +29,4 @@ if(z<=23){
     
 } else if(j<24){
 
-}
+}*/

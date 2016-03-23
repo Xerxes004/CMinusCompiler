@@ -25,4 +25,9 @@ public class IterationStatement extends Statement{
     public String toString() {
         return (this.expr.toString() + " " + this.stmt.toString());
     }
+
+    @Override
+    public void printMe(String spaces) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

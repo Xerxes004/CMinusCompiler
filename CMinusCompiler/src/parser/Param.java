@@ -30,4 +30,15 @@ public class Param
           .append(isArray ? " [ ] " : "");
         return sb.toString();
     }
+    
+    public void printMe(String spaces) {
+        System.out.println(spaces + "Param");
+        spaces += "   ";
+        System.out.println(spaces + "int");
+        System.out.println(spaces + "ID: " +this.ID);
+        if(this.isArray()) {
+            System.out.println(spaces + "[");
+            System.out.println(spaces + "]");
+        }
+    }
 }

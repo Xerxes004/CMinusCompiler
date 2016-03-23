@@ -31,5 +31,10 @@ public class SelectionStatement extends Statement {
                 +this.ifPart.toString() + " "
                 +this.elsePart.toString());
     }
+
+    @Override
+    public void printMe(String spaces) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
