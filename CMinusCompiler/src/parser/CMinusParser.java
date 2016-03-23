@@ -32,13 +32,13 @@ public class CMinusParser
     public Program parseProgram() throws CMinusParserError, IOException
     {
         Program program = new Program();
-        TokenType oldToken = getToken().getType();
+        TokenType token = advanceTokenPointer().getType();
         
         while (getToken().getType() != TokenType.EOF)
         {
-            oldToken = advanceTokenPointer().getType();
+            token = getToken().getType();
             
-            switch(oldToken)
+            switch(token)
             {
             case INT:        
             case VOID:
@@ -170,7 +170,8 @@ public class CMinusParser
         return params;
     }
     
-    private Declaration parseCompoundStatement() 
+    // FINISHED
+    private Statement parseCompoundStatement() 
         throws CMinusParserError
     {
         matchToken(TokenType.LCURLYBRACE);
@@ -208,19 +209,173 @@ public class CMinusParser
             }
         }
         
-            
+        ArrayList<Statement> statements = new ArrayList<>();
+        
+        while (isInFirstSetOfStatement(getToken().getType()))
+        {
+            statements.add(parseStatement());
+        }
+        
+        matchToken(TokenType.RCURLYBRACE);
+        
+        return new CompoundStatement(localDeclarations, statements);
     }
     
+    private boolean isInFirstSetOfStatement(TokenType token)
+    {
+        switch (token)
+        {
+        case NUM:
+        case LPAREN:
+        case ID:
+        case SEMICOLON:
+        case LCURLYBRACE:
+        case IF:
+        case WHILE:
+        case RETURN:
+            return true;
+            
+        default:
+            return false;
+        }
+    }
     
+    private Statement parseStatement() 
+        throws CMinusParserError
+    {
+        switch (getToken().getType())
+        {
+        case NUM:
+        case LPAREN:
+        case ID:
+        case SEMICOLON:
+            return parseExpressionStatement();
+            
+        case LCURLYBRACE:
+            return parseCompoundStatement();
+            
+        case IF:
+            return parseSelectionStatement();
+            
+        case WHILE:
+            return parseIterationStatement();
+            
+        case RETURN:
+            return parseReturnStatement();
+            
+        default:
+            throw new CMinusParserError("Failed in parseStatement");
+        }
+    }
     
+    // FINISHED
+    private Statement parseExpressionStatement() 
+        throws CMinusParserError
+    {
+        Statement expressionStatement = null;
+        
+        switch (getToken().getType())
+        {
+        case NUM:
+        case LPAREN:
+        case ID:
+            expressionStatement = parseStatement();
+            break;
+        
+        default:
+            break;
+        }
+        
+        matchToken(TokenType.SEMICOLON);
+        
+        return expressionStatement;
+    }
     
+    private Statement parseSelectionStatement() 
+        throws CMinusParserError
+    {
+        matchToken(TokenType.IF);
+        matchToken(TokenType.LPAREN);
+        
+        Expression expression = parseExpression();
+        
+        matchToken(TokenType.RPAREN);
+        
+        Statement ifStatement = parseStatement();
+        
+        Statement elseStatement = null;
+        
+        if (getToken().getType() == TokenType.ELSE)
+        {
+            matchToken(TokenType.ELSE);
+            elseStatement = parseStatement();
+        }
+        else
+        {
+            switch (getToken().getType())
+            {
+                case RCURLYBRACE:
+                case NUM:
+                case LPAREN:
+                case ID:
+                case SEMICOLON:
+                case LCURLYBRACE:
+                case IF:
+                case WHILE:
+                case RETURN:
+                    break;
+                    
+                default:
+                    throw new CMinusParserError("Failed in parseSelectionStatement");
+            }
+        }
+        
+        return new SelectionStatement(expression, ifStatement, elseStatement);
+    }
     
+    private Statement parseIterationStatement() 
+        throws CMinusParserError
+    {
+        matchToken(TokenType.WHILE);
+        matchToken(TokenType.LPAREN);
+        
+        Expression expression = parseExpression();
+        
+        matchToken(TokenType.RPAREN);
+        
+        Statement statement = parseStatement();
+        
+        return new IterationStatement(expression, statement);
+    }
     
+    private Statement parseReturnStatement() 
+        throws CMinusParserError
+    {
+        matchToken(TokenType.RETURN);
+        return parseExpressionStatement();
+    }
     
-    
-    
-    
-    
+    private Expression parseExpression() 
+        throws CMinusParserError
+    {
+        switch (getToken().getType())
+        {
+        case NUM:
+            return parseSimpleExpressionPrime();
+            
+        case LPAREN:
+            matchToken(TokenType.LPAREN);
+            Expression lSide = parseExpression();
+            matchToken(TokenType.RPAREN);
+            Expression rSide = parseSimpleExpressionPrime();
+            
+            return new BinaryExpression(lSide, BinaryExpression.Operator.PARENTHESIZED , rSide);
+            
+            
+        case ID:
+            
+        }
+    }
     
     
     
