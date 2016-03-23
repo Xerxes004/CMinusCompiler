@@ -15,23 +15,25 @@ package parser;
 
 public class Var extends Expression
 {
-    public Var(String ID, int arrayLength)
+    public Var(String ID, Expression arrayLength)
     {
         this.ID = ID;
-        this.arrayLength = arrayLength;
-        this.isArray = true;
+        this.dereferenceExpression = arrayLength;
     }
     
     public Var(String ID)
     {
         this.ID = ID;
-        this.arrayLength = -1;
-        this.isArray = false;
+        this.dereferenceExpression = null;
     }
     
     private final String ID;
-    private final int arrayLength;
-    private final boolean isArray;
+    private final Expression dereferenceExpression;
+    
+    public boolean isArray()
+    {
+        return dereferenceExpression != null;
+    }
     
     @Override
     public String toString()
@@ -39,9 +41,9 @@ public class Var extends Expression
         StringBuilder sb = new StringBuilder();
         sb.append(ID).append(" ");
         
-        if (isArray)
+        if (isArray())
         {
-            sb.append(" [ ").append(arrayLength).append(" ] ");
+            sb.append(" [ ").append(dereferenceExpression).append(" ] ");
         }
         
         return sb.toString();
