@@ -779,10 +779,10 @@ public class CMinusParser
             case NUM:
             case ID:
                 ArrayList<Expression> args = new ArrayList<>();
-                
+
                 args.add(parseExpression());
                 
-                boolean hasComma = true;
+                boolean hasComma = (getTokenType() == TokenType.COMMA);
 
                 while (hasComma)
                 {
