@@ -454,37 +454,95 @@ public class CMinusParser
         return termPrime;
     }
     
-    private Expression parseTerm()
+    
+    // GOOD EXAMPLE
+    private Expression parseTerm() 
+        throws CMinusParserError
     {
+        Expression term = parseFactor();
         
+        
+        TokenType operator = getToken().getType();
+        
+        while (mulop.contains(operator))
+        {
+            switch (operator)
+            {
+                case MULTIPLY:
+                    matchToken(TokenType.MULTIPLY);
+                    
+                    term = new BinaryExpression(
+                        term, 
+                        getOperator(TokenType.MULTIPLY), 
+                        parseFactor()
+                    );
+                    break;
+                    
+                case DIVIDE:
+                    matchToken(TokenType.DIVIDE);
+                    
+                    term = new BinaryExpression(
+                        term,
+                        getOperator(TokenType.DIVIDE),
+                        parseFactor()
+                    );
+                    
+                // should never happen
+                default:
+                    throw new CMinusParserError("Token does not follow term: " + tokenString(operator));
+            }
+        }
+        
+        return term;
     }
     
-    // FINISHED
     private Expression parseTermPrime(Expression lSide) 
         throws CMinusParserError
     {
         Expression termPrime = lSide;
         
-        switch (getToken().getType())
+        while (mulop.contains(getToken().getType()))
         {
-            case MULTIPLY:
-                matchToken(TokenType.MULTIPLY);
-                termPrime = parseTermPrime(new BinaryExpression(lSide, Operator.MUL, parseTerm()));
-                break;
-                
-            case DIVIDE:
-                matchToken(TokenType.DIVIDE);
-                termPrime = parseTermPrime(new BinaryExpression(lSide, Operator.DIV, parseTerm()));
-                break;
+            switch (getToken().getType())
+            {
+                case MULTIPLY:
+                    matchToken(TokenType.MULTIPLY);
+                    termPrime = new BinaryExpression(
+                        lSide, 
+                        Operator.MUL, 
+                        parseTerm()
+                    );
+                    break;
+
+                case DIVIDE:
+                    matchToken(TokenType.DIVIDE);
+                    termPrime = new BinaryExpression(
+                            lSide, 
+                            Operator.DIV, 
+                            parseTerm()
+                    );
+                    break;
+
+                default:
+                    if (!doesFollowTermPrime(getToken().getType()))
+                    {
+                        throw new CMinusParserError("Died in parseTermPrime: " + tokenString(getToken()));
+                    }
+            }
             
-            default:
-                if (!doesFollowTermPrime(getToken().getType()))
-                {
-                    throw new CMinusParserError("Died in parseTermPrime: " + tokenString(getToken()));
-                }
         }
         
         return termPrime;
+    }
+    
+    private Expression parseFactor()
+    {
+        
+    }
+    
+    private boolean doesFollowFactor(TokenType token)
+    {
+        return ()
     }
     
     private boolean doesFollowTermPrime(TokenType token)
