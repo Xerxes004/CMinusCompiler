@@ -710,6 +710,8 @@ public class CMinusParser
         return varCall;
     }
     
+    // FINISHED
+    // CHECKED
     private ArrayList<Expression> parseArgs() 
         throws CMinusParserError
     {
@@ -743,6 +745,8 @@ public class CMinusParser
         }
     }
     
+    // FINISHED
+    // CHECKED
     private Expression parseExpressionPrime(String id) 
         throws CMinusParserError
     {
@@ -752,22 +756,47 @@ public class CMinusParser
         {
             case ASSIGN:
                 matchToken(TokenType.ASSIGN);
-                return new AssignExpression(new Var(id), parseExpression());
+                
+                expressionPrime = new AssignExpression(
+                    new Var(id),
+                    parseExpression()
+                );
+                break;
 
             case LBRACKET:
                 matchToken(TokenType.LBRACKET);
+                
                 Expression inBrackets = parseExpression();
+                
                 matchToken(TokenType.RBRACKET);
-                return parseExpressionDoublePrime(id, inBrackets);
+                
+                expressionPrime = parseExpressionDoublePrime(id, inBrackets);
+                break;
                 
             case LPAREN:
+                matchToken(TokenType.LPAREN);
                 
-            
+                ArrayList<Expression> args = parseArgs();
+                
+                matchToken(TokenType.RPAREN);
+                
+                expressionPrime = parseSimpleExpressionPrime(new Call(id, args));
+                break;
+                
+            default:
+                if (!followExpression.contains(getTokenType()))
+                {
+                    throw new CMinusParserError(
+                        "Invalid token in ParseExpressionPrime: " + 
+                        tokenString(getToken())
+                    );
+                }
         }
         
         return expressionPrime;
     }
     
+    // FINISHED
     private Expression parseExpressionDoublePrime(String id, Expression inBrackets) 
         throws CMinusParserError
     {
