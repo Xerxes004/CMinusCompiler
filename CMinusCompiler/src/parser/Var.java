@@ -53,8 +53,11 @@ public class Var extends Expression
         System.out.println(spaces + "Var");
         spaces += "    ";
         System.out.println(spaces + "ID: " + this.ID);
-        System.out.println(spaces + "[");
-        this.dereferenceExpression.printMe(spaces);
-        System.out.println(spaces + "[");
+        if(this.isArray()) {
+            System.out.println(spaces + "[");
+            this.dereferenceExpression.printMe(spaces);
+            System.out.println(spaces + "[");
+        }
+        
     }
 }
