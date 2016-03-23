@@ -48,4 +48,13 @@ public class Var extends Expression
         
         return sb.toString();
     }
+    
+    public void printMe(String spaces) {
+        System.out.println(spaces + "Var");
+        spaces += "    ";
+        System.out.println(spaces + "ID: " + this.ID);
+        System.out.println(spaces + "[");
+        this.dereferenceExpression.printMe(spaces);
+        System.out.println(spaces + "[");
+    }
 }

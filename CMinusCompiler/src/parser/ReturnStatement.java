@@ -31,6 +31,12 @@ public class ReturnStatement extends Statement
 
     @Override
     public void printMe(String spaces) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println(spaces + "ReturnStatement");
+        spaces += "    ";
+        System.out.println(spaces + "return");
+        if(this.hasExpression()) {
+            this.expressionStatement.printMe(spaces);
+        }
+        System.out.println(spaces + ";");
     }
 }

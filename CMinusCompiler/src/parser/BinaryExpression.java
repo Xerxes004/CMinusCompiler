@@ -38,5 +38,11 @@ public class BinaryExpression extends Expression{
                + this.secondExpr.toString());
     }
     
-    
+    public void printMe(String spaces) {
+        System.out.println(spaces + "BinaryExpression");
+        spaces += "    ";
+        this.firstExpr.printMe(spaces);
+        System.out.println(spaces + op.toString());
+        this.secondExpr.printMe(spaces);
+    }    
 }

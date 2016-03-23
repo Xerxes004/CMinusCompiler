@@ -14,4 +14,8 @@ public class Num extends Expression
     {
         return Integer.toString(value);
     }
+    
+    public void printMe(String spaces) {
+        System.out.println(spaces + "NUM: " + this.value);
+    }
 }
