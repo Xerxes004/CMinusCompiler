@@ -6,6 +6,7 @@ int i (int e, int fe[], int rof) {
    int w;
    int we[7];
    {int y;}
+   return;
 }
 int ret [0];
 /* recursive factorial function */
