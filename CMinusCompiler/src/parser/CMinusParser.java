@@ -24,11 +24,32 @@ public class CMinusParser
         }
         
         tokens.add(scanner.peekNextToken());
+        
+        
+        mulop = new ArrayList<>();
+        mulop.add(TokenType.MULTIPLY);
+        mulop.add(TokenType.DIVIDE);
+        
+        addop = new ArrayList<>();
+        addop.add(TokenType.PLUS);
+        addop.add(TokenType.MINUS);
+        
+        relop = new ArrayList<>();
+        relop.add(TokenType.GTHAN);
+        relop.add(TokenType.GTHAN_EQUAL);
+        relop.add(TokenType.LTHAN);
+        relop.add(TokenType.LTHAN_EQUAL);
+        relop.add(TokenType.EQUAL);
+        relop.add(TokenType.NOT_EQUAL);
     }
     
     private final ArrayList<Token> tokens;
     private int tokenPointer;
     private final scanner.CMinusScanner scanner;
+    
+    private final ArrayList<TokenType> mulop;
+    private final ArrayList<TokenType> addop;
+    private final ArrayList<TokenType> relop;
     
     public Program parseProgram() 
         throws CMinusParserError, IOException
@@ -89,7 +110,6 @@ public class CMinusParser
         return declaration;
     }
     
-    // FINISHED
     private Declaration parseDeclarationPrime(Token typeToken, Token idToken) 
         throws CMinusParserError
     {
@@ -396,9 +416,12 @@ public class CMinusParser
     private Expression parseSimpleExpressionPrime(Expression lSide) 
         throws CMinusParserError
     {
-        Expression expression = null;
+        Expression addExprPrime = parseAdditiveExpressionPrime(lSide);
         
-        BinaryExpression additiveExpression = parseAdditiveExpressionPrime();
+        
+        /*Expression expression = null;
+        
+        BinaryExpression expression = parseAdditiveExpressionPrime(lSide);
         
         if (isInFollowSetOfAdditiveExpressionPrime(getToken().getType()))
         {
@@ -406,21 +429,53 @@ public class CMinusParser
 
             if (operator == BinaryExpression.Operator.SIMPLE_EXPRESSION)
             {
-                expression = new BinaryExpression(additiveExpression, operator, null);
+                expression = new BinaryExpression(rSide, operator, null);
             }
             else
             {
                 advanceTokenPointer();
                 expression = new BinaryExpression(
-                    additiveExpression, operator, parseAdditiveExpression());
+                    rSide, operator, parseAdditiveExpression());
             }
         }
         else
         {
             throw new CMinusParserError("Token is not in follow set of Additive Expression Prime");
-        }
+        }*/
         
-        return expression;
+        return addExprPrime;
+    }
+    
+    private Expression parseAdditiveExpressionPrime(Expression lSide)
+    {
+        Expression termPrime = parseTermPrime(lSide);
+        
+        return termPrime;
+    }
+    
+    private Expression parseTermPrime(Expression lSide) 
+        throws CMinusParserError
+    {
+        switch (getToken().getType())
+        {
+            case MULTIPLY:
+                matchToken(TokenType.MULTIPLY);
+                return new BinaryExpression(lSide, Operator.MUL, lSide);
+            case DIVIDE:
+                matchToken(TokenType.DIVIDE);
+                return new BinaryExpression(lSide, Operator.DIV, lSide);
+            
+            default:
+                if (doesFollowTermPrime(getToken().getType()))
+                {
+                    
+                }
+        }
+    }
+    
+    private boolean doesFollowTermPrime(TokenType token)
+    {
+        return (mulop.contains(token) || relop.contains(token));
     }
     
     private Expression parseExpressionPrime(Token idToken) 
