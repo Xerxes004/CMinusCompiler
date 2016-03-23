@@ -25,6 +25,11 @@ public class Call
     
     ArrayList<Expression> args;
     
+    public boolean hasArgs()
+    {
+        return args != null;
+    }
+    
     @Override
     public String toString()
     {
