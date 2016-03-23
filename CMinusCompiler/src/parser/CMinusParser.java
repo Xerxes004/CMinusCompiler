@@ -86,7 +86,7 @@ public class CMinusParser
         followExpression.add(TokenType.RPAREN);
         followExpression.add(TokenType.COMMA);
         followExpression.add(TokenType.ELSE);
-        followExpression.add(TokenType.RPAREN);
+        followExpression.add(TokenType.RBRACKET);
         
         followTerm = new ArrayList<>();
         followTerm.addAll(addop);
@@ -850,25 +850,13 @@ public class CMinusParser
         {
             TokenType operator = getTokenType();
             
-            switch (operator)
-            {
-                case PLUS:
-                case MINUS:
-                    matchToken(operator);
-                    
-                    additiveExpressionPrime = new BinaryExpression(
-                        additiveExpressionPrime, 
-                        getOperator(operator), 
-                        parseTerm()
-                    );
-                    break;
-                    
-                // should never happen
-                default:
-                    throw new CMinusParserError(
-                        "Died in parseAdditiveExpressionPrime"
-                    );
-            }
+            matchToken(getTokenType());
+            
+            additiveExpressionPrime = new BinaryExpression(
+                    additiveExpressionPrime, 
+                    getOperator(operator), 
+                    parseTerm()
+                );
         }
         
         if (!followTerm.contains(getTokenType()))
