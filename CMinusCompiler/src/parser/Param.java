@@ -2,22 +2,14 @@ package parser;
 
 public class Param 
 {
-    public Param(String ID)
+    public Param(String ID, boolean isArray)
     {
         this.ID = ID;
-        this.arraySize = -1;
-        this.isArray = false;
-    }
-    public Param(String ID, int arraySize)
-    {
-        this.ID = ID;
-        this.arraySize = arraySize;
-        this.isArray = true;
+        this.isArray = isArray;
     }
     
     private final String ID;
     private final boolean isArray;
-    private final int arraySize;
     
     public String ID()
     {
@@ -29,18 +21,13 @@ public class Param
         return this.isArray;
     }
     
-    public int arraySize()
-    {
-        return this.arraySize;
-    }
-    
     @Override
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
         sb.append("int ")
           .append(ID)
-          .append(isArray ? " [ " + arraySize + " ] " : "");
+          .append(isArray ? " [ ] " : "");
         return sb.toString();
     }
 }
