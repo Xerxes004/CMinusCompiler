@@ -171,7 +171,8 @@ public class CMinusParser
     /**
      * Parses a declaration.
      * @return a declaration
-     * @throws CMinusParserError 
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
      */
     private Declaration parseDeclaration() 
         throws CMinusParserError
@@ -199,10 +200,11 @@ public class CMinusParser
     
     /**
      * Parses a declaration prime.
-     * @param typeToken
-     * @param id
-     * @return
-     * @throws CMinusParserError 
+     * @param typeToken the type of declaration
+     * @param id the id of the declaration
+     * @return a Declaration
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
      */
     private Declaration parseDeclarationPrime(Token typeToken, String id) 
         throws CMinusParserError
@@ -244,9 +246,15 @@ public class CMinusParser
         return declaration;
     }
     
-    // FINISHED
-    // CHECKED
-    private Declaration parseFunDeclarationPrime(Token typeToken, String id) 
+    /**
+     * Parses a FunDeclaration prime.
+     * @param typeToken the type of declaration
+     * @param id the id of the declaration
+     * @return a FunDeclaration
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
+    private FunDeclaration parseFunDeclarationPrime(Token typeToken, String id) 
         throws CMinusParserError
     {
         ArrayList<Param> params = null;
@@ -280,8 +288,12 @@ public class CMinusParser
             parseCompoundStatement());
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parses params.
+     * @return an ArrayList of params
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private ArrayList<Param> parseParams() 
         throws CMinusParserError
     {
@@ -325,8 +337,12 @@ public class CMinusParser
         return params;
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parses a statement.
+     * @return a Statement
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private Statement parseStatement() 
         throws CMinusParserError
     {
@@ -358,9 +374,13 @@ public class CMinusParser
         }
     }
     
-    // FINISHED
-    // CHECKED
-    private Statement parseCompoundStatement() 
+    /**
+     * Parses a compound statement.
+     * @return a CompoundStatement
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
+    private CompoundStatement parseCompoundStatement() 
         throws CMinusParserError
     {
         matchToken(TokenType.LCURLYBRACE);
@@ -412,12 +432,16 @@ public class CMinusParser
         return new CompoundStatement(localDeclarations, statements);
     }
     
-    // FINISHED
-    // CHECKED
-    private Statement parseExpressionStatement() 
+    /**
+     * Parses an expression statement.
+     * @return an ExpressionStatement
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
+    private ExpressionStatement parseExpressionStatement() 
         throws CMinusParserError
     {
-        Statement expressionStatement = null;
+        ExpressionStatement expressionStatement = null;
         
         switch (getTokenType())
         {
@@ -440,9 +464,13 @@ public class CMinusParser
         return expressionStatement;
     }
     
-    // FINISHED
-    // CHECKED
-    private Statement parseSelectionStatement() 
+    /**
+     * Parses a selection statement.
+     * @return a SelectionStatement
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
+    private SelectionStatement parseSelectionStatement() 
         throws CMinusParserError
     {
         matchToken(TokenType.IF);
@@ -476,9 +504,13 @@ public class CMinusParser
         );
     }
     
-    // FINISHED
-    // CHECKED
-    private Statement parseIterationStatement() 
+    /**
+     * Parses an iteration statement.
+     * @return an IterationStatement
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
+    private IterationStatement parseIterationStatement() 
         throws CMinusParserError
     {
         matchToken(TokenType.WHILE);
@@ -493,17 +525,24 @@ public class CMinusParser
         return new IterationStatement(expression, statement);
     }
     
-    // FINISHED
-    // CHECKED
-    private Statement parseReturnStatement() 
+    /**
+     * Parses a return statement.
+     * @return a ReturnStatement
+     * @throws CMinusParserError 
+     */
+    private ReturnStatement parseReturnStatement() 
         throws CMinusParserError
     {
         matchToken(TokenType.RETURN);
         return new ReturnStatement(parseExpressionStatement());
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parses an Expression.
+     * @return an Expression.
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private Expression parseExpression() 
         throws CMinusParserError
     {
@@ -532,8 +571,13 @@ public class CMinusParser
         }
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parses a simple expression.
+     * @param lSide the lefthand expression of a simple expression
+     * @return an Expression
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private Expression parseSimpleExpressionPrime(Expression lSide) 
         throws CMinusParserError
     {
@@ -541,11 +585,11 @@ public class CMinusParser
         
         if (relop.contains(getTokenType()))
         {
-            matchToken(getTokenType());
+            Token operator = matchToken(getTokenType());
             
             simpleExpressionPrime = new BinaryExpression(
                 simpleExpressionPrime, 
-                getOperator(getTokenType()), 
+                getOperator(operator), 
                 parseAdditiveExpression()
             );
         }
@@ -560,8 +604,12 @@ public class CMinusParser
         return simpleExpressionPrime;
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parse a term.
+     * @return an Expression
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private Expression parseTerm() 
         throws CMinusParserError
     {
@@ -583,8 +631,13 @@ public class CMinusParser
         return term;
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parse a term prime.
+     * @param lSide the lefthand side of a term prime.
+     * @return an Expression
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private Expression parseTermPrime(Expression lSide) 
         throws CMinusParserError
     {
@@ -617,8 +670,12 @@ public class CMinusParser
         return termPrime;
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parse a factor.
+     * @return an Expression
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private Expression parseFactor() 
         throws CMinusParserError
     {
@@ -660,8 +717,13 @@ public class CMinusParser
         return factor;
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parse a varcall prime
+     * @param id the id of the var or call
+     * @return an Expression
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private Expression parseVarCallPrime(String id) 
         throws CMinusParserError
     {
@@ -702,8 +764,12 @@ public class CMinusParser
         return varCall;
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parse the args.
+     * @return an ArrayList of Expression args
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private ArrayList<Expression> parseArgs() 
         throws CMinusParserError
     {
@@ -737,8 +803,13 @@ public class CMinusParser
         }
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parse an expression prime.
+     * @param id the id of the expression
+     * @return an Expression
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private Expression parseExpressionPrime(String id) 
         throws CMinusParserError
     {
@@ -790,8 +861,14 @@ public class CMinusParser
         return expressionPrime;
     }
     
-    // FINISHED
-    // CHECKED
+    /**
+     * Parse an expression double prime.
+     * @param id the id of the expression
+     * @param inBrackets the value in the brackets of the expression
+     * @return an Expression
+     * @throws CMinusParserError throws errors when the file does not have
+     * correct syntax. 
+     */
     private Expression parseExpressionDoublePrime(String id, Expression inBrackets) 
         throws CMinusParserError
     {
@@ -825,7 +902,11 @@ public class CMinusParser
         return expressionDoublePrime;
     }
     
-    
+    /**
+     * Parse an additive expression.
+     * @return
+     * @throws CMinusParserError 
+     */
     private Expression parseAdditiveExpression() 
         throws CMinusParserError
     {
