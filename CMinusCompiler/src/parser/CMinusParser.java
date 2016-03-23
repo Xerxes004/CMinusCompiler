@@ -446,31 +446,45 @@ public class CMinusParser
         return addExprPrime;
     }
     
-    private Expression parseAdditiveExpressionPrime(Expression lSide)
+    private Expression parseAdditiveExpressionPrime(Expression lSide) 
+        throws CMinusParserError
     {
         Expression termPrime = parseTermPrime(lSide);
         
         return termPrime;
     }
     
+    private Expression parseTerm()
+    {
+        
+    }
+    
+    // FINISHED
     private Expression parseTermPrime(Expression lSide) 
         throws CMinusParserError
     {
+        Expression termPrime = lSide;
+        
         switch (getToken().getType())
         {
             case MULTIPLY:
                 matchToken(TokenType.MULTIPLY);
-                return new BinaryExpression(lSide, Operator.MUL, lSide);
+                termPrime = parseTermPrime(new BinaryExpression(lSide, Operator.MUL, parseTerm()));
+                break;
+                
             case DIVIDE:
                 matchToken(TokenType.DIVIDE);
-                return new BinaryExpression(lSide, Operator.DIV, lSide);
+                termPrime = parseTermPrime(new BinaryExpression(lSide, Operator.DIV, parseTerm()));
+                break;
             
             default:
-                if (doesFollowTermPrime(getToken().getType()))
+                if (!doesFollowTermPrime(getToken().getType()))
                 {
-                    
+                    throw new CMinusParserError("Died in parseTermPrime: " + tokenString(getToken()));
                 }
         }
+        
+        return termPrime;
     }
     
     private boolean doesFollowTermPrime(TokenType token)
@@ -546,6 +560,37 @@ public class CMinusParser
                 return new BinaryExpression(lSide, operator, parseTerm());
         }
         
+    }
+    
+    private BinaryExpression.Operator getOperator(TokenType token) 
+        throws CMinusParserError
+    {
+        switch (token)
+        {
+        case LTHAN:
+            return Operator.LTHAN;
+        case LTHAN_EQUAL:
+            return Operator.LTHAN_EQUAL;
+        case GTHAN:
+            return Operator.GTHAN;
+        case GTHAN_EQUAL:
+            return Operator.GTHAN_EQUAL;
+        case NOT_EQUAL:
+            return Operator.NOT_EQUAL;
+        case EQUAL:
+            return Operator.EQUAL;
+        case PLUS:
+            return Operator.ADD;
+        case MINUS:
+            return Operator.SUB;
+        case MULTIPLY:
+            return Operator.MUL;
+        case DIVIDE:
+            return Operator.DIV;
+        
+        default:
+            throw new CMinusParserError("Operator not found: " + tokenString(token));
+        }
     }
     
     
@@ -638,6 +683,11 @@ public class CMinusParser
                    msg+= " != " + tokenString(getToken().getType());
             throw new CMinusParserError(msg);
         }
+    }
+    
+    private String tokenString(Token token)
+    {
+        return tokenString(token.getType());
     }
     
     private String tokenString(Token.TokenType type)
