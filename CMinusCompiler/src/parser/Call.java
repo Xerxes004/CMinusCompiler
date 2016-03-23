@@ -16,6 +16,7 @@ package parser;
 import java.util.ArrayList;
 
 public class Call 
+    extends Expression
 {
     public Call(ArrayList<Expression> args)
     {
