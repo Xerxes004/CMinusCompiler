@@ -18,18 +18,13 @@ import java.util.ArrayList;
 
 public class Program 
 {
-    public Program() 
+    public Program(ArrayList<Declaration> declarations) 
         throws IOException
     {
-        declarations = new ArrayList<>();
+        this.declarations = declarations;
     }
     
     private final ArrayList<Declaration> declarations;
-    
-    public void addDeclaration(Declaration declaration)
-    {
-        declarations.add(declaration);
-    }
     
     @Override
     public String toString()
