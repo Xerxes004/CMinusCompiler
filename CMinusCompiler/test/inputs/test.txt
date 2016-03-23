@@ -6,9 +6,11 @@ int i (int e, int fe[], int rof) {
    int w;
    int we[7];
    {int y;}
+   w = 4;
    return;
 }
 int ret [0];
+
 /* recursive factorial function */
 /*{ if (x > 1)
     return x * fact(x-1);
