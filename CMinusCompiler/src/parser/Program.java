@@ -39,11 +39,11 @@ public class Program
         return sb.toString();
     }
     
-    public void printProgram() {
+    public void printMe() {
         String spaces = "    ";
         System.out.println("Program");
         for(int i = 0; i < this.declarations.size(); i ++) {
-            declarations.get(i).printDeclaration(spaces);
+            declarations.get(i).printMe(spaces);
         }
     }
 }

@@ -44,7 +44,7 @@ public class Param
         return sb.toString();
     }
     
-    public void printParam(String spaces) {
+    public void printMe(String spaces) {
         System.out.println(spaces + "Param");
         spaces += "   ";
         System.out.println(spaces + "int");

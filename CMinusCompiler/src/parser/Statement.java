@@ -22,6 +22,6 @@ public abstract class Statement{
     @Override
     public abstract String toString();
     
-    public abstract void printStatement(String spaces);
+    public abstract void printMe(String spaces);
     
 }

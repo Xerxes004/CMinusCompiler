@@ -56,8 +56,7 @@ public class FunDeclaration extends Declaration
         return sb.toString();
     }
     
-    @Override
-    public void printDeclaration(String spaces){
+    public void printMe(String spaces){
         System.out.println(spaces + "FunDeclaration");
         spaces += "    ";
         System.out.println(spaces + this.typeSpecifier());
@@ -68,13 +67,13 @@ public class FunDeclaration extends Declaration
                 if(i > 0) {
                     System.out.println(spaces + ",");
                 }
-                this.params.get(i).printParam(spaces + "    ");
+                this.params.get(i).printMe(spaces);
                 
             } 
         } else {
             System.out.println(spaces + "void");
         }
         System.out.println(spaces + ")");
-        this.compoundStmt.printStatement(spaces);
+        this.compoundStmt.printMe(spaces);
     }
 }

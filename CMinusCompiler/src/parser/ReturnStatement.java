@@ -24,7 +24,7 @@ public class ReturnStatement extends Statement{
     }
 
     @Override
-    public void printStatement(String spaces) {
+    public void printMe(String spaces) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

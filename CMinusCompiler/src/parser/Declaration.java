@@ -37,5 +37,5 @@ public abstract class Declaration
         return this.IDType;
     }
     
-    public abstract void printDeclaration(String spaces);
+    public abstract void printMe(String spaces);
 }

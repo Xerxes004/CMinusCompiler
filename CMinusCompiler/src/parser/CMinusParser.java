@@ -913,7 +913,7 @@ public class CMinusParser
             CMinusParser parser = new CMinusParser("./test/inputs/test.txt");
             try {
                 Program parsed = parser.parseProgram();
-                parsed.printProgram();
+                parsed.printMe();
             } catch (CMinusParserError ex2) {
                 System.out.println(ex2);
             }
