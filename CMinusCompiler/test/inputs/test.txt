@@ -22,8 +22,7 @@ int i (int e, int fe[], int rof) {
      x = 0;
      if (x > 0){};
    }
-/*
-   ident a = 45 + 0;
+   a = 45 + 0;
    if(z<=23){
     
    } 
@@ -33,7 +32,7 @@ int i (int e, int fe[], int rof) {
    if(j<24){
 
    }
-   return;*/
+   return;
 }
 int ret [0];
 

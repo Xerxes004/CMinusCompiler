@@ -1224,7 +1224,7 @@ public class CMinusParser
     {
         
         try {
-            CMinusParser parser = new CMinusParser("./test/inputs/gcd.c");
+            CMinusParser parser = new CMinusParser("./test/inputs/test.txt");
             try {
                 Program parsed = parser.parseProgram();
                 parsed.printMe();
