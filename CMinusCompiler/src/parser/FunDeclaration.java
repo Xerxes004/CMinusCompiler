@@ -9,7 +9,7 @@ public class FunDeclaration extends Declaration
                            TokenType typeSpecifierType, 
                            String ID, 
                            ArrayList<Param> params, 
-                           CompoundStatement compoundStmt)
+                           Statement compoundStmt)
     {
         super(typeSpecifier, typeSpecifierType, ID);
         this.params = params;
@@ -17,7 +17,7 @@ public class FunDeclaration extends Declaration
     }
     
     private final ArrayList<Param> params;
-    private final CompoundStatement compoundStmt;
+    private final Statement compoundStmt;
     
     public boolean hasParams()
     {
