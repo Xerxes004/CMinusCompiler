@@ -34,7 +34,7 @@ public class CMinusParser
         Program program = new Program();
         TokenType token = advanceTokenPointer().getType();
         
-        while (getToken().getType() != TokenType.EOF)
+        while (token != TokenType.EOF)
         {
             token = getToken().getType();
             
@@ -120,6 +120,7 @@ public class CMinusParser
         switch(getToken().getType())
         {
         case VOID:
+            matchToken(TokenType.VOID);
             break;
             
         case INT:
@@ -200,7 +201,7 @@ public class CMinusParser
                 localDeclarations.add(
                     new VarDeclaration(
                         (String)idToken.getData(), 
-                        (int)numToken.getData()));
+                        Integer.parseInt((String)numToken.getData())));
             }
             else
             {
@@ -279,7 +280,7 @@ public class CMinusParser
         case NUM:
         case LPAREN:
         case ID:
-            expressionStatement = parseStatement();
+            expressionStatement = new ExpressionStatement(parseExpression());
             break;
         
         default:
@@ -361,24 +362,155 @@ public class CMinusParser
         switch (getToken().getType())
         {
         case NUM:
-            return parseSimpleExpressionPrime();
+            Num num = new Num(Integer.parseInt((String)matchToken(TokenType.NUM).getData()));
+            return parseSimpleExpressionPrime(num);
             
         case LPAREN:
             matchToken(TokenType.LPAREN);
             Expression lSide = parseExpression();
             matchToken(TokenType.RPAREN);
-            Expression rSide = parseSimpleExpressionPrime();
+            Expression rSide = parseSimpleExpressionPrime(lSide);
             
-            return new BinaryExpression(lSide, BinaryExpression.Operator.PARENTHESIZED , rSide);
-            
+            return new BinaryExpression(lSide, BinaryExpression.Operator.PARENTHESIZED, rSide);
             
         case ID:
+            Token idToken = matchToken(TokenType.ID);
+            return parseExpressionPrime(idToken);
+            
+        default:
+            throw new CMinusParserError("Failed in parseExpression");
+        }
+    }
+    
+    private Expression parseSimpleExpressionPrime(Expression lSide) 
+        throws CMinusParserError
+    {
+        Expression expression = null;
+        
+        BinaryExpression additiveExpression = parseAdditiveExpressionPrime();
+        
+        if (isInFollowSetOfAdditiveExpressionPrime(getToken().getType()))
+        {
+            BinaryExpression.Operator operator = isRelop(getToken().getType());
+
+            if (operator == BinaryExpression.Operator.SIMPLE_EXPRESSION)
+            {
+                expression = new BinaryExpression(additiveExpression, operator, null);
+            }
+            else
+            {
+                advanceTokenPointer();
+                expression = new BinaryExpression(
+                    additiveExpression, operator, parseAdditiveExpression());
+            }
+        }
+        else
+        {
+            throw new CMinusParserError("Token is not in follow set of Additive Expression Prime");
+        }
+        
+        return expression;
+    }
+    
+    private Expression parseExpressionPrime(Token idToken) 
+        throws CMinusParserError
+    {
+        switch (getToken().getType())
+        {
+        case ASSIGN:
+            matchToken(TokenType.ASSIGN);
+            return parseExpression();
+            
+        case LBRACKET:
+            matchToken(TokenType.LBRACKET);
+            Expression expression = parseExpression();
+            matchToken(TokenType.RBRACKET);
+            
+            if (getToken().getType() == TokenType.ASSIGN)
+            {
+                matchToken(TokenType.ASSIGN);
+                return new AssignExpression(expression, parseExpression());
+            }
+            else
+            {
+                
+            }
+            
+        case LPAREN:
+        case MULTIPLY:
+        case DIVIDE:
+        case PLUS:
+        case MINUS:
+        case LTHAN:
+        case LTHAN_EQUAL:
+        case GTHAN:
+        case GTHAN_EQUAL:
+        case EQUAL:
+        case NOT_EQUAL:
+        case SEMICOLON:
+        case RPAREN:
+        case COMMA:
+        case ELSE:
+        case RBRACKET:
             
         }
     }
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private BinaryExpression.Operator isRelop(TokenType token)
+    {
+        switch (token)
+        {
+        case LTHAN:
+            return BinaryExpression.Operator.LTHAN;
+        case LTHAN_EQUAL:
+            return BinaryExpression.Operator.LTHAN_EQUAL;
+        case GTHAN:
+            return BinaryExpression.Operator.GTHAN;
+        case GTHAN_EQUAL:
+            return BinaryExpression.Operator.GTHAN_EQUAL;
+        case NOT_EQUAL:
+            return BinaryExpression.Operator.NOT_EQUAL;
+        case EQUAL:
+            return BinaryExpression.Operator.EQUAL;
+        
+        default:
+            return BinaryExpression.Operator.SIMPLE_EXPRESSION;
+        }
+    }
+    
+    private boolean isInFollowSetOfAdditiveExpressionPrime(TokenType token) 
+        throws CMinusParserError
+    {
+        switch (token)
+        {
+        case LTHAN:
+        case LTHAN_EQUAL:
+        case GTHAN:
+        case GTHAN_EQUAL:
+        case NOT_EQUAL:
+        case EQUAL:
+        case SEMICOLON:
+        case RPAREN:
+        case COMMA:
+        case ELSE:
+        case RBRACKET:
+            return true;
+            
+        default:
+            return false;
+        }
+    }
     
     
     

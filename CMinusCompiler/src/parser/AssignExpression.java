@@ -15,13 +15,13 @@ package parser;
 
 public class AssignExpression extends Expression
 {
-    public AssignExpression(Var var, Expression expression)
+    public AssignExpression(Expression var, Expression expression)
     {
         this.var = var;
         this.expression = expression;
     }
 
-    Var var;
+    Expression var;
     Expression expression;
     
     @Override

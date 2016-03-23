@@ -1,6 +1,6 @@
 package parser;
 
-public class Num 
+public class Num extends Expression
 {
     public Num(int value)
     {
