@@ -31,4 +31,12 @@ public class AssignExpression extends Expression
         sb.append(var.toString()).append(" = ").append(expression.toString());
         return sb.toString();
     }
+    
+    public void printMe(String spaces) {
+        System.out.println(spaces + "AssignExpression");
+        spaces += "    ";
+        this.var.printMe(spaces);
+        System.out.println(spaces + "=");
+        this.expression.printMe(spaces);
+    }
 }

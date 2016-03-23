@@ -34,7 +34,18 @@ public class SelectionStatement extends Statement {
 
     @Override
     public void printMe(String spaces) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println(spaces + "SelectionStatement");
+        spaces += "    ";
+        System.out.println(spaces + "if");
+        System.out.println(spaces + "(");
+        this.expr.printMe(spaces);
+        System.out.println(spaces + ")");
+        this.ifPart.printMe(spaces);
+        if(this.elsePart != null) {
+            System.out.println(spaces + "else");
+            this.elsePart.printMe(spaces);
+        }
+        
     }
     
 }

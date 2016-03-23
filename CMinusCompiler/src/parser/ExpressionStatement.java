@@ -25,7 +25,12 @@ public class ExpressionStatement extends Statement{
 
     @Override
     public void printMe(String spaces) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println(spaces + "ExpressionStatement");
+        spaces += "    ";
+        if(this.expr != null) {
+           this.expr.printMe(spaces); 
+        } 
+        System.out.println(spaces + ";");
     }
     
 }

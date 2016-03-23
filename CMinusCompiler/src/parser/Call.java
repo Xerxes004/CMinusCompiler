@@ -44,4 +44,21 @@ public class Call
         
         return sb.toString();
     }
+    
+    public void printMe(String spaces) {
+        System.out.println(spaces + "Call");
+        spaces += "    ";
+        System.out.println(spaces + "(");
+        if(this.hasArgs()){
+            for(int i = 0; i < this.args.size(); i ++) {
+                if(i > 0) {
+                    System.out.println(spaces + ",");
+                }
+                this.args.get(i).printMe(spaces);
+                
+            } 
+        } 
+        System.out.println(spaces + ")");
+ 
+    }
 }
