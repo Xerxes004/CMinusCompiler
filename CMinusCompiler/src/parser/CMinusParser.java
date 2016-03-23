@@ -795,6 +795,9 @@ public class CMinusParser
                 
                 return args;
                 
+            case RPAREN:
+                return null;
+                
             default:
                 throw new CMinusParserError(
                     "Invalid token in ParseArgs: " + 
