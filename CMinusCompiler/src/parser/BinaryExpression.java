@@ -28,8 +28,8 @@ public class BinaryExpression extends Expression{
     private Operator op;
     public enum Operator
     {
-        LTHAN, LTHAN_EQUAL, GTHAN, GTHAN_EQUAL, EQUAL, NOT_EQUAL, ADD, SUB, MUL, 
-        DIV, PARENTHESIZED, SIMPLE_EXPRESSION
+        LTHAN, LTHAN_EQUAL, GTHAN, GTHAN_EQUAL, EQUAL, NOT_EQUAL, PLUS, MINUS, 
+        MULTIPLY, DIVIDE, PARENTHESIZED, SIMPLE_EXPRESSION
     };
     
     public String toString() {
