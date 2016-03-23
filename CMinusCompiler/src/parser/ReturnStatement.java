@@ -12,14 +12,20 @@
  */
 package parser;
 
-public class ReturnStatement extends Statement{
-    public ReturnStatement(Expression input) {
-        this.expr = input;
+public class ReturnStatement extends Statement
+{
+    public ReturnStatement(Statement input) {
+        this.expressionStatement = input;
     }
     
-    private Expression expr;
+    private Statement expressionStatement;
+    
+    public boolean hasExpression()
+    {
+        return expressionStatement != null;
+    }
     
     public String toString() {
-        return this.expr.toString();
+        return this.expressionStatement.toString();
     }
 }
