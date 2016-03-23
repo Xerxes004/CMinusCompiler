@@ -48,9 +48,7 @@ public class BinaryExpression
         spaces += "    ";
         this.firstExpr.printMe(spaces);
         System.out.println(spaces + op.toString());
-        if(this.secondExpr != null) {
-            this.secondExpr.printMe(spaces);
-        }
+        this.secondExpr.printMe(spaces);
         
     }    
 

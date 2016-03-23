@@ -752,13 +752,17 @@ public class CMinusParser
                 break;
                 
             default:
-                if (!followFactor.contains(getTokenType()))
+                if (followFactor.contains(getTokenType())) 
+                {
+                    varCall = new Var(id);
+                } 
+                else 
                 {
                     throw new CMinusParserError(
                         "Unexpected token in parseVarCallPrime: " 
                         + tokenString(getToken())
                     );
-                }
+                } 
         }
         
         return varCall;
