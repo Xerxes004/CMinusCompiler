@@ -29,7 +29,7 @@ public class BinaryExpression extends Expression{
     public enum Operator
     {
         LTHAN, LTHAN_EQUAL, GTHAN, GTHAN_EQUAL, EQUAL, NOT_EQUAL, PLUS, MINUS, 
-        MULTIPLY, DIVIDE, PARENTHESIZED, SIMPLE_EXPRESSION
+        MULTIPLY, DIVIDE
     };
     
     public String toString() {
