@@ -21,7 +21,7 @@ import scanner.CMinusScanner;
 import scanner.Token;
 import scanner.Token.TokenType;
 
-public class CMinusParser 
+public class CMinusParser implements Parser
 {
     /**
      * Constructor for CMinusParser.
@@ -137,11 +137,14 @@ public class CMinusParser
      * @throws CMinusParserError throws errors when the file does not have
      * correct syntax.
      */
+    @Override
     public Program parseProgram() 
         throws CMinusParserError
     {
         ArrayList<Declaration> declarations = new ArrayList<>();
         TokenType token = advanceTokenPointer().getType();
+        
+        declarations.add(parseDeclaration());
         
         while (token != TokenType.EOF)
         {
@@ -163,6 +166,12 @@ public class CMinusParser
                            + tokenString(getTokenType());
                 throw new CMinusParserError(msg);
             }
+        }
+        
+        if (declarations.isEmpty())
+        {
+            throw new CMinusParserError("Error in parseProgram: " + 
+                "Programs need at least one declaration.");
         }
         
         return new Program(declarations);
@@ -194,7 +203,8 @@ public class CMinusParser
                 return parseFunDeclarationPrime(voidToken, id);
                 
             default:
-                throw new CMinusParserError("Died in parseDeclaration");
+                throw new CMinusParserError("Unexpected token in parseDeclaration: " +
+                    tokenString(getToken()));
         }
     }
     
@@ -1232,7 +1242,7 @@ public class CMinusParser
     {
         
         try {
-            CMinusParser parser = new CMinusParser("./test/inputs/gcd.c");
+            CMinusParser parser = new CMinusParser("./test/inputs/empty.txt");
             try {
                 Program parsed = parser.parseProgram();
                 parsed.printMe();
