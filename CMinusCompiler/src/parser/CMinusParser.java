@@ -903,7 +903,8 @@ public class CMinusParser implements Parser
                 parseExpression()
             );
         } 
-        else if (operators.contains(getTokenType()))
+        else if (operators.contains(getTokenType()) 
+              || getTokenType() == TokenType.RBRACKET)
         {
             expressionDoublePrime = parseSimpleExpressionPrime(
                 new Var(id, inBrackets)
@@ -916,10 +917,6 @@ public class CMinusParser implements Parser
                 throw new CMinusParserError(
                     "Found invalid token in parseExpressionDoublePrime: " + 
                         tokenString(getTokenType()));
-            }
-            else
-            {
-                expressionDoublePrime = new Var(id, inBrackets);
             }
         }
         
