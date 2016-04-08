@@ -203,8 +203,11 @@ public class CMinusParser implements Parser
                 return parseFunDeclarationPrime(voidToken, id);
                 
             default:
-                throw new CMinusParserError("Unexpected token in parseDeclaration: " +
-                    tokenString(getToken()));
+                throw new CMinusParserError(
+                    "int or void",
+                    tokenString(getToken()),
+                    "parseDeclaration()"
+                );
         }
     }
     
@@ -248,8 +251,9 @@ public class CMinusParser implements Parser
                 
             default:
                 throw new CMinusParserError(
-                    "Invalid token in ParseDeclarationPrime: " +
-                    tokenString(getToken())
+                    "[ ; (",
+                    tokenString(getToken()),
+                    "parseDeclarationPrime"
                 );
         }
         
@@ -283,8 +287,9 @@ public class CMinusParser implements Parser
                 
             default:
                 throw new CMinusParserError(
-                    "Invalid token in ParseFunDeclarationPrime: " +
-                    tokenString(getToken())
+                    "void or int",
+                    tokenString(getToken()),
+                    "parseFunDeclarationPrime"
                 );
         }
 
@@ -336,8 +341,9 @@ public class CMinusParser implements Parser
             else if (getTokenType() != TokenType.RPAREN)
             {
                 throw new CMinusParserError(
-                    "Invalid token in ParseParams: " +
-                    tokenString(getToken())
+                    ")",
+                    tokenString(getToken()),
+                    "parseParams"
                 );
             }
 
@@ -378,8 +384,9 @@ public class CMinusParser implements Parser
 
             default:
                 throw new CMinusParserError(
-                    "Invalid token in parseStatement: " +
-                    tokenString(getToken())
+                    "num id ( ; { if while return",
+                    tokenString(getToken()),
+                    "parseStatement"
                 );
         }
     }
@@ -914,9 +921,7 @@ public class CMinusParser implements Parser
         {
             if (!followExpression.contains(getTokenType()))
             {
-                throw new CMinusParserError(
-                    "Found invalid token in parseExpressionDoublePrime: " + 
-                        tokenString(getTokenType()));
+                throw new CMinusParserError("");
             }
         }
         
@@ -1117,8 +1122,8 @@ public class CMinusParser implements Parser
         }
         else
         {
-            String msg = "Token didn't match: " + tokenString(type);
-                   msg+= " != " + tokenString(getTokenType());
+            String msg = "Token didn't match: expected " + tokenString(type);
+                   msg+= " got " + tokenString(getTokenType());
             throw new CMinusParserError(msg);
         }
     }
