@@ -17,8 +17,22 @@ package parser;
 
 class CMinusParserError extends Exception 
 {
-    public CMinusParserError(String string)
+    public CMinusParserError(String msg) {
+        super(msg);
+    }
+    
+    public CMinusParserError(String expected, String found, String func)
     {
-        super(string);
+        message = "parser.CMinusParserError: expected "+
+            expected+" but found "+
+            found+ " in function "+func;
+    }
+    
+    private String message;
+    
+    @Override
+    public String getMessage()
+    {
+        return this.message != null ? this.message : super.getMessage();
     }
 }
