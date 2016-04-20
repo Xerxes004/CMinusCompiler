@@ -920,7 +920,9 @@ public class CMinusParser implements Parser
         {
             if (!followExpression.contains(getTokenType()))
             {
-                throw new CMinusParserError("follow expr", tokenString(getToken()), "ParseE\'\'");
+                throw new CMinusParserError("follow of expression", 
+                    tokenString(getToken()), 
+                    "parseExpressionDoublePrime");
             }
             else
             {
