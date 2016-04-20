@@ -57,7 +57,7 @@ public class Var extends Expression
         if(this.isArray()) {
             System.out.println(spaces + "[");
             this.dereferenceExpression.printMe(spaces);
-            System.out.println(spaces + "[");
+            System.out.println(spaces + "]");
         }
         
     }

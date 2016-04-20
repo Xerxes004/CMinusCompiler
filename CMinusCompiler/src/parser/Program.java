@@ -40,7 +40,7 @@ public class Program
         return sb.toString();
     }
     
-    public void printMe() {
+    public void printMe() throws NullPointerException{
         String spaces = "    ";
         System.out.println("Program");
         for(int i = 0; i < this.declarations.size(); i ++) {

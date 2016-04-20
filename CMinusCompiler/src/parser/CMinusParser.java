@@ -910,8 +910,7 @@ public class CMinusParser implements Parser
                 parseExpression()
             );
         } 
-        else if (operators.contains(getTokenType()) 
-              || getTokenType() == TokenType.RBRACKET)
+        else if (operators.contains(getTokenType()))
         {
             expressionDoublePrime = parseSimpleExpressionPrime(
                 new Var(id, inBrackets)
@@ -921,7 +920,11 @@ public class CMinusParser implements Parser
         {
             if (!followExpression.contains(getTokenType()))
             {
-                throw new CMinusParserError("");
+                throw new CMinusParserError("follow expr", tokenString(getToken()), "ParseE\'\'");
+            }
+            else
+            {
+                expressionDoublePrime = new Var(id, inBrackets);
             }
         }
         
@@ -1254,6 +1257,9 @@ public class CMinusParser implements Parser
                 parsed.printMe();
             } catch (CMinusParserError ex2) {
                 System.out.println(ex2);
+            } catch (NullPointerException e)
+            {
+                System.out.println(e.getMessage());
             }
         } catch (IOException ex) {
             System.out.println(ex);
