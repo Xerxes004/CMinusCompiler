@@ -15,7 +15,7 @@
 
 package parser;
 
-class CMinusParserError extends Exception 
+public class CMinusParserError extends Exception 
 {
     public CMinusParserError(String msg) {
         super(msg);
