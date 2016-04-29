@@ -3,6 +3,7 @@ package lowlevel;
 import java.io.*;
 import java.util.*;
 import dataflow.BitArraySet;
+import parser.CodeGenerationException;
 
 /**
  * This class is the primary low-level abstraction for a basic block

@@ -102,7 +102,8 @@ public class Operand {
 /***************************************************************************/
   // support methods
     // converts type to a string for printing
-  private String printType () throws CodeGenerationException {
+  private String printType () throws CodeGenerationException 
+  {
     if (type == OperandType.INTEGER) {
       return ("i");
     }
@@ -123,13 +124,19 @@ public class Operand {
     }
   }
     // prints an operand surrounded by parentheses
-  public void printLLCode(PrintWriter outFile) 
-      throws CodeGenerationException {
-    if (outFile == null) {
-      System.out.print("("+ printType() +" " + value + ")");
+  public void printLLCode(PrintWriter outFile) {
+    try {
+        if (outFile == null) {
+          System.out.print("("+ printType() +" " + value + ")");
+        }
+        else {
+          outFile.print("("+ printType() +" " + value + ")");
+        }
     }
-    else {
-      outFile.print("("+ printType() +" " + value + ")");
+    catch (CodeGenerationException e) {
+        System.err.println("Failed when printing ll code: "+
+            e.getMessage());
+        e.printStackTrace();
     }
 //    System.out.print("("+ printType() +" " + value + ")");
   }

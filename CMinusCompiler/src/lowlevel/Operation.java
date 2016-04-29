@@ -2,6 +2,7 @@ package lowlevel;
 
 import java.io.*;
 import dataflow.BitArraySet;
+import parser.CodeGenerationException;
 
 /**
  * This class is the primary low-level abstraction for an assembly instruction

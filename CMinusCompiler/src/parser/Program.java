@@ -15,8 +15,10 @@
 
 package parser;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import lowlevel.CodeItem;
+import lowlevel.Data;
+import lowlevel.Function;
 
 public class Program 
 {
@@ -38,6 +40,68 @@ public class Program
         }
         
         return sb.toString();
+    }
+    
+    public CodeItem genCode() 
+        throws CodeGenerationException
+    {
+        if (declarations.isEmpty()) return null;
+        
+        CodeItem head = null;
+        
+        int i = 0;
+        CodeItem tail = head;
+        for (Declaration decl : declarations)
+        {
+            if (i == 0)
+            {
+                Declaration first = declarations.get(0);
+        
+                switch (first.getType())
+                {
+                    case Declaration.TYPE_VAR:
+                        head = new Data(Data.TYPE_INT, first.getId());
+                        tail = head;
+                        break;
+                    case Declaration.TYPE_FUN:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (decl.getType())
+                {
+                    case Declaration.TYPE_VAR:
+                        tail.setNextItem(new Data(Data.TYPE_INT, decl.getId()));
+                        tail = tail.getNextItem();
+                        break;
+                        
+                    case Declaration.TYPE_FUN:
+                        FunDeclaration funDecl = (FunDeclaration)decl;
+                        
+                        int type = decl.returnType().equals("int") ? 
+                                   Data.TYPE_INT : Data.TYPE_VOID;
+                        
+                        if (funDecl.hasParams())
+                        {
+                            
+                            tail.setNextItem(new Function(type, decl.getId()));
+                        }
+                        
+                        
+                        break;
+                        
+                    default:
+                        throw new CodeGenerationException(
+                            "Code Item in Program.genCode was not a var or fun decl");
+                }
+            }
+            i++;
+        }
+        
+        return head;
     }
     
     public void printMe() throws NullPointerException{

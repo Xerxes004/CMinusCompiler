@@ -30,16 +30,17 @@ public class CMinusCompiler implements Compiler {
     @Override
     public void compile(String filePrefix) {
 
-        String fileName = filePrefix + ".c";
+        String fileName = "test/inputs/" + filePrefix + ".c";
         try {
             Parser myParser = new CMinusParser(fileName);
 
             Program parseTree = myParser.parseProgram();
             parseTree.printMe();
 
+            
             CodeItem lowLevelCode = parseTree.genCode();
 
-            fileName = filePrefix + ".ll";
+            fileName = "test/outputs/" + filePrefix + ".ll";
             PrintWriter outFile =
                     new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
             lowLevelCode.printLLCode(outFile);
@@ -50,7 +51,7 @@ public class CMinusCompiler implements Compiler {
                     new LowLevelCodeOptimizer(lowLevelCode, optiLevel);
             lowLevelOpti.optimize();
 
-            fileName = filePrefix + ".opti";
+            fileName = "test/outputs/" + filePrefix + ".opti";
             outFile =
                     new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
             lowLevelCode.printLLCode(outFile);
@@ -64,7 +65,7 @@ public class CMinusCompiler implements Compiler {
                 X86CodeGenerator x86gen = new X86CodeGenerator(lowLevelCode);
                 x86gen.convertToX86();
             }
-            fileName = filePrefix + ".x86";
+            fileName = "test/outputs/" + filePrefix + ".x86";
             outFile =
                     new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
             lowLevelCode.printLLCode(outFile);
@@ -96,7 +97,7 @@ public class CMinusCompiler implements Compiler {
 
                 lowLevelCode.printLLCode(null);
 
-                fileName = filePrefix + ".s";
+                fileName = "test/outputs/" + filePrefix + ".s";
                 outFile =
                         new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
                 X64AssemblyGenerator assembler =
@@ -112,7 +113,7 @@ public class CMinusCompiler implements Compiler {
 
                 lowLevelCode.printLLCode(null);
 
-                fileName = filePrefix + ".s";
+                fileName = "test/outputs/" + filePrefix + ".s";
                 outFile =
                         new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
                 X86AssemblyGenerator assembler =
@@ -122,9 +123,7 @@ public class CMinusCompiler implements Compiler {
             }
 
         } 
-        catch (IOException ioe) {
-        }
-        catch (CMinusParserError ex)
+        catch (IOException | CMinusParserError | CodeGenerationException ex)
         {
             Logger.getLogger(CMinusCompiler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -132,7 +131,7 @@ public class CMinusCompiler implements Compiler {
     }
 
     public static void main(String[] args) {
-        String filePrefix = "oneglobal";
+        String filePrefix = "globals";
         CMinusCompiler myCompiler = new CMinusCompiler();
         myCompiler.setGenX64Code(true);
         myCompiler.compile(filePrefix);

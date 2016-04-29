@@ -26,7 +26,7 @@ public class FunDeclaration extends Declaration
                            ArrayList<Param> params, 
                            Statement compoundStmt)
     {
-        super(typeSpecifier, typeSpecifierType, ID);
+        super(typeSpecifier, ID);
         this.params = params;
         this.compoundStmt = compoundStmt;
     }
@@ -39,10 +39,15 @@ public class FunDeclaration extends Declaration
         return params != null;
     }
     
+    public int getType()
+    {
+        return TYPE_FUN;
+    }
+    
     @Override
     public String toString()
     {
-        return typeSpecifier() + " " + ID() 
+        return returnType() + " " + getId() 
              + " ( " + paramsString() + " ) " 
              + compoundStmt.toString();
     }
@@ -74,8 +79,8 @@ public class FunDeclaration extends Declaration
     public void printMe(String spaces){
         System.out.println(spaces + "FunDeclaration");
         spaces += "    ";
-        System.out.println(spaces + this.typeSpecifier());
-        System.out.println(spaces + "ID: " + this.ID());
+        System.out.println(spaces + this.returnType());
+        System.out.println(spaces + "ID: " + this.getId());
         System.out.println(spaces + "(");
         if(this.hasParams()){
             for(int i = 0; i < this.params.size(); i ++) {
