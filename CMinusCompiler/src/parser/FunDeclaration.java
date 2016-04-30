@@ -24,14 +24,15 @@ public class FunDeclaration extends Declaration
                            ArrayList<Param> params, 
                            Statement compoundStmt)
     {
-        super(returnType, ID);
+        super(ID);
+        this.returnType = returnType;
         this.params = params;
         this.compoundStmt = compoundStmt;
     }
     
     private final ArrayList<Param> params;
     private final Statement compoundStmt;
-    private int returnType;
+    private final int returnType;
     
     public boolean hasParams()
     {
