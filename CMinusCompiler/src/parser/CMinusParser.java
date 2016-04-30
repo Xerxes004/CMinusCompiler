@@ -294,10 +294,12 @@ public class CMinusParser implements Parser
         }
 
         matchToken(TokenType.RPAREN);
-
+        
+        int returnType = typeToken.getData().equals("int") ? 
+                         Declaration.TYPE_INT:Declaration.TYPE_VOID;
+        
         return new FunDeclaration(
-            typeToken.getData(), 
-            typeToken.getType(),
+            returnType, 
             id,
             params, 
             parseCompoundStatement());

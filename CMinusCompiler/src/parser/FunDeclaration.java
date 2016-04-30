@@ -16,38 +16,48 @@
 package parser;
 
 import java.util.ArrayList;
-import scanner.Token.TokenType;
 
 public class FunDeclaration extends Declaration
 {
-    public FunDeclaration (String typeSpecifier, 
-                           TokenType typeSpecifierType, 
+    public FunDeclaration (int returnType, 
                            String ID, 
                            ArrayList<Param> params, 
                            Statement compoundStmt)
     {
-        super(typeSpecifier, ID);
+        super(returnType, ID);
         this.params = params;
         this.compoundStmt = compoundStmt;
     }
     
     private final ArrayList<Param> params;
     private final Statement compoundStmt;
+    private int returnType;
     
     public boolean hasParams()
     {
         return params != null;
     }
     
-    public int getType()
+    @Override
+    public int getDeclType()
     {
         return TYPE_FUN;
+    }
+        
+    public int getReturnType()
+    {
+        return this.returnType;
+    }
+    
+    public String returnTypeString()
+    {
+        return returnType == TYPE_VOID ? "void" : "int";
     }
     
     @Override
     public String toString()
     {
-        return returnType() + " " + getId() 
+        return returnTypeString() + " " + getId() 
              + " ( " + paramsString() + " ) " 
              + compoundStmt.toString();
     }
@@ -79,7 +89,7 @@ public class FunDeclaration extends Declaration
     public void printMe(String spaces){
         System.out.println(spaces + "FunDeclaration");
         spaces += "    ";
-        System.out.println(spaces + this.returnType());
+        System.out.println(spaces + returnTypeString());
         System.out.println(spaces + "ID: " + this.getId());
         System.out.println(spaces + "(");
         if(this.hasParams()){

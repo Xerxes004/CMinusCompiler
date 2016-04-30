@@ -20,7 +20,7 @@ public class VarDeclaration extends Declaration
 {
     public VarDeclaration(String ID)
     {
-        super("int", ID);
+        super(ID);
         this.arraySize = -1;
         this.isArray = false;
     }
@@ -28,7 +28,7 @@ public class VarDeclaration extends Declaration
     public VarDeclaration(String ID, int arraySize) 
         throws CMinusParserError
     {
-        super("int", ID);
+        super(ID);
         this.arraySize = arraySize;
         this.isArray = true;
     }
@@ -46,7 +46,7 @@ public class VarDeclaration extends Declaration
         return isArray;
     }
     
-    public int getType()
+    public int getDeclType()
     {
         return TYPE_VAR;
     }
@@ -54,7 +54,7 @@ public class VarDeclaration extends Declaration
     @Override
     public String toString()
     {
-        String string = returnType() + " " + getId();
+        String string = "int" + " " + getId();
         
         if (isArray)
         {

@@ -18,23 +18,28 @@ import scanner.Token.TokenType;
 
 public abstract class Declaration 
 {
-    public Declaration(String type, String ID)
+    public Declaration (String ID)
     {
-        this.typeSpecifier = type;
+        this.returnType = -1;
+        this.ID = ID;
+    }
+    
+    public Declaration(int returnType, String ID)
+    {
+        this.returnType = returnType;
         this.ID = ID;
     }
     
     public static final int TYPE_VAR = 0;
     public static final int TYPE_FUN = 1;
+    public static final int TYPE_VOID = 0;
+    public static final int TYPE_INT = 1;
     
-    private final String typeSpecifier;
+    private final int returnType;
     
     private final String ID;
     
-    public String returnType()
-    {
-        return this.typeSpecifier;
-    }
+
     
     public String getId()
     {
@@ -42,5 +47,5 @@ public abstract class Declaration
     }
     
     public abstract void printMe(String spaces);
-    public abstract int getType();
+    public abstract int getDeclType();
 }
