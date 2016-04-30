@@ -14,20 +14,23 @@
 
 package parser;
 
+import lowlevel.Data;
+import lowlevel.FuncParam;
+
 public class Param 
 {
     public Param(String ID, boolean isArray)
     {
-        this.ID = ID;
+        this.id = ID;
         this.isArray = isArray;
     }
     
-    private final String ID;
+    private final String id;
     private final boolean isArray;
     
-    public String ID()
+    public String getId()
     {
-        return this.ID;
+        return this.id;
     }
     
     public boolean isArray()
@@ -35,12 +38,17 @@ public class Param
         return this.isArray;
     }
     
+    public FuncParam genCode()
+    {
+        return new FuncParam(Data.TYPE_INT, id, isArray);
+    }
+    
     @Override
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
         sb.append("int ")
-          .append(ID)
+          .append(id)
           .append(isArray ? " [ ] " : "");
         return sb.toString();
     }
@@ -49,7 +57,7 @@ public class Param
         System.out.println(spaces + "Param");
         spaces += "   ";
         System.out.println(spaces + "int");
-        System.out.println(spaces + "ID: " +this.ID);
+        System.out.println(spaces + "ID: " +this.id);
         if(this.isArray()) {
             System.out.println(spaces + "[");
             System.out.println(spaces + "]");
