@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import lowlevel.CodeItem;
 import lowlevel.Data;
 import lowlevel.Function;
+import lowlevel.FuncParam;
 
 public class Program 
 {
@@ -48,57 +49,86 @@ public class Program
         if (declarations.isEmpty()) return null;
         
         CodeItem head = null;
+        CodeItem tail = null;
+        Declaration firstDecl = declarations.get(0);
         
-        int i = 0;
-        CodeItem tail = head;
-        for (Declaration decl : declarations)
+        switch(firstDecl.getDeclType())
         {
-            if (i == 0)
-            {
-                Declaration first = declarations.get(0);
+            case Declaration.DECL_TYPE_VAR:
+                head = new Data(Data.TYPE_INT, firstDecl.getId());
+                head.setNextItem(head);
+                tail = head;
+                break;
+                
+            case Declaration.DECL_TYPE_FUN:
+                FunDeclaration funDecl = (FunDeclaration)firstDecl;
+                if (funDecl.hasParams())
+                {
+                    ArrayList<Param> params = funDecl.getParams();
+                    FuncParam firstParam = params.get(0).genCode();
+                    FuncParam last = firstParam;
+                    for (Param p : params.subList(1, params.size()))
+                    {
+                        last.setNextParam(p.genCode());
+                        last = last.getNextParam();
+                    }
+
+                    head = new Function(
+                        firstDecl.getDeclType(), 
+                        firstDecl.getId(), 
+                        firstParam);
+                }
+                else
+                {
+                    head = new Function(funDecl.getDeclType(), funDecl.getId());
+                }
+                tail = head;
+                break;
+                
+            default:
+                throw new CodeGenerationException(
+                    "Code Item in Program.genCode was not a var or fun decl");
+        }
         
-                switch (first.getType())
-                {
-                    case Declaration.TYPE_VAR:
-                        head = new Data(Data.TYPE_INT, first.getId());
-                        tail = head;
-                        break;
-                    case Declaration.TYPE_FUN:
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
+        for (Declaration decl : declarations.subList(1, declarations.size()))
+        {
+            switch(decl.getDeclType())
             {
-                switch (decl.getType())
+            case Declaration.DECL_TYPE_VAR:
+                tail.setNextItem(new Data(Data.TYPE_INT, decl.getId()));
+                break;
+
+            case Declaration.DECL_TYPE_FUN:
+                FunDeclaration funDecl = (FunDeclaration)decl;
+                if (funDecl.hasParams())
                 {
-                    case Declaration.TYPE_VAR:
-                        tail.setNextItem(new Data(Data.TYPE_INT, decl.getId()));
-                        tail = tail.getNextItem();
-                        break;
-                        
-                    case Declaration.TYPE_FUN:
-                        FunDeclaration funDecl = (FunDeclaration)decl;
-                        
-                        int type = decl.returnType().equals("int") ? 
-                                   Data.TYPE_INT : Data.TYPE_VOID;
-                        
-                        if (funDecl.hasParams())
-                        {
-                            
-                            tail.setNextItem(new Function(type, decl.getId()));
-                        }
-                        
-                        
-                        break;
-                        
-                    default:
-                        throw new CodeGenerationException(
-                            "Code Item in Program.genCode was not a var or fun decl");
+                    ArrayList<Param> params = funDecl.getParams();
+                    FuncParam firstParam = params.get(0).genCode();
+                    FuncParam lastParam = firstParam;
+                    for (Param p : params.subList(1, params.size()))
+                    {
+                        lastParam.setNextParam(p.genCode());
+                        lastParam = lastParam.getNextParam();
+                    }
+
+                    tail.setNextItem(new Function(
+                        decl.getDeclType(), 
+                        decl.getId(), 
+                        firstParam));
                 }
+                else
+                {
+                    tail.setNextItem(
+                        new Function(funDecl.getDeclType(), funDecl.getId())
+                    );
+                }
+                break;
+            default:
+                throw new CodeGenerationException(
+                    "Code Item in Program.genCode was not a var or fun decl");
             }
-            i++;
+            
+            tail = tail.getNextItem();
         }
         
         return head;

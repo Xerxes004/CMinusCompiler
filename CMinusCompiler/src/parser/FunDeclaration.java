@@ -20,11 +20,11 @@ import java.util.ArrayList;
 public class FunDeclaration extends Declaration
 {
     public FunDeclaration (int returnType, 
-                           String ID, 
+                           String id, 
                            ArrayList<Param> params, 
                            Statement compoundStmt)
     {
-        super(ID);
+        super(id);
         this.returnType = returnType;
         this.params = params;
         this.compoundStmt = compoundStmt;
@@ -39,10 +39,15 @@ public class FunDeclaration extends Declaration
         return params != null;
     }
     
+    public ArrayList<Param> getParams()
+    {
+        return this.params;
+    }
+    
     @Override
     public int getDeclType()
     {
-        return TYPE_FUN;
+        return DECL_TYPE_FUN;
     }
         
     public int getReturnType()

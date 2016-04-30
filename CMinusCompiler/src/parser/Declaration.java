@@ -30,8 +30,8 @@ public abstract class Declaration
         this.ID = ID;
     }
     
-    public static final int TYPE_VAR = 0;
-    public static final int TYPE_FUN = 1;
+    public static final int DECL_TYPE_VAR = 0;
+    public static final int DECL_TYPE_FUN = 1;
     public static final int TYPE_VOID = 0;
     public static final int TYPE_INT = 1;
     

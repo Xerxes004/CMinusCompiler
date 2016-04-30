@@ -48,7 +48,7 @@ public class VarDeclaration extends Declaration
     
     public int getDeclType()
     {
-        return TYPE_VAR;
+        return DECL_TYPE_VAR;
     }
     
     @Override

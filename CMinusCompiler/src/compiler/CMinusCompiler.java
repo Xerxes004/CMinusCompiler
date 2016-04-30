@@ -36,10 +36,12 @@ public class CMinusCompiler implements Compiler {
 
             Program parseTree = myParser.parseProgram();
             parseTree.printMe();
-
             
             CodeItem lowLevelCode = parseTree.genCode();
 
+        //**********************************************************************
+        // don't edit anything below this comment
+        //**********************************************************************
             fileName = "test/outputs/" + filePrefix + ".ll";
             PrintWriter outFile =
                     new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
@@ -131,7 +133,7 @@ public class CMinusCompiler implements Compiler {
     }
 
     public static void main(String[] args) {
-        String filePrefix = "globals";
+        String filePrefix = "funcs";
         CMinusCompiler myCompiler = new CMinusCompiler();
         myCompiler.setGenX64Code(true);
         myCompiler.compile(filePrefix);
