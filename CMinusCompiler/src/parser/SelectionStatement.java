@@ -14,7 +14,7 @@
 
 package parser;
 
-import lowlevel.CodeItem;
+import lowlevel.Operation;
 
 public class SelectionStatement extends Statement {
 
@@ -25,9 +25,9 @@ public class SelectionStatement extends Statement {
         this.elsePart = inputElse;
     }
     
-    private Expression expr;
-    private Statement ifPart;
-    private Statement elsePart;
+    private final Expression expr;
+    private final Statement ifPart;
+    private final Statement elsePart;
     
     public String toString() {
         return (this.expr.toString() + " "
@@ -52,7 +52,7 @@ public class SelectionStatement extends Statement {
     }
     
     @Override
-    public CodeItem genCode()
+    public Operation genCode()
     {
         return null;
     }

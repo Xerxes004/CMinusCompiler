@@ -13,7 +13,7 @@
 
 package parser;
 
-import lowlevel.CodeItem;
+import lowlevel.Operation;
 
 public abstract class Statement{
     
@@ -25,5 +25,5 @@ public abstract class Statement{
     public abstract String toString();
     
     public abstract void printMe(String spaces);
-    public abstract CodeItem genCode();
+    public abstract Operation genCode();
 }

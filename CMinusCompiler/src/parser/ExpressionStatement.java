@@ -13,7 +13,7 @@
 
 package parser;
 
-import lowlevel.CodeItem;
+import lowlevel.Operation;
 
 public class ExpressionStatement extends Statement{
     
@@ -39,7 +39,7 @@ public class ExpressionStatement extends Statement{
     }
     
     @Override
-    public CodeItem genCode()
+    public Operation genCode()
     {
         return null;
     }

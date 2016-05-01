@@ -20,6 +20,7 @@ import lowlevel.BasicBlock;
 import lowlevel.CodeItem;
 import lowlevel.FuncParam;
 import lowlevel.Function;
+import lowlevel.Operation;
 
 public class FunDeclaration extends Declaration
 {
@@ -135,8 +136,10 @@ public class FunDeclaration extends Declaration
             }
 
             function = new Function(this.getDeclType(), this.getId(), firstParam);
-            BasicBlock firstBlock = new BasicBlock(function);
-            
+            function.createBlock0();
+            function.getFirstBlock().appendOper( 
+                (Operation)compoundStmt.genCode() 
+            );
         }
         else
         {

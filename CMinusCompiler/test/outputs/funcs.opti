@@ -1,4 +1,4 @@
-(FUNCTION  addone  [(int a)]
+(FUNCTION  funcOne  [(int a)]
 )
-(FUNCTION  addtwo  [(int b)]
+(FUNCTION  funcTwo  [(int b)]
 )

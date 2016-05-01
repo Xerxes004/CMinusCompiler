@@ -1,9 +1,9 @@
-int addone(int a)
+int funcOne(int a)
 {
     int x;
 }
 
-int addtwo(int b)
+void funcTwo(int b)
 {
     int y;
 }

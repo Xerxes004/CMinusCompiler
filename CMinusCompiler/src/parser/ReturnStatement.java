@@ -13,7 +13,7 @@
 
 package parser;
 
-import lowlevel.CodeItem;
+import lowlevel.Operation;
 
 public class ReturnStatement extends Statement
 {
@@ -45,7 +45,7 @@ public class ReturnStatement extends Statement
     }
     
     @Override
-    public CodeItem genCode()
+    public Operation genCode()
     {
         return null;
     }

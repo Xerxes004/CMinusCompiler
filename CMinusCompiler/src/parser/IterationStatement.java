@@ -14,7 +14,7 @@
 
 package parser;
 
-import lowlevel.CodeItem;
+import lowlevel.Operation;
 
 public class IterationStatement extends Statement{
     public IterationStatement(Expression inputExpr, Statement inputStmt) {
@@ -41,7 +41,7 @@ public class IterationStatement extends Statement{
     }
     
     @Override
-    public CodeItem genCode()
+    public Operation genCode()
     {
         return null;
     }

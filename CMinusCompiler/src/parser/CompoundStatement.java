@@ -16,7 +16,7 @@
 package parser;
 
 import java.util.*;
-import lowlevel.CodeItem;
+import lowlevel.Operation;
 
 public class CompoundStatement
     extends Statement
@@ -67,8 +67,16 @@ public class CompoundStatement
     }
     
     @Override
-    public CodeItem genCode()
+    public Operation genCode()
     {
+        for (Declaration localDecl : localDeclarations)
+        {
+            
+        }
+        for (Statement statement : statementList)
+        {
+            
+        }
         return null;
     }
 }
