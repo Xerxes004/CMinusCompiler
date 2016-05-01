@@ -43,4 +43,10 @@ public class ExpressionStatement extends Statement{
     {
         return null;
     }
+    
+    @Override
+    public StatementType getStatementType()
+    {
+        return StatementType.EXPRESSION;
+    }
 }

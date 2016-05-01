@@ -56,4 +56,10 @@ public class SelectionStatement extends Statement {
     {
         return null;
     }
+    
+    @Override
+    public StatementType getStatementType()
+    {
+        return StatementType.SELECTION;
+    }
 }

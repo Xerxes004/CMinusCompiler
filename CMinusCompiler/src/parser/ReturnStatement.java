@@ -49,4 +49,10 @@ public class ReturnStatement extends Statement
     {
         return null;
     }
+    
+    @Override
+    public StatementType getStatementType()
+    {
+        return StatementType.RETURN;
+    }
 }

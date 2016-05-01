@@ -66,17 +66,35 @@ public class CompoundStatement
         System.out.println(spaces + "}");
     }
     
+    public ArrayList<String> getLocalVars()
+    {
+        ArrayList<String> localVars = new ArrayList<>();
+        
+        for (Declaration localDecl : localDeclarations)
+        {
+            localVars.add(localDecl.getId());
+        }
+        
+        return localVars;
+    }
+    
     @Override
     public Operation genCode()
     {
-        for (Declaration localDecl : localDeclarations)
-        {
-            
-        }
+        Operation firstOper = null;
+        Operation lastOper = null;
+        
         for (Statement statement : statementList)
         {
             
         }
+        
         return null;
+    }
+    
+    @Override
+    public StatementType getStatementType()
+    {
+        return StatementType.COMPOUND;
     }
 }

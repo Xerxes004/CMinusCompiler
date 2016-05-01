@@ -45,4 +45,10 @@ public class IterationStatement extends Statement{
     {
         return null;
     }
+    
+    @Override
+    public StatementType getStatementType()
+    {
+        return StatementType.ITERATION;
+    }
 }

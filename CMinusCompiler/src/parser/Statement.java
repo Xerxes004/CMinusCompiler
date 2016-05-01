@@ -17,8 +17,8 @@ import lowlevel.Operation;
 
 public abstract class Statement{
     
-    public Statement() {
-        
+    public enum StatementType {
+        SELECTION, RETURN, COMPOUND, EXPRESSION, ITERATION
     }
     
     @Override
@@ -26,4 +26,5 @@ public abstract class Statement{
     
     public abstract void printMe(String spaces);
     public abstract Operation genCode();
+    public abstract StatementType getStatementType();
 }
