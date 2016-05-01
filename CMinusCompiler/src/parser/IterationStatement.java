@@ -14,6 +14,8 @@
 
 package parser;
 
+import lowlevel.CodeItem;
+
 public class IterationStatement extends Statement{
     public IterationStatement(Expression inputExpr, Statement inputStmt) {
         this.expr = inputExpr;
@@ -36,5 +38,11 @@ public class IterationStatement extends Statement{
         this.expr.printMe(spaces);
         System.out.println(spaces + ")");
         this.stmt.printMe(spaces);
+    }
+    
+    @Override
+    public CodeItem genCode()
+    {
+        return null;
     }
 }

@@ -14,6 +14,8 @@
 
 package parser;
 
+import lowlevel.CodeItem;
+
 public class SelectionStatement extends Statement {
 
     public SelectionStatement(
@@ -49,4 +51,9 @@ public class SelectionStatement extends Statement {
         
     }
     
+    @Override
+    public CodeItem genCode()
+    {
+        return null;
+    }
 }

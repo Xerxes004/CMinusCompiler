@@ -16,6 +16,7 @@
 package parser;
 
 import java.util.*;
+import lowlevel.CodeItem;
 
 public class CompoundStatement
     extends Statement
@@ -27,8 +28,8 @@ public class CompoundStatement
         this.statementList = statementList;
     }
 
-    private ArrayList<Declaration> localDeclarations;
-    private ArrayList<Statement> statementList;
+    private final ArrayList<Declaration> localDeclarations;
+    private final ArrayList<Statement> statementList;
 
     public String toString()
     {
@@ -46,6 +47,7 @@ public class CompoundStatement
         return toOutput;
     }
 
+    @Override
     public void printMe(String spaces)
     {
         System.out.println(spaces + "CompoundStatement");
@@ -62,5 +64,11 @@ public class CompoundStatement
             
         }
         System.out.println(spaces + "}");
+    }
+    
+    @Override
+    public CodeItem genCode()
+    {
+        return null;
     }
 }

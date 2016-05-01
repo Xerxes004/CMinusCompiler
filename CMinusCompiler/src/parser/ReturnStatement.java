@@ -13,6 +13,8 @@
 
 package parser;
 
+import lowlevel.CodeItem;
+
 public class ReturnStatement extends Statement
 {
     public ReturnStatement(Statement expressionStatement) 
@@ -40,5 +42,11 @@ public class ReturnStatement extends Statement
             this.expressionStatement.printMe(spaces);
         }
         System.out.println(spaces + ";");
+    }
+    
+    @Override
+    public CodeItem genCode()
+    {
+        return null;
     }
 }

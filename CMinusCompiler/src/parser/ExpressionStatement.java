@@ -13,6 +13,8 @@
 
 package parser;
 
+import lowlevel.CodeItem;
+
 public class ExpressionStatement extends Statement{
     
     public ExpressionStatement(Expression input) {
@@ -36,4 +38,9 @@ public class ExpressionStatement extends Statement{
         }
     }
     
+    @Override
+    public CodeItem genCode()
+    {
+        return null;
+    }
 }

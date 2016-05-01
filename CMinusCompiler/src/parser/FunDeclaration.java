@@ -16,6 +16,7 @@
 package parser;
 
 import java.util.ArrayList;
+import lowlevel.BasicBlock;
 import lowlevel.CodeItem;
 import lowlevel.FuncParam;
 import lowlevel.Function;
@@ -134,6 +135,8 @@ public class FunDeclaration extends Declaration
             }
 
             function = new Function(this.getDeclType(), this.getId(), firstParam);
+            BasicBlock firstBlock = new BasicBlock(function);
+            
         }
         else
         {
