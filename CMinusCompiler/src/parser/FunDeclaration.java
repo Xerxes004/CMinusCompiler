@@ -16,6 +16,9 @@
 package parser;
 
 import java.util.ArrayList;
+import lowlevel.CodeItem;
+import lowlevel.FuncParam;
+import lowlevel.Function;
 
 public class FunDeclaration extends Declaration
 {
@@ -92,11 +95,12 @@ public class FunDeclaration extends Declaration
         return sb.toString();
     }
     
+    @Override
     public void printMe(String spaces){
         System.out.println(spaces + "FunDeclaration");
         spaces += "    ";
         System.out.println(spaces + returnTypeString());
-        System.out.println(spaces + "ID: " + this.getId());
+        System.out.println(spaces + "ID: " + getId());
         System.out.println(spaces + "(");
         if(this.hasParams()){
             for(int i = 0; i < this.params.size(); i ++) {
@@ -111,5 +115,31 @@ public class FunDeclaration extends Declaration
         }
         System.out.println(spaces + ")");
         this.compoundStmt.printMe(spaces);
+    }
+    
+    @Override
+    public CodeItem genCode()
+    {
+        Function function = null;
+        
+        if (this.hasParams())
+        {
+            FuncParam firstParam = params.get(0).genCode();
+            FuncParam lastParam = firstParam;
+            
+            for (Param p : params.subList(1, params.size()))
+            {
+                lastParam.setNextParam(p.genCode());
+                lastParam = lastParam.getNextParam();
+            }
+
+            function = new Function(this.getDeclType(), this.getId(), firstParam);
+        }
+        else
+        {
+            function = new Function(this.getDeclType(), this.getId());
+        }
+        
+        return function;
     }
 }

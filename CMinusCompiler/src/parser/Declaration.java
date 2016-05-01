@@ -14,7 +14,7 @@
 
 package parser;
 
-import scanner.Token.TokenType;
+import lowlevel.CodeItem;
 
 public abstract class Declaration 
 {
@@ -48,4 +48,5 @@ public abstract class Declaration
     
     public abstract void printMe(String spaces);
     public abstract int getDeclType();
+    public abstract CodeItem genCode();
 }

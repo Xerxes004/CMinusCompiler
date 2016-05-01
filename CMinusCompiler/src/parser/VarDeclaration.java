@@ -14,6 +14,8 @@
 
 package parser;
 
+import lowlevel.CodeItem;
+import lowlevel.Data;
 import scanner.Token.TokenType;
 
 public class VarDeclaration extends Declaration 
@@ -79,4 +81,9 @@ public class VarDeclaration extends Declaration
         System.out.println(spaces + ";");
     }
     
+    @Override
+    public CodeItem genCode()
+    {
+        return new Data(Data.TYPE_INT, getId());
+    }
 }

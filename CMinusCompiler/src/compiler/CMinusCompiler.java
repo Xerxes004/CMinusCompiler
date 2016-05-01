@@ -125,7 +125,11 @@ public class CMinusCompiler implements Compiler {
             }
 
         } 
-        catch (IOException | CMinusParserError | CodeGenerationException ex)
+        catch (IOException | CMinusParserError ex)
+        {
+            Logger.getLogger(CMinusCompiler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (CodeGenerationException ex)
         {
             Logger.getLogger(CMinusCompiler.class.getName()).log(Level.SEVERE, null, ex);
         }

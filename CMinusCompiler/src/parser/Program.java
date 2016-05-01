@@ -16,6 +16,8 @@
 package parser;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lowlevel.CodeItem;
 import lowlevel.Data;
 import lowlevel.Function;
@@ -30,6 +32,11 @@ public class Program
     
     private final ArrayList<Declaration> declarations;
     
+    public ArrayList<Declaration> getDeclarations()
+    {
+        return declarations;
+    }
+    
     @Override
     public String toString()
     {
@@ -43,92 +50,25 @@ public class Program
         return sb.toString();
     }
     
-    public CodeItem genCode() 
-        throws CodeGenerationException
+    public CodeItem genCode() throws CodeGenerationException
     {
         if (declarations.isEmpty()) return null;
         
         CodeItem head = null;
         CodeItem tail = null;
-        Declaration firstDecl = declarations.get(0);
         
-        switch(firstDecl.getDeclType())
+        for (Declaration decl : declarations)
         {
-            case Declaration.DECL_TYPE_VAR:
-                head = new Data(Data.TYPE_INT, firstDecl.getId());
-                head.setNextItem(head);
-                tail = head;
-                break;
-                
-            case Declaration.DECL_TYPE_FUN:
-                FunDeclaration funDecl = (FunDeclaration)firstDecl;
-                if (funDecl.hasParams())
-                {
-                    ArrayList<Param> params = funDecl.getParams();
-                    FuncParam firstParam = params.get(0).genCode();
-                    FuncParam last = firstParam;
-                    for (Param p : params.subList(1, params.size()))
-                    {
-                        last.setNextParam(p.genCode());
-                        last = last.getNextParam();
-                    }
-
-                    head = new Function(
-                        firstDecl.getDeclType(), 
-                        firstDecl.getId(), 
-                        firstParam);
-                }
-                else
-                {
-                    head = new Function(funDecl.getDeclType(), funDecl.getId());
-                }
-                tail = head;
-                break;
-                
-            default:
-                throw new CodeGenerationException(
-                    "Code Item in Program.genCode was not a var or fun decl");
-        }
-        
-        for (Declaration decl : declarations.subList(1, declarations.size()))
-        {
-            switch(decl.getDeclType())
+            if (head == null || tail == null)
             {
-            case Declaration.DECL_TYPE_VAR:
-                tail.setNextItem(new Data(Data.TYPE_INT, decl.getId()));
-                break;
-
-            case Declaration.DECL_TYPE_FUN:
-                FunDeclaration funDecl = (FunDeclaration)decl;
-                if (funDecl.hasParams())
-                {
-                    ArrayList<Param> params = funDecl.getParams();
-                    FuncParam firstParam = params.get(0).genCode();
-                    FuncParam lastParam = firstParam;
-                    for (Param p : params.subList(1, params.size()))
-                    {
-                        lastParam.setNextParam(p.genCode());
-                        lastParam = lastParam.getNextParam();
-                    }
-
-                    tail.setNextItem(new Function(
-                        decl.getDeclType(), 
-                        decl.getId(), 
-                        firstParam));
-                }
-                else
-                {
-                    tail.setNextItem(
-                        new Function(funDecl.getDeclType(), funDecl.getId())
-                    );
-                }
-                break;
-            default:
-                throw new CodeGenerationException(
-                    "Code Item in Program.genCode was not a var or fun decl");
+                head = decl.genCode();
+                tail = head;
             }
-            
-            tail = tail.getNextItem();
+            else
+            {
+                tail.setNextItem(decl.genCode());
+                tail = tail.getNextItem();
+            }
         }
         
         return head;
