@@ -14,7 +14,11 @@
 
 package parser;
 
-public class Var extends Expression
+import lowlevel.Function;
+import lowlevel.Operation;
+
+public class Var 
+    extends Expression
 {
     public Var(String ID, Expression arrayLength)
     {
@@ -34,6 +38,12 @@ public class Var extends Expression
     public boolean isArray()
     {
         return dereferenceExpression != null;
+    }
+    
+    @Override
+    public ExpressionType getExpressionType()
+    {
+        return ExpressionType.VAR;
     }
     
     @Override
@@ -61,4 +71,7 @@ public class Var extends Expression
         }
         
     }
+    
+    @Override
+    public Operation genCode(Function function){return null;}
 }

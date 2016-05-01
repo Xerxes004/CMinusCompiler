@@ -14,6 +14,8 @@
 package parser;
 
 import java.util.ArrayList;
+import lowlevel.Function;
+import lowlevel.Operation;
 
 public class Call
     extends Expression
@@ -30,6 +32,22 @@ public class Call
     public boolean hasArgs()
     {
         return args != null;
+    }
+    
+    public String getId()
+    {
+        return id;
+    }
+    
+    public ArrayList<Expression> getArgs()
+    {
+        return args;
+    }
+    
+    @Override
+    public ExpressionType getExpressionType()
+    {
+        return ExpressionType.CALL;
     }
 
     @Override
@@ -66,4 +84,7 @@ public class Call
         System.out.println(spaces + ")");
 
     }
+    
+    @Override
+    public Operation genCode(Function function){return null;}
 }

@@ -14,6 +14,9 @@
 
 package parser;
 
+import lowlevel.Function;
+import lowlevel.Operation;
+
 public class AssignExpression extends Expression
 {
     public AssignExpression(Expression var, Expression expression)
@@ -24,6 +27,12 @@ public class AssignExpression extends Expression
 
     Expression var;
     Expression expression;
+    
+    @Override
+    public ExpressionType getExpressionType()
+    {
+        return ExpressionType.ASSIGN;
+    }
     
     @Override
     public String toString()
@@ -41,5 +50,11 @@ public class AssignExpression extends Expression
         System.out.println(spaces + "ASSIGN");
         this.expression.printMe(spaces);
         System.out.println(spaces + ";");
+    }
+    
+    @Override
+    public Operation genCode(Function function)
+    {
+        return null;
     }
 }

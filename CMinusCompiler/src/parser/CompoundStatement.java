@@ -17,6 +17,7 @@ package parser;
 
 import java.util.*;
 import lowlevel.Operation;
+import lowlevel.Function;
 
 public class CompoundStatement
     extends Statement
@@ -79,14 +80,31 @@ public class CompoundStatement
     }
     
     @Override
-    public Operation genCode()
+    public Operation genCode(Function function)
     {
         Operation firstOper = null;
         Operation lastOper = null;
         
         for (Statement statement : statementList)
         {
-            
+            switch (statement.getStatementType())
+            {
+                case EXPRESSION:
+                    Operation oper = statement.genCode(function);
+                    if (firstOper == null || lastOper == null)
+                    {
+                        firstOper = oper;
+                        lastOper = firstOper;
+                    }
+                    else
+                    {
+                        lastOper.setNextOper(oper);
+                        lastOper = lastOper.getNextOper();
+                    }
+                    break;
+                default:
+                    
+            }
         }
         
         return null;

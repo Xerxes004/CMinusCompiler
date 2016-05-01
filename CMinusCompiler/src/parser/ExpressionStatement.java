@@ -13,6 +13,7 @@
 
 package parser;
 
+import lowlevel.Function;
 import lowlevel.Operation;
 
 public class ExpressionStatement extends Statement{
@@ -39,8 +40,18 @@ public class ExpressionStatement extends Statement{
     }
     
     @Override
-    public Operation genCode()
+    public Operation genCode(Function function)
     {
+        switch (expr.getExpressionType())
+        {
+            case BINARY:
+                BinaryExpression b = (BinaryExpression)expr;
+                switch(b.getExpressionType())
+                {
+                    case ASSIGN:
+                        // TODO
+                }
+        }
         return null;
     }
     

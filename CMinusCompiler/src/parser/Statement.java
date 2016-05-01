@@ -13,6 +13,7 @@
 
 package parser;
 
+import lowlevel.Function;
 import lowlevel.Operation;
 
 public abstract class Statement{
@@ -25,6 +26,6 @@ public abstract class Statement{
     public abstract String toString();
     
     public abstract void printMe(String spaces);
-    public abstract Operation genCode();
+    public abstract Operation genCode(Function function);
     public abstract StatementType getStatementType();
 }

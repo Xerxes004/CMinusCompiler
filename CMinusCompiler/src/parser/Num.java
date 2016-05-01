@@ -14,7 +14,12 @@
 
 package parser;
 
-public class Num extends Expression
+import lowlevel.Function;
+import lowlevel.Operand;
+import lowlevel.Operation;
+
+public class Num
+    extends Expression
 {
     public Num(int value)
     {
@@ -22,6 +27,17 @@ public class Num extends Expression
     }
     
     private final int value;
+    
+    public int getValue()
+    {
+        return value;
+    }
+    
+    @Override
+    public ExpressionType getExpressionType()
+    {
+        return ExpressionType.NUM;
+    }
     
     @Override
     public String toString()
@@ -32,4 +48,6 @@ public class Num extends Expression
     public void printMe(String spaces) {
         System.out.println(spaces + "NUM: " + this.value);
     }
+    
+    public Operation genCode(Function function){return null;}
 }

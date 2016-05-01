@@ -13,6 +13,9 @@
 
 package parser;
 
+import lowlevel.Function;
+import lowlevel.Operation;
+
 public class BinaryExpression
     extends Expression
 {
@@ -27,6 +30,12 @@ public class BinaryExpression
     private final Expression firstExpr;
     private final Expression secondExpr;
     private Operator op;
+    
+    @Override
+    public ExpressionType getExpressionType()
+    {
+        return ExpressionType.BINARY;
+    }
 
     public enum Operator
     {
@@ -52,4 +61,9 @@ public class BinaryExpression
         
     }    
 
+    @Override
+    public Operation genCode(Function function)
+    {
+        return null;
+    }
 }

@@ -16,6 +16,7 @@
 package parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import lowlevel.BasicBlock;
 import lowlevel.CodeItem;
 import lowlevel.FuncParam;
@@ -137,9 +138,9 @@ public class FunDeclaration extends Declaration
 
             function = new Function(this.getDeclType(), this.getId(), firstParam);
             function.createBlock0();
-            function.getFirstBlock().appendOper( 
-                (Operation)compoundStmt.genCode() 
-            );
+            function.getTable().putAll(makeSymbolTable(compoundStmt, function));
+            function.getFirstBlock().appendOper(compoundStmt.genCode(function));
+            function.getLastBlock().setNextBlock(function.getReturnBlock());
         }
         else
         {
@@ -147,5 +148,19 @@ public class FunDeclaration extends Declaration
         }
         
         return function;
+    }
+    
+    private HashMap<String, Integer> makeSymbolTable(Statement compoundStmt, Function function)
+    {
+        ArrayList<String> localVars = 
+                ((CompoundStatement)compoundStmt).getLocalVars();
+            
+        HashMap<String, Integer> symbolTable = new HashMap<>();
+        for (String id : localVars)
+        {
+            symbolTable.put(id, function.getNewRegNum());
+        }
+        
+        return symbolTable;
     }
 }

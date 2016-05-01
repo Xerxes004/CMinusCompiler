@@ -14,7 +14,15 @@
 
 package parser;
 
+import lowlevel.Function;
+import lowlevel.Operation;
+
 public abstract class Expression 
 {
+    public enum ExpressionType {
+        NUM, VAR, CALL, BINARY, ASSIGN
+    }
     public abstract void printMe(String spaces);
+    public abstract Operation genCode(Function function);
+    public abstract ExpressionType getExpressionType();
 }

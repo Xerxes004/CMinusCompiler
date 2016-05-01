@@ -14,6 +14,7 @@
 
 package parser;
 
+import lowlevel.Function;
 import lowlevel.Operation;
 
 public class IterationStatement extends Statement{
@@ -41,7 +42,7 @@ public class IterationStatement extends Statement{
     }
     
     @Override
-    public Operation genCode()
+    public Operation genCode(Function function)
     {
         return null;
     }
