@@ -107,7 +107,7 @@ public class CompoundStatement
             }
         }
         
-        return null;
+        return firstOper;
     }
     
     @Override

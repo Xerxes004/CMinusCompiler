@@ -20,21 +20,36 @@ public class BinaryExpression
     extends Expression
 {
     public BinaryExpression(
-        Expression inputFirst, Operator inputOp, Expression inputSecond)
+        Expression leftSide, Operator inputOp, Expression rightSide)
     {
-        this.firstExpr = inputFirst;
+        this.leftSide = leftSide;
         this.op = inputOp;
-        this.secondExpr = inputSecond;
+        this.rightSide = rightSide;
     }
 
-    private final Expression firstExpr;
-    private final Expression secondExpr;
-    private Operator op;
+    private final Expression leftSide;
+    private final Expression rightSide;
+    private final Operator op;
     
     @Override
     public ExpressionType getExpressionType()
     {
         return ExpressionType.BINARY;
+    }
+    
+    public Expression getLeftSide()
+    {
+        return leftSide;
+    }
+    
+    public Expression getRightSide()
+    {
+        return rightSide;
+    }
+    
+    public Operator getOperator()
+    {
+        return op;
     }
 
     public enum Operator
@@ -45,9 +60,9 @@ public class BinaryExpression
 
     public String toString()
     {
-        return (this.firstExpr.toString() + " "
+        return (this.leftSide.toString() + " "
             + this.op.toString() + " "
-            + this.secondExpr.toString());
+            + this.rightSide.toString());
     }
 
     @Override
@@ -55,9 +70,9 @@ public class BinaryExpression
     {
         System.out.println(spaces + "BinaryExpression");
         spaces += "    ";
-        this.firstExpr.printMe(spaces);
+        this.leftSide.printMe(spaces);
         System.out.println(spaces + op.toString());
-        this.secondExpr.printMe(spaces);
+        this.rightSide.printMe(spaces);
         
     }    
 

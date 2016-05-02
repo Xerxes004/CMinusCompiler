@@ -34,6 +34,16 @@ public class AssignExpression extends Expression
         return ExpressionType.ASSIGN;
     }
     
+    public Expression getLeftSide()
+    {
+        return var;
+    }
+    
+    public Expression getRightSide()
+    {
+        return expression;
+    }
+    
     @Override
     public String toString()
     {

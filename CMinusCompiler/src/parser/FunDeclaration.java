@@ -137,10 +137,12 @@ public class FunDeclaration extends Declaration
             }
 
             function = new Function(this.getDeclType(), this.getId(), firstParam);
-            function.createBlock0();
             function.getTable().putAll(makeSymbolTable(compoundStmt, function));
-            function.getFirstBlock().appendOper(compoundStmt.genCode(function));
-            function.getLastBlock().setNextBlock(function.getReturnBlock());
+            function.createBlock0();
+            function.setCurrBlock(function.getFirstBlock());
+            function.getCurrBlock().appendOper(compoundStmt.genCode(function));
+            function.appendToCurrentBlock(function.getReturnBlock());
+            function.setCurrBlock(function.getLastBlock());
         }
         else
         {
@@ -150,6 +152,7 @@ public class FunDeclaration extends Declaration
         return function;
     }
     
+    // TODO: need to add globals
     private HashMap<String, Integer> makeSymbolTable(Statement compoundStmt, Function function)
     {
         ArrayList<String> localVars = 
@@ -159,6 +162,10 @@ public class FunDeclaration extends Declaration
         for (String id : localVars)
         {
             symbolTable.put(id, function.getNewRegNum());
+        }
+        for (FuncParam p = function.getfirstParam(); p != null; p = p.getNextParam())
+        {
+            symbolTable.put(p.getName(), function.getNewRegNum());
         }
         
         return symbolTable;

@@ -137,7 +137,7 @@ public class CMinusCompiler implements Compiler {
     }
 
     public static void main(String[] args) {
-        String filePrefix = "funcs";
+        String filePrefix = "onefunc";
         CMinusCompiler myCompiler = new CMinusCompiler();
         myCompiler.setGenX64Code(true);
         myCompiler.compile(filePrefix);

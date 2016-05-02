@@ -20,24 +20,29 @@ import lowlevel.Operation;
 public class Var 
     extends Expression
 {
-    public Var(String ID, Expression arrayLength)
+    public Var(String id, Expression array)
     {
-        this.ID = ID;
-        this.dereferenceExpression = arrayLength;
+        this.id = id;
+        this.dereferenceExpression = array;
     }
     
     public Var(String ID)
     {
-        this.ID = ID;
+        this.id = ID;
         this.dereferenceExpression = null;
     }
     
-    private final String ID;
+    private final String id;
     private final Expression dereferenceExpression;
     
     public boolean isArray()
     {
         return dereferenceExpression != null;
+    }
+    
+    public String getId()
+    {
+        return id;
     }
     
     @Override
@@ -50,7 +55,7 @@ public class Var
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(ID).append(" ");
+        sb.append(id).append(" ");
         
         if (isArray())
         {
@@ -63,7 +68,7 @@ public class Var
     public void printMe(String spaces) {
         System.out.println(spaces + "Var");
         spaces += "    ";
-        System.out.println(spaces + "ID: " + this.ID);
+        System.out.println(spaces + "ID: " + this.id);
         if(this.isArray()) {
             System.out.println(spaces + "[");
             this.dereferenceExpression.printMe(spaces);

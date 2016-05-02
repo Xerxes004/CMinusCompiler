@@ -14,6 +14,7 @@
 package parser;
 
 import lowlevel.Function;
+import lowlevel.Operand;
 import lowlevel.Operation;
 
 public class ExpressionStatement extends Statement{
@@ -44,13 +45,28 @@ public class ExpressionStatement extends Statement{
     {
         switch (expr.getExpressionType())
         {
-            case BINARY:
-                BinaryExpression b = (BinaryExpression)expr;
-                switch(b.getExpressionType())
-                {
-                    case ASSIGN:
-                        // TODO
-                }
+            // NOTE, THIS CODE ONLY WORKS FOR VAR = INT
+            // IT IS MEANT TO BE USED AS A TEST ONLY
+            case ASSIGN:
+                AssignExpression assignExpr = (AssignExpression)expr;
+                Var lhs = (Var)assignExpr.getLeftSide();
+                Num rhs = (Num)assignExpr.getRightSide();
+                Operand lhsOp = new Operand(
+                        Operand.OperandType.REGISTER, 
+                        function.getTable().get(lhs.getId())
+                    );
+                Operand rhsOp = new Operand(
+                    Operand.OperandType.INTEGER,
+                    rhs.getValue()
+                );
+                Operation op = new Operation(
+                    Operation.OperationType.ASSIGN,
+                    function.getCurrBlock()
+                );
+                op.setDestOperand(0, lhsOp);
+                op.setSrcOperand(0, rhsOp);
+                
+                return op;
         }
         return null;
     }
