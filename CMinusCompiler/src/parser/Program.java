@@ -16,12 +16,7 @@
 package parser;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lowlevel.CodeItem;
-import lowlevel.Data;
-import lowlevel.Function;
-import lowlevel.FuncParam;
 
 public class Program 
 {
