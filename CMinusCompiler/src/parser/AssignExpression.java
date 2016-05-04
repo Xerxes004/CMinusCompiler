@@ -63,5 +63,10 @@ public class AssignExpression extends Expression
     }
     
     @Override
-    public void genCode(Function function){}
+    public void genCode(Function function)
+    {
+        Var lhs = (Var)var;
+        lhs.setIsDest(true);
+        lhs.genCode(function);
+    }
 }

@@ -94,9 +94,9 @@ public class Call
         function.appendBlock(newBlock);
         
         Operand op = new Operand(
-            Operand.OperandType.BLOCK,
-            newBlock.getBlockNum()
-        );
+                Operand.OperandType.BLOCK,
+                newBlock.getBlockNum()
+            );
         
         Operation jmpOperation = new Operation(
                 Operation.OperationType.JMP,

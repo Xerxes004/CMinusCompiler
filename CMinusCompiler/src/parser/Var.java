@@ -65,6 +65,7 @@ public class Var
         return sb.toString();
     }
     
+    @Override
     public void printMe(String spaces) {
         System.out.println(spaces + "Var");
         spaces += "    ";
@@ -78,5 +79,12 @@ public class Var
     }
     
     @Override
-    public void genCode(Function function){}
+    public void genCode(Function function)
+    {
+        //get the curblock
+        //get lastop
+        Operation lastOp = function.getCurrBlock().getLastOper();
+        //add self to operand
+        if (isDest());
+    }
 }

@@ -45,23 +45,7 @@ public class ExpressionStatement extends Statement{
     @Override
     public void genCode(Function function)
     {
-        switch (expr.getExpressionType())
-        {
-        case ASSIGN:
-            AssignExpression assignExpr = (AssignExpression)expr;
-            Var lhs = (Var)assignExpr.getLeftSide();
-            Expression rhs = assignExpr.getRightSide();
-
-            rhs.genCode(function);
-            
-            // the dest register
-            Operand lhsOp = new Operand(
-                    Operand.OperandType.REGISTER, 
-                    function.getTable().get(lhs.getId())
-                );
-
-            
-        }
+        expr.genCode(function);
     }
     
     @Override

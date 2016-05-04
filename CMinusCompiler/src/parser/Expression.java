@@ -19,10 +19,27 @@ import lowlevel.Operand;
 
 public abstract class Expression 
 {
+    protected Expression()
+    {
+        this.isDest = false;
+    }
     public enum ExpressionType {
         NUM, VAR, CALL, BINARY, ASSIGN
     }
+    
+    private boolean isDest;
+    
     public abstract void printMe(String spaces);
     public abstract void genCode(Function function);
     public abstract ExpressionType getExpressionType();
+    
+    public boolean isDest()
+    {
+        return isDest;
+    }
+    
+    public void setIsDest(boolean isDest)
+    {
+        this.isDest = isDest;
+    }
 }
