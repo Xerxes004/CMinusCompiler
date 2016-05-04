@@ -52,6 +52,7 @@ public class Program
         CodeItem head = null;
         CodeItem tail = null;
         
+        // build a linked list of top-level CodeItems (Datas and Functions)
         for (Declaration decl : declarations)
         {
             if (head == null || tail == null)

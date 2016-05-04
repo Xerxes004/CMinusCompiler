@@ -77,5 +77,8 @@ public class BinaryExpression
     }    
 
     @Override
-    public void genCode(Function function){}
+    public void genCode(Function function)
+    {
+        
+    }
 }

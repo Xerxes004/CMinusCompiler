@@ -130,6 +130,7 @@ public class FunDeclaration extends Declaration
             FuncParam firstParam = params.get(0).genCode();
             FuncParam lastParam = firstParam;
             
+            // build a linked list of params
             for (Param p : params.subList(1, params.size()))
             {
                 lastParam.setNextParam(p.genCode());
