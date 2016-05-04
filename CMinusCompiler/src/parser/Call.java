@@ -14,7 +14,9 @@
 package parser;
 
 import java.util.ArrayList;
+import lowlevel.BasicBlock;
 import lowlevel.Function;
+import lowlevel.Operand;
 import lowlevel.Operation;
 
 public class Call
@@ -86,5 +88,23 @@ public class Call
     }
     
     @Override
-    public Operation genCode(Function function){return null;}
+    public void genCode(Function function)
+    {
+        BasicBlock newBlock = new BasicBlock(function);
+        function.appendBlock(newBlock);
+        
+        Operand op = new Operand(
+            Operand.OperandType.BLOCK,
+            newBlock.getBlockNum()
+        );
+        
+        Operation jmpOperation = new Operation(
+                Operation.OperationType.JMP,
+                newBlock
+            );
+        
+        jmpOperation.setDestOperand(0, op);
+        function.getCurrBlock().appendOper(jmpOperation);
+        function.setCurrBlock(newBlock);
+    }
 }

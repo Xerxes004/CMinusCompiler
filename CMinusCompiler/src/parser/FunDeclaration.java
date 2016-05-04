@@ -137,17 +137,18 @@ public class FunDeclaration extends Declaration
             }
 
             function = new Function(this.getDeclType(), this.getId(), firstParam);
-            function.getTable().putAll(makeSymbolTable(compoundStmt, function));
-            function.createBlock0();
-            function.setCurrBlock(function.getFirstBlock());
-            function.getCurrBlock().appendOper(compoundStmt.genCode(function));
-            function.appendToCurrentBlock(function.getReturnBlock());
-            function.setCurrBlock(function.getLastBlock());
         }
         else
         {
             function = new Function(this.getDeclType(), this.getId());
         }
+        
+        function.getTable().putAll(makeSymbolTable(compoundStmt, function));
+        function.createBlock0();
+        function.setCurrBlock(function.getFirstBlock());
+        compoundStmt.genCode(function);
+        function.appendToCurrentBlock(function.getReturnBlock());
+        function.setCurrBlock(function.getLastBlock());
         
         return function;
     }
@@ -163,6 +164,7 @@ public class FunDeclaration extends Declaration
         {
             symbolTable.put(id, function.getNewRegNum());
         }
+        // add function params to symbol table
         for (FuncParam p = function.getfirstParam(); p != null; p = p.getNextParam())
         {
             symbolTable.put(p.getName(), function.getNewRegNum());

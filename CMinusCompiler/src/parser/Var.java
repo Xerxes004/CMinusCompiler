@@ -78,5 +78,5 @@ public class Var
     }
     
     @Override
-    public Operation genCode(Function function){return null;}
+    public void genCode(Function function){}
 }

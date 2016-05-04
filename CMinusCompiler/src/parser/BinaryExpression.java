@@ -14,7 +14,7 @@
 package parser;
 
 import lowlevel.Function;
-import lowlevel.Operation;
+import lowlevel.Operand;
 
 public class BinaryExpression
     extends Expression
@@ -77,8 +77,5 @@ public class BinaryExpression
     }    
 
     @Override
-    public Operation genCode(Function function)
-    {
-        return null;
-    }
+    public void genCode(Function function){}
 }

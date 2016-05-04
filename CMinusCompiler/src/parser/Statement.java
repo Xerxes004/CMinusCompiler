@@ -26,6 +26,6 @@ public abstract class Statement{
     public abstract String toString();
     
     public abstract void printMe(String spaces);
-    public abstract Operation genCode(Function function);
+    public abstract void genCode(Function function);
     public abstract StatementType getStatementType();
 }

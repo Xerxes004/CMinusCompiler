@@ -15,7 +15,7 @@
 package parser;
 
 import lowlevel.Function;
-import lowlevel.Operation;
+import lowlevel.Operand;
 
 public abstract class Expression 
 {
@@ -23,6 +23,6 @@ public abstract class Expression
         NUM, VAR, CALL, BINARY, ASSIGN
     }
     public abstract void printMe(String spaces);
-    public abstract Operation genCode(Function function);
+    public abstract void genCode(Function function);
     public abstract ExpressionType getExpressionType();
 }

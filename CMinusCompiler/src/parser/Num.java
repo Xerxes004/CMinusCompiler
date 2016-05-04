@@ -49,5 +49,6 @@ public class Num
         System.out.println(spaces + "NUM: " + this.value);
     }
     
-    public Operation genCode(Function function){return null;}
+    @Override
+    public void genCode(Function function){}
 }

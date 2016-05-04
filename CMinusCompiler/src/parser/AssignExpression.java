@@ -15,7 +15,7 @@
 package parser;
 
 import lowlevel.Function;
-import lowlevel.Operation;
+import lowlevel.Operand;
 
 public class AssignExpression extends Expression
 {
@@ -63,8 +63,5 @@ public class AssignExpression extends Expression
     }
     
     @Override
-    public Operation genCode(Function function)
-    {
-        return null;
-    }
+    public void genCode(Function function){}
 }

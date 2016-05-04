@@ -13,6 +13,8 @@
 
 package parser;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lowlevel.Function;
 import lowlevel.Operand;
 import lowlevel.Operation;
@@ -41,34 +43,25 @@ public class ExpressionStatement extends Statement{
     }
     
     @Override
-    public Operation genCode(Function function)
+    public void genCode(Function function)
     {
         switch (expr.getExpressionType())
         {
-            // NOTE, THIS CODE ONLY WORKS FOR VAR = INT
-            // IT IS MEANT TO BE USED AS A TEST ONLY
-            case ASSIGN:
-                AssignExpression assignExpr = (AssignExpression)expr;
-                Var lhs = (Var)assignExpr.getLeftSide();
-                Num rhs = (Num)assignExpr.getRightSide();
-                Operand lhsOp = new Operand(
-                        Operand.OperandType.REGISTER, 
-                        function.getTable().get(lhs.getId())
-                    );
-                Operand rhsOp = new Operand(
-                    Operand.OperandType.INTEGER,
-                    rhs.getValue()
+        case ASSIGN:
+            AssignExpression assignExpr = (AssignExpression)expr;
+            Var lhs = (Var)assignExpr.getLeftSide();
+            Expression rhs = assignExpr.getRightSide();
+
+            rhs.genCode(function);
+            
+            // the dest register
+            Operand lhsOp = new Operand(
+                    Operand.OperandType.REGISTER, 
+                    function.getTable().get(lhs.getId())
                 );
-                Operation op = new Operation(
-                    Operation.OperationType.ASSIGN,
-                    function.getCurrBlock()
-                );
-                op.setDestOperand(0, lhsOp);
-                op.setSrcOperand(0, rhsOp);
-                
-                return op;
+
+            
         }
-        return null;
     }
     
     @Override

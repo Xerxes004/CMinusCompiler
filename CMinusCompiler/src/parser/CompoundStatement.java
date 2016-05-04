@@ -16,6 +16,8 @@
 package parser;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lowlevel.Operation;
 import lowlevel.Function;
 
@@ -80,7 +82,7 @@ public class CompoundStatement
     }
     
     @Override
-    public Operation genCode(Function function)
+    public void genCode(Function function)
     {
         Operation firstOper = null;
         Operation lastOper = null;
@@ -90,24 +92,25 @@ public class CompoundStatement
             switch (statement.getStatementType())
             {
                 case EXPRESSION:
-                    Operation oper = statement.genCode(function);
-                    if (firstOper == null || lastOper == null)
-                    {
-                        firstOper = oper;
-                        lastOper = firstOper;
-                    }
-                    else
-                    {
-                        lastOper.setNextOper(oper);
-                        lastOper = lastOper.getNextOper();
-                    }
+                    statement.genCode(function);
                     break;
                 default:
-                    
+                    /// REMOVE BEFORE FLIGHT
+                    try
+                    {
+                        System.out.println("=============");
+                        statement.printMe("");
+                        throw new CodeGenerationException("Not yet implemented");
+                    }
+                    catch (CodeGenerationException ex)
+                    {
+                        System.out.println(ex.getMessage());
+                        System.out.println("=============");
+                        ex.printStackTrace();
+                        System.exit(1);
+                    }
             }
         }
-        
-        return firstOper;
     }
     
     @Override

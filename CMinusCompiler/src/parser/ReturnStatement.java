@@ -46,9 +46,8 @@ public class ReturnStatement extends Statement
     }
     
     @Override
-    public Operation genCode(Function function)
+    public void genCode(Function function)
     {
-        return null;
     }
     
     @Override

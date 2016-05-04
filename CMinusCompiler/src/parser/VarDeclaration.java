@@ -16,7 +16,6 @@ package parser;
 
 import lowlevel.CodeItem;
 import lowlevel.Data;
-import scanner.Token.TokenType;
 
 public class VarDeclaration extends Declaration 
 {
@@ -48,6 +47,7 @@ public class VarDeclaration extends Declaration
         return isArray;
     }
     
+    @Override
     public int getDeclType()
     {
         return DECL_TYPE_VAR;
@@ -68,6 +68,7 @@ public class VarDeclaration extends Declaration
         return string;
     }
     
+    @Override
     public void printMe(String spaces) {
         System.out.println(spaces + "VarDeclaration");
         spaces += "    ";
