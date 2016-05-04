@@ -15,6 +15,8 @@ package parser;
 
 import lowlevel.Function;
 import lowlevel.Operand;
+import lowlevel.Operation;
+import lowlevel.BasicBlock;
 
 public class BinaryExpression
     extends Expression
@@ -77,5 +79,41 @@ public class BinaryExpression
     }    
 
     @Override
-    public void genCode(Function function){}
+    public void genCode(Function function)
+    {
+        Operator typeOf = this.getOperator();
+        if((typeOf == Operator.LTHAN)||(typeOf == Operator.LTHAN_EQUAL)
+                ||(typeOf == Operator.GTHAN)||(typeOf == Operator.GTHAN_EQUAL)
+                ||(typeOf == Operator.EQUAL)||(typeOf == Operator.NOT_EQUAL))
+        {
+            this.leftSide.genCode(function);
+            Operand destination = new Operand(Operand.OperandType.REGISTER, function.getNewRegNum());
+            Operation bin = null;
+            BasicBlock current = function.getCurrBlock();
+            switch(typeOf) {
+                case LTHAN: bin = new Operation(Operation.OperationType.LT, current);
+                    break;
+                case LTHAN_EQUAL: bin = new Operation(Operation.OperationType.LTE, current);
+                    break;
+                case GTHAN: bin = new Operation(Operation.OperationType.GT, current);
+                    break;
+                case GTHAN_EQUAL: bin = new Operation(Operation.OperationType.GTE, current);
+                    break;
+                case EQUAL: bin = new Operation(Operation.OperationType.EQUAL, current);
+                    break;
+                case NOT_EQUAL: bin = new Operation(Operation.OperationType.NOT_EQUAL, current);
+                    break;
+            }
+            
+            bin.setDestOperand(0, destination);
+            Operation temp = current.getLastOper();
+            current.setLastOper(bin);
+            temp.setNextOper(bin);
+            temp.setSrcOperand(0, destination);
+            
+            this.rightSide.genCode(function);
+        }
+        
+        
+    }
 }
