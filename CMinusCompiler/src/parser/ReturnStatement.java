@@ -13,7 +13,9 @@
 
 package parser;
 
+import lowlevel.BasicBlock;
 import lowlevel.Function;
+import lowlevel.Operand;
 import lowlevel.Operation;
 
 public class ReturnStatement extends Statement
@@ -48,6 +50,13 @@ public class ReturnStatement extends Statement
     @Override
     public void genCode(Function function)
     {
+        if (expressionStatement != null)
+        {
+            BasicBlock returnBlock = function.getReturnBlock();
+            function.appendToCurrentBlock(returnBlock);
+            function.setCurrBlock(returnBlock);
+            expressionStatement.genCode(function);
+        }
     }
     
     @Override

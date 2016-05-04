@@ -15,6 +15,7 @@
 package parser;
 
 import lowlevel.Function;
+import lowlevel.Operand;
 import lowlevel.Operation;
 
 public class Var 
@@ -84,7 +85,26 @@ public class Var
         //get the curblock
         //get lastop
         Operation lastOp = function.getCurrBlock().getLastOper();
+        while (lastOp.getNextOper() != null)
+        {
+            lastOp = lastOp.getNextOper();
+        }
+        
+        Operand op = new Operand(
+                    Operand.OperandType.REGISTER,
+                    function.getTable().get(id)
+                );
+        
         //add self to operand
-        if (isDest());
+        if (isDest())
+        {
+            lastOp.setDestOperand(0, op);
+        }
+        else
+        {
+            lastOp.setSrcOperand(0, op);
+        }
+        
+        this.setIsDest(false);
     }
 }

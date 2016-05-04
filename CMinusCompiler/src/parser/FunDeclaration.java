@@ -147,8 +147,6 @@ public class FunDeclaration extends Declaration
         function.createBlock0();
         function.setCurrBlock(function.getFirstBlock());
         compoundStmt.genCode(function);
-        function.appendToCurrentBlock(function.getReturnBlock());
-        function.setCurrBlock(function.getLastBlock());
         
         return function;
     }
