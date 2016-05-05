@@ -84,32 +84,9 @@ public class CompoundStatement
     @Override
     public void genCode(Function function)
     {
-        Operation firstOper = null;
-        Operation lastOper = null;
-        
         for (Statement statement : statementList)
         {
-            switch (statement.getStatementType())
-            {
-                case EXPRESSION:
-                    statement.genCode(function);
-                    break;
-                default:
-                    /// REMOVE BEFORE FLIGHT
-                    try
-                    {
-                        System.out.println("=============");
-                        statement.printMe("");
-                        throw new CodeGenerationException("Not yet implemented");
-                    }
-                    catch (CodeGenerationException ex)
-                    {
-                        System.out.println(ex.getMessage());
-                        System.out.println("=============");
-                        ex.printStackTrace();
-                        System.exit(1);
-                    }
-            }
+            statement.genCode(function);
         }
     }
     

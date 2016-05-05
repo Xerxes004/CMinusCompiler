@@ -14,8 +14,10 @@
 
 package parser;
 
+import lowlevel.BasicBlock;
 import lowlevel.Function;
 import lowlevel.Operand;
+import lowlevel.Operation;
 
 public class AssignExpression extends Expression
 {
@@ -65,8 +67,15 @@ public class AssignExpression extends Expression
     @Override
     public void genCode(Function function)
     {
-        Var lhs = (Var)var;
-        lhs.setIsDest(true);
-        lhs.genCode(function);
+        BasicBlock currBlock = function.getCurrBlock();
+        Operation currOp = currBlock.getLastOper();
+        Operation lastOper = new Operation(Operation.OperationType.ASSIGN, currBlock);
+        currOp.setNextOper(lastOper);
+        lastOper.setPrevOper(currOp);
+        currBlock.setLastOper(lastOper);
+        
+        var.setIsDest(true);
+        var.genCode(function);
+        expression.genCode(function);
     }
 }

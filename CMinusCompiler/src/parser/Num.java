@@ -57,5 +57,14 @@ public class Num
         // IF I'M A DESTINATION, SET MYSELF AS A DEST OPERAND
         // IF I'M NOT, SET MYSELF AS A SRC OPERAND
         // ADD MYSELF TO THE LAST OPERATION
+        Operation lastOp = function.getCurrBlock().getFirstOper();
+        while (lastOp.getNextOper() != null)
+        {
+            lastOp = lastOp.getNextOper();
+        }
+        
+        Operand operand = new Operand(Operand.OperandType.INTEGER, value);
+        
+        lastOp.setSrcOperand(0, operand);
     }
 }

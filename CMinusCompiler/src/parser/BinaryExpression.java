@@ -103,6 +103,8 @@ public class BinaryExpression
                     break;
                 case NOT_EQUAL: bin = new Operation(Operation.OperationType.NOT_EQUAL, current);
                     break;
+                case PLUS: bin = new Operation(Operation.OperationType.ADD_I, current);
+                    break;
             }
             
             bin.setDestOperand(0, destination);

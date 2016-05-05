@@ -1,8 +1,10 @@
 (FUNCTION  main  [(int a)]
   (BB 2
-    (OPER 4 Mov [(r 2)]  [(m EDI)])
+    (OPER 4 Mov [(r 1)]  [])
+    (OPER 6 Mov [(r 2)]  [(m EDI)])
+    (OPER 5 Mov [(r 1)]  [(r 1)])
   )
   (BB 1
-    (OPER 2 Return []  [(m EAX)])
+    (OPER 2 Return []  [(r 1)])
   )
 )
