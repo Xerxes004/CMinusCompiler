@@ -15,6 +15,7 @@
 package parser;
 
 import java.util.ArrayList;
+import lowlevel.BasicBlock;
 import lowlevel.Function;
 import lowlevel.Operand;
 import lowlevel.Operation;
@@ -59,17 +60,16 @@ public class Num
         // IF I'M A DESTINATION, SET MYSELF AS A DEST OPERAND
         // IF I'M NOT, SET MYSELF AS A SRC OPERAND
         // ADD MYSELF TO THE LAST OPERATION
-        Operation lastOp = function.getCurrBlock().getLastOper();
-        
+        //Operation lastOp = function.getCurrBlock().getLastOper();
+             
+        BasicBlock curr = function.getCurrBlock();
+        Operation moveOper = new Operation(Operation.OperationType.ASSIGN, curr);
         Operand operand = new Operand(Operand.OperandType.INTEGER, value);
+        moveOper.setSrcOperand(0, operand);
+        int newReg = function.getNewRegNum();
+        moveOper.setDestOperand(0, new Operand(Operand.OperandType.REGISTER, newReg));
+        setRegNum(newReg);
         
-        for (int i = 0; i < Operation.MAX_SRC_OPERANDS; i++)
-        {
-            if (lastOp.getSrcOperand(i) == null)
-            {
-                lastOp.setSrcOperand(i, operand);
-                break;
-            }
-        }
+        curr.appendOper(moveOper);
     }
 }

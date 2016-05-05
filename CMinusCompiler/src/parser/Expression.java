@@ -31,6 +31,18 @@ public abstract class Expression
     public abstract void genCode(Function function, ArrayList<String> globals)
         throws CodeGenerationException;
     public abstract ExpressionType getExpressionType();
+    
+    private int regNum;
+    
+    public int getRegNum()
+    {
+        return regNum;
+    }
+    
+    public void setRegNum(int newNum)
+    {
+        regNum = newNum;
+    }
         
     public Operand getVariable(
         Function function, 

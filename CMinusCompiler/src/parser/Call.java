@@ -91,21 +91,26 @@ public class Call
     @Override
     public void genCode(Function function, ArrayList<String> globals)
     {
-        BasicBlock newBlock = new BasicBlock(function);
-        function.appendBlock(newBlock);
+        // for each param
+        // codeGen param
+        // pass param reg - attribute on pass with PARAMNUM
+        // make CALL oper  src0 name
+        // Regnew = RETREG  (ASSIGN OPER)
+        // annotate yourself with Regnew
         
-        Operand op = new Operand(
-                Operand.OperandType.BLOCK,
-                newBlock.getBlockNum()
-            );
         
-        Operation jmpOperation = new Operation(
-                Operation.OperationType.JMP,
-                newBlock
-            );
-        
-        jmpOperation.setDestOperand(0, op);
-        function.getCurrBlock().appendOper(jmpOperation);
-        function.setCurrBlock(newBlock);
+//        Operand op = new Operand(
+//                Operand.OperandType.BLOCK,
+//                newBlock.getBlockNum()
+//            );
+//        
+//        Operation jmpOperation = new Operation(
+//                Operation.OperationType.JMP,
+//                newBlock
+//            );
+//        
+//        jmpOperation.setDestOperand(0, op);
+//        function.getCurrBlock().appendOper(jmpOperation);
+//        function.setCurrBlock(newBlock);
     }
 }

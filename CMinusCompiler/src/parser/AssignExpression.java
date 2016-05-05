@@ -68,11 +68,17 @@ public class AssignExpression extends Expression
     public void genCode(Function function, ArrayList<String> globals) 
         throws CodeGenerationException
     {
-        var.genCode(function, globals);
+        BasicBlock currBlock = function.getCurrBlock();
         
-        Operation lastOp = function.getCurrBlock().getLastOper();
-        lastOp.setType(Operation.OperationType.ASSIGN);
-        
+        //var.genCode(function, globals);
         expression.genCode(function, globals);
+        // peek var
+        // if in local table, get reg
+        // make ASSIGN oper with var reg as dest, expresssion reg as src
+        // annocate assign with varreg
+        
+        // else if in global
+        // make STORE oper, src0 is expression reg, src1 is var name
+        // annotate with expression reg
     }
 }

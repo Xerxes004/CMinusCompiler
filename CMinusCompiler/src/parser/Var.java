@@ -84,31 +84,14 @@ public class Var
     public void genCode(Function function, ArrayList<String> globals) 
         throws CodeGenerationException
     {
-        //get the curblock
-        //get lastop
-        Operation lastOp = function.getCurrBlock().getLastOper();
+        // if in local table
+        // annotate self with table's reg
         
-        Operand op = getVariable(function, globals, id);
-        
-        switch (lastOp.getType())
-        {
-        case ASSIGN:
-        case STORE_I:
-        case UNKNOWN:
-            if (lastOp.getDestOperand(0) == null)
-            {
-                lastOp.setDestOperand(0, op);
-            }
-            break;
-        default:
-            for (int i = 0; i < Operation.MAX_SRC_OPERANDS; i++)
-            {
-                if (lastOp.getSrcOperand(i) == null)
-                {
-                    lastOp.setSrcOperand(i, op);
-                    break;
-                }
-            }
-        }
+        // else if in global
+        // make load
+            // dest is newreg (and annotate)
+            // src0 varname
+        // else exception
+
     }
 }

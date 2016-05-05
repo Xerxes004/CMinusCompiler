@@ -171,10 +171,6 @@ public class FunDeclaration extends Declaration
         function.createBlock0();
         function.appendBlock(new BasicBlock(function));
         function.setCurrBlock(function.getLastBlock());
-        function.getCurrBlock().insertFirst(new Operation(
-                Operation.OperationType.UNKNOWN,
-                function.getCurrBlock()
-        ));
         compoundStmt.genCode(function, globals);
         
         return function;

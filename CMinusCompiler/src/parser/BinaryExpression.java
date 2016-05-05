@@ -121,34 +121,34 @@ public class BinaryExpression
                 opType = Operation.OperationType.UNKNOWN;
         }
         
+        int regNum = function.getNewRegNum();
         Operand destination = new Operand(
             Operand.OperandType.REGISTER, 
-            function.getNewRegNum()
+            regNum
         );
         
-        this.leftSide.genCode(function, globals);
+        setRegNum(regNum);
+        
         
         
         BasicBlock currentBlock = function.getCurrBlock();
+        Operation currOp = new Operation(
+                    opType, 
+                    function.getCurrBlock()
+                );
+        currentBlock.appendOper(currOp);
         
-        currentBlock.appendOper(
-            new Operation(opType, function.getCurrBlock())
-        );
+//        Operation currOp = currentBlock.getLastOper();
         
-        Operation lastOp = currentBlock.getLastOper();
-        
-        for (int i = 0; i < Operation.MAX_SRC_OPERANDS; i++)
-        {
-            if (lastOp.getSrcOperand(i) == null)
-            {
-                lastOp.setSrcOperand(i, destination);
-                break;
-            }
-        }
-        
-        lastOp.setDestOperand(0, destination);
-        //lastOp.setType(opType);
-        
+        this.leftSide.genCode(function, globals);
         this.rightSide.genCode(function, globals);
+        
+        currOp.setDestOperand(0, destination);
+        currOp.setSrcOperand(0, new Operand(Operand.OperandType.REGISTER, leftSide.getRegNum()));
+        currOp.setSrcOperand(1, new Operand(Operand.OperandType.REGISTER, rightSide.getRegNum()));
+        
+        //Operation nextOper = new Operation(, currentBlock);
+        //currentBlock.appendOper(nextOper);
+ 
     }
 }
