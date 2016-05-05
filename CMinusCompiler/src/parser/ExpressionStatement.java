@@ -43,7 +43,6 @@ public class ExpressionStatement extends Statement{
     public void genCode(Function function, ArrayList<String> globals) 
         throws CodeGenerationException
     {
-        expr.setIsLeftSide(true);
         expr.genCode(function, globals);
     }
     

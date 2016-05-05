@@ -23,43 +23,15 @@ import lowlevel.Operation;
 
 public abstract class Expression 
 {
-    protected Expression()
-    {
-        this.isDest = false;
-        this.isLeftSide = false;
-    }
     public enum ExpressionType {
         NUM, VAR, CALL, BINARY, ASSIGN
     }
-    
-    private boolean isDest;
-    private boolean isLeftSide;
     
     public abstract void printMe(String spaces);
     public abstract void genCode(Function function, ArrayList<String> globals)
         throws CodeGenerationException;
     public abstract ExpressionType getExpressionType();
-    
-    public boolean isDest()
-    {
-        return isDest;
-    }
-    
-    public void setIsDest(boolean isDest)
-    {
-        this.isDest = isDest;
-    }
-    
-    public boolean isLeftSide()
-    {
-        return this.isLeftSide;
-    }
-    
-    public void setIsLeftSide(boolean isLeftSide)
-    {
-        this.isLeftSide = isLeftSide;
-    }
-    
+        
     public Operand getVariable(
         Function function, 
         ArrayList<String> globals,
@@ -94,19 +66,6 @@ public abstract class Expression
                 Operand.OperandType.STRING,
                 id
             );
-            
-            if (isDest)
-            {
-                lastOp.setType(Operation.OperationType.STORE_I);
-                //lastOp.setSrcOperand(0, globalLoadVar);
-                lastOp.setSrcOperand(1, globalLoadVar);
-            }
-            else
-            {
-                globalOp.setDestOperand(0, globalLoadDest);
-                globalOp.setSrcOperand(0, globalLoadVar);
-                currBlock.insertOperBefore(lastOp, globalOp);
-            }
             
             return globalLoadDest;
         }

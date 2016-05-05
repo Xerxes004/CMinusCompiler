@@ -63,15 +63,13 @@ public class Num
         
         Operand operand = new Operand(Operand.OperandType.INTEGER, value);
         
-        if (isLeftSide())
+        for (int i = 0; i < Operation.MAX_SRC_OPERANDS; i++)
         {
-            lastOp.setSrcOperand(0, operand);
+            if (lastOp.getSrcOperand(i) == null)
+            {
+                lastOp.setSrcOperand(i, operand);
+                break;
+            }
         }
-        else
-        {
-            lastOp.setSrcOperand(1, operand);
-        }
-        
-        //this.setIsLeftSide(false);
     }
 }

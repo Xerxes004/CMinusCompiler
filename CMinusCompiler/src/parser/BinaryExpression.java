@@ -123,29 +123,23 @@ public class BinaryExpression
             function.getNewRegNum()
         );
         
+        this.leftSide.genCode(function, globals);
+        
         BasicBlock currentBlock = function.getCurrBlock();
         Operation lastOp = currentBlock.getLastOper();
         
-        if (isLeftSide())
+        for (int i = 0; i < Operation.MAX_SRC_OPERANDS; i++)
         {
-            lastOp.setSrcOperand(0, destination);
+            if (lastOp.getSrcOperand(i) == null)
+            {
+                lastOp.setSrcOperand(i, destination);
+                break;
+            }
         }
-        else
-        {
-            lastOp.setSrcOperand(1, destination);
-        }
         
-        Operation newOp = new Operation(opType, currentBlock);
-        newOp.setDestOperand(0, destination);
+        lastOp.setDestOperand(0, destination);
+        lastOp.setType(opType);
         
-        Operation temp = currentBlock.getLastOper();
-        currentBlock.setLastOper(newOp);
-        currentBlock.insertOperBefore(temp, newOp);
-        
-        this.leftSide.setIsLeftSide(true);
-        this.leftSide.genCode(function, globals);
         this.rightSide.genCode(function, globals);
-        
-        currentBlock.setLastOper(temp);
     }
 }

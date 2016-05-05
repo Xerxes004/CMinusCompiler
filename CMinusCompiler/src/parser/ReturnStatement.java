@@ -58,7 +58,7 @@ public class ReturnStatement extends Statement
             function.setCurrBlock(returnBlock);
             // NEED TO ADD CODE TO MAKE SURE THIS GENCODE STORES ITS
             // RESULT IN THE RetReg BEFORE RETURN
-            Operation temp = function.getCurrBlock().getPrevBlock().getLastOper();
+            //Operation temp = function.getCurrBlock().getPrevBlock().getLastOper();
             expressionStatement.genCode(function, globals);
         }
     }

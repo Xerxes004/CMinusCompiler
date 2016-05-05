@@ -87,28 +87,28 @@ public class Var
         //get the curblock
         //get lastop
         Operation lastOp = function.getCurrBlock().getLastOper();
+        
         Operand op = getVariable(function, globals, id);
         
-        //add self to operand
-        if (isDest())
+        switch (lastOp.getType())
         {
-            if (lastOp.getType() != Operation.OperationType.STORE_I)
+        case ASSIGN:
+        case STORE_I:
+        case UNKNOWN:
+            if (lastOp.getDestOperand(0) == null)
             {
                 lastOp.setDestOperand(0, op);
             }
-        }
-        else
-        {
-            if (isLeftSide())
+            break;
+        default:
+            for (int i = 0; i < Operation.MAX_SRC_OPERANDS; i++)
             {
-                lastOp.setSrcOperand(0, op);
-            }
-            else
-            {
-                lastOp.setSrcOperand(1, op);
+                if (lastOp.getSrcOperand(i) == null)
+                {
+                    lastOp.setSrcOperand(i, op);
+                    break;
+                }
             }
         }
-        
-        this.setIsDest(false);
     }
 }

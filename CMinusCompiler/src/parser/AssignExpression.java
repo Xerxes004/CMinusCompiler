@@ -68,19 +68,11 @@ public class AssignExpression extends Expression
     public void genCode(Function function, ArrayList<String> globals) 
         throws CodeGenerationException
     {
-        BasicBlock currBlock = function.getCurrBlock();
-        Operation currOp = currBlock.getLastOper();
-        
-        Operation nextOper = new Operation(
-            Operation.OperationType.ASSIGN, 
-            currBlock
-        );
-        
-        currBlock.insertOperAfter(currOp, nextOper);
-        
-        var.setIsDest(true);
         var.genCode(function, globals);
-        expression.setIsLeftSide(true);
+        
+        Operation lastOp = function.getCurrBlock().getLastOper();
+        lastOp.setType(Operation.OperationType.ASSIGN);
+        
         expression.genCode(function, globals);
     }
 }

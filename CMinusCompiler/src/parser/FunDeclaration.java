@@ -19,9 +19,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lowlevel.BasicBlock;
 import lowlevel.CodeItem;
 import lowlevel.FuncParam;
 import lowlevel.Function;
+import lowlevel.Operation;
 
 public class FunDeclaration extends Declaration
 {
@@ -167,7 +169,12 @@ public class FunDeclaration extends Declaration
         
         function.getTable().putAll(makeSymbolTable(compoundStmt, function));
         function.createBlock0();
-        function.setCurrBlock(function.getFirstBlock());
+        function.appendBlock(new BasicBlock(function));
+        function.setCurrBlock(function.getLastBlock());
+        function.getCurrBlock().insertFirst(new Operation(
+                Operation.OperationType.UNKNOWN,
+                function.getCurrBlock()
+        ));
         compoundStmt.genCode(function, globals);
         
         return function;
