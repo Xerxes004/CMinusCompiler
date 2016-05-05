@@ -16,6 +16,7 @@ package parser;
 import java.util.ArrayList;
 import lowlevel.BasicBlock;
 import lowlevel.Function;
+import lowlevel.Operation;
 
 public class ReturnStatement extends Statement
 {
@@ -57,6 +58,7 @@ public class ReturnStatement extends Statement
             function.setCurrBlock(returnBlock);
             // NEED TO ADD CODE TO MAKE SURE THIS GENCODE STORES ITS
             // RESULT IN THE RetReg BEFORE RETURN
+            Operation temp = function.getCurrBlock().getPrevBlock().getLastOper();
             expressionStatement.genCode(function, globals);
         }
     }
