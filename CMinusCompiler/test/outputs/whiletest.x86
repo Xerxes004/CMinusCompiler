@@ -1,0 +1,16 @@
+(FUNCTION  main  []
+  (BB 2
+    (OPER 7 Mov [(r 2)]  [(i 0)])
+    (OPER 6 Cmp [(m Flags)]  [(r 1)(i 1)])
+    (OPER 8 BNE []  [(bb 6)(m Flags)])
+  )
+  (BB 5
+    (OPER 9 Mov [(r 2)]  [(i 1)])
+  )
+  (BB 6
+    (OPER 4 Mov [(r 1)]  [(i 1)(r 2)])
+  )
+  (BB 1
+    (OPER 2 Return []  [(r 1)])
+  )
+)
