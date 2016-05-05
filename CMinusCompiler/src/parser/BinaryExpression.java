@@ -80,7 +80,8 @@ public class BinaryExpression
     }    
 
     @Override
-    public void genCode(Function function, ArrayList<String> globals)
+    public void genCode(Function function, ArrayList<String> globals) 
+        throws CodeGenerationException
     {
         // MOVE TO HELPER FUNC
         Operation.OperationType opType;

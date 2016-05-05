@@ -49,5 +49,6 @@ public abstract class Declaration
     
     public abstract void printMe(String spaces);
     public abstract int getDeclType();
-    public abstract CodeItem genCode(ArrayList<String> globals);
+    public abstract CodeItem genCode(ArrayList<String> globals)
+        throws CodeGenerationException;
 }

@@ -15,6 +15,7 @@
 package parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import lowlevel.Function;
 import lowlevel.Operand;
 
@@ -33,7 +34,8 @@ public abstract class Expression
     private boolean isLeftSide;
     
     public abstract void printMe(String spaces);
-    public abstract void genCode(Function function, ArrayList<String> globals);
+    public abstract void genCode(Function function, ArrayList<String> globals)
+        throws CodeGenerationException;
     public abstract ExpressionType getExpressionType();
     
     public boolean isDest()
@@ -54,5 +56,33 @@ public abstract class Expression
     public void setIsLeftSide(boolean isLeftSide)
     {
         this.isLeftSide = isLeftSide;
+    }
+    
+    public Operand getVariable(
+        Function function, 
+        ArrayList<String> globals,
+        String id
+    ) 
+        throws CodeGenerationException
+    {
+        HashMap table = function.getTable();
+        if (table.containsKey(id))
+        {
+            return new Operand(
+                Operand.OperandType.REGISTER,
+                table.get(id)
+            );
+        }
+        else if (globals.contains(id))
+        {
+            return new Operand(
+                Operand.OperandType.STRING,
+                id
+            );
+        }
+        else
+        {
+            throw new CodeGenerationException("Symbol not found: " + id);
+        }
     }
 }

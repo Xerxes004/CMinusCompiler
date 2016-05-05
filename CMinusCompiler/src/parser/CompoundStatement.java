@@ -79,7 +79,8 @@ public class CompoundStatement
     }
     
     @Override
-    public void genCode(Function function, ArrayList<String> globals)
+    public void genCode(Function function, ArrayList<String> globals) 
+        throws CodeGenerationException
     {
         for (Statement statement : statementList)
         {

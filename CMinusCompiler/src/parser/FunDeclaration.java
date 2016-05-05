@@ -122,6 +122,7 @@ public class FunDeclaration extends Declaration
     
     @Override
     public CodeItem genCode(ArrayList<String> globals)
+        throws CodeGenerationException
     {
         Function function = null;
         
