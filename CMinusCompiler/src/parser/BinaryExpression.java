@@ -81,41 +81,68 @@ public class BinaryExpression
     @Override
     public void genCode(Function function)
     {
-        Operator typeOf = this.getOperator();
-        if((typeOf == Operator.LTHAN)||(typeOf == Operator.LTHAN_EQUAL)
-                ||(typeOf == Operator.GTHAN)||(typeOf == Operator.GTHAN_EQUAL)
-                ||(typeOf == Operator.EQUAL)||(typeOf == Operator.NOT_EQUAL))
-        {
-            this.leftSide.genCode(function);
-            Operand destination = new Operand(Operand.OperandType.REGISTER, function.getNewRegNum());
-            Operation bin = null;
-            BasicBlock current = function.getCurrBlock();
-            switch(typeOf) {
-                case LTHAN: bin = new Operation(Operation.OperationType.LT, current);
-                    break;
-                case LTHAN_EQUAL: bin = new Operation(Operation.OperationType.LTE, current);
-                    break;
-                case GTHAN: bin = new Operation(Operation.OperationType.GT, current);
-                    break;
-                case GTHAN_EQUAL: bin = new Operation(Operation.OperationType.GTE, current);
-                    break;
-                case EQUAL: bin = new Operation(Operation.OperationType.EQUAL, current);
-                    break;
-                case NOT_EQUAL: bin = new Operation(Operation.OperationType.NOT_EQUAL, current);
-                    break;
-                case PLUS: bin = new Operation(Operation.OperationType.ADD_I, current);
-                    break;
-            }
-            
-            bin.setDestOperand(0, destination);
-            Operation temp = current.getLastOper();
-            current.setLastOper(bin);
-            temp.setNextOper(bin);
-            temp.setSrcOperand(0, destination);
-            
-            this.rightSide.genCode(function);
+        Operation.OperationType opType;
+        
+        switch(this.op) {
+            case LTHAN: 
+                opType = Operation.OperationType.LT;
+                break;
+            case LTHAN_EQUAL: 
+                opType = Operation.OperationType.LTE;
+                break;
+            case GTHAN: 
+                opType = Operation.OperationType.GT;
+                break;
+            case GTHAN_EQUAL: 
+                opType = Operation.OperationType.GTE;
+                break;
+            case EQUAL: 
+                opType = Operation.OperationType.EQUAL;
+                break;
+            case NOT_EQUAL: 
+                opType = Operation.OperationType.NOT_EQUAL;
+                break;
+            case PLUS: 
+                opType = Operation.OperationType.ADD_I;
+                break;
+            case MULTIPLY:
+                opType = Operation.OperationType.MUL_I;
+                break;
+            case DIVIDE:
+                opType = Operation.OperationType.DIV_I;
+                break;
+            default:
+                opType = Operation.OperationType.UNKNOWN;
         }
         
+        Operand destination = new Operand(
+            Operand.OperandType.REGISTER, 
+            function.getNewRegNum()
+        );
         
+        BasicBlock currentBlock = function.getCurrBlock();
+        Operation lastOp = currentBlock.getLastOper();
+        
+        if (isLeftSide())
+        {
+            lastOp.setSrcOperand(0, destination);
+        }
+        else
+        {
+            lastOp.setSrcOperand(1, destination);
+        }
+        
+        Operation newOp = new Operation(opType, currentBlock);
+        newOp.setDestOperand(0, destination);
+        
+        Operation temp = currentBlock.getLastOper();
+        currentBlock.setLastOper(newOp);
+        currentBlock.insertOperBefore(temp, newOp);
+        
+        this.leftSide.setIsLeftSide(true);
+        this.leftSide.genCode(function);
+        this.rightSide.genCode(function);
+        
+        currentBlock.setLastOper(temp);
     }
 }

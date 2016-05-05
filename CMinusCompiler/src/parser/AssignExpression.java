@@ -69,13 +69,17 @@ public class AssignExpression extends Expression
     {
         BasicBlock currBlock = function.getCurrBlock();
         Operation currOp = currBlock.getLastOper();
-        Operation lastOper = new Operation(Operation.OperationType.ASSIGN, currBlock);
-        currOp.setNextOper(lastOper);
-        lastOper.setPrevOper(currOp);
-        currBlock.setLastOper(lastOper);
+        
+        Operation nextOper = new Operation(
+            Operation.OperationType.ASSIGN, 
+            currBlock
+        );
+        
+        currBlock.insertOperAfter(currOp, nextOper);
         
         var.setIsDest(true);
         var.genCode(function);
+        expression.setIsLeftSide(true);
         expression.genCode(function);
     }
 }

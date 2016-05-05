@@ -22,12 +22,14 @@ public abstract class Expression
     protected Expression()
     {
         this.isDest = false;
+        this.isLeftSide = false;
     }
     public enum ExpressionType {
         NUM, VAR, CALL, BINARY, ASSIGN
     }
     
     private boolean isDest;
+    private boolean isLeftSide;
     
     public abstract void printMe(String spaces);
     public abstract void genCode(Function function);
@@ -41,5 +43,15 @@ public abstract class Expression
     public void setIsDest(boolean isDest)
     {
         this.isDest = isDest;
+    }
+    
+    public boolean isLeftSide()
+    {
+        return this.isLeftSide;
+    }
+    
+    public void setIsLeftSide(boolean isLeftSide)
+    {
+        this.isLeftSide = isLeftSide;
     }
 }

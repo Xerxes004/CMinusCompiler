@@ -45,6 +45,7 @@ public class ExpressionStatement extends Statement{
     @Override
     public void genCode(Function function)
     {
+        expr.setIsLeftSide(true);
         expr.genCode(function);
     }
     

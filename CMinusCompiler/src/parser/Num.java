@@ -45,6 +45,7 @@ public class Num
         return Integer.toString(value);
     }
     
+    @Override
     public void printMe(String spaces) {
         System.out.println(spaces + "NUM: " + this.value);
     }
@@ -57,14 +58,19 @@ public class Num
         // IF I'M A DESTINATION, SET MYSELF AS A DEST OPERAND
         // IF I'M NOT, SET MYSELF AS A SRC OPERAND
         // ADD MYSELF TO THE LAST OPERATION
-        Operation lastOp = function.getCurrBlock().getFirstOper();
-        while (lastOp.getNextOper() != null)
-        {
-            lastOp = lastOp.getNextOper();
-        }
+        Operation lastOp = function.getCurrBlock().getLastOper();
         
         Operand operand = new Operand(Operand.OperandType.INTEGER, value);
         
-        lastOp.setSrcOperand(0, operand);
+        if (isLeftSide())
+        {
+            lastOp.setSrcOperand(0, operand);
+        }
+        else
+        {
+            lastOp.setSrcOperand(1, operand);
+        }
+        
+        //this.setIsLeftSide(false);
     }
 }

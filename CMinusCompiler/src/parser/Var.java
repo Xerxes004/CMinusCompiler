@@ -85,10 +85,6 @@ public class Var
         //get the curblock
         //get lastop
         Operation lastOp = function.getCurrBlock().getLastOper();
-        while (lastOp.getNextOper() != null)
-        {
-            lastOp = lastOp.getNextOper();
-        }
         
         Operand op = new Operand(
                     Operand.OperandType.REGISTER,
@@ -102,9 +98,17 @@ public class Var
         }
         else
         {
-            lastOp.setSrcOperand(0, op);
+            if (isLeftSide())
+            {
+                lastOp.setSrcOperand(0, op);
+            }
+            else
+            {
+                lastOp.setSrcOperand(1, op);
+            }
         }
         
         this.setIsDest(false);
+        //this.setIsLeftSide(false);
     }
 }
