@@ -13,11 +13,8 @@
 
 package parser;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 import lowlevel.Function;
-import lowlevel.Operand;
-import lowlevel.Operation;
 
 public class ExpressionStatement extends Statement{
     
@@ -43,10 +40,10 @@ public class ExpressionStatement extends Statement{
     }
     
     @Override
-    public void genCode(Function function)
+    public void genCode(Function function, ArrayList<String> globals)
     {
         expr.setIsLeftSide(true);
-        expr.genCode(function);
+        expr.genCode(function, globals);
     }
     
     @Override

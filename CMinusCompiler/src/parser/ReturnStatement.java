@@ -13,6 +13,7 @@
 
 package parser;
 
+import java.util.ArrayList;
 import lowlevel.BasicBlock;
 import lowlevel.Function;
 
@@ -46,14 +47,14 @@ public class ReturnStatement extends Statement
     }
     
     @Override
-    public void genCode(Function function)
+    public void genCode(Function function, ArrayList<String> globals)
     {
         if (expressionStatement != null)
         {
             BasicBlock returnBlock = function.getReturnBlock();
             function.appendToCurrentBlock(returnBlock);
             function.setCurrBlock(returnBlock);
-            expressionStatement.genCode(function);
+            expressionStatement.genCode(function, globals);
         }
     }
     

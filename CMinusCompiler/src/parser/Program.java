@@ -16,6 +16,7 @@
 package parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import lowlevel.CodeItem;
 
 public class Program 
@@ -55,14 +56,15 @@ public class Program
         // build a linked list of top-level CodeItems (Datas and Functions)
         for (Declaration decl : declarations)
         {
+            ArrayList<String> globals = new ArrayList<>();
             if (head == null || tail == null)
             {
-                head = decl.genCode();
+                head = decl.genCode(globals);
                 tail = head;
             }
             else
             {
-                tail.setNextItem(decl.genCode());
+                tail.setNextItem(decl.genCode(globals));
                 tail = tail.getNextItem();
             }
         }

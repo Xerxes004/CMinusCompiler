@@ -88,7 +88,7 @@ public class Call
     }
     
     @Override
-    public void genCode(Function function)
+    public void genCode(Function function, ArrayList<String> globals)
     {
         BasicBlock newBlock = new BasicBlock(function);
         function.appendBlock(newBlock);

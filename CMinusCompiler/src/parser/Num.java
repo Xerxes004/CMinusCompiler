@@ -14,6 +14,7 @@
 
 package parser;
 
+import java.util.ArrayList;
 import lowlevel.Function;
 import lowlevel.Operand;
 import lowlevel.Operation;
@@ -51,7 +52,7 @@ public class Num
     }
     
     @Override
-    public void genCode(Function function)
+    public void genCode(Function function, ArrayList<String> globals)
     {
         // GET CURR BLOCK
         // GET LAST OPERATION

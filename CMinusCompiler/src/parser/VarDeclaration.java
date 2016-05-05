@@ -14,22 +14,25 @@
 
 package parser;
 
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lowlevel.CodeItem;
 import lowlevel.Data;
 
 public class VarDeclaration extends Declaration 
 {
-    public VarDeclaration(String ID)
+    public VarDeclaration(String id)
     {
-        super(ID);
+        super(id);
         this.arraySize = -1;
         this.isArray = false;
     }
         
-    public VarDeclaration(String ID, int arraySize) 
+    public VarDeclaration(String id, int arraySize) 
         throws CMinusParserError
     {
-        super(ID);
+        super(id);
         this.arraySize = arraySize;
         this.isArray = true;
     }
@@ -83,8 +86,30 @@ public class VarDeclaration extends Declaration
     }
     
     @Override
-    public CodeItem genCode()
+    public CodeItem genCode(ArrayList<String> globals)
     {
+        String id = getId();
+        
+        if (!globals.contains(id))
+        {
+            globals.add(getId());
+        }
+        else
+        {
+            try
+            {
+                System.out.println("Duplicate global found: " + id);
+                throw new CodeGenerationException("Duplicate global found");
+            }
+            catch (CodeGenerationException ex)
+            {
+                Logger.getLogger(
+                    VarDeclaration.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+                System.exit(1);
+            }
+        }
+        
         return new Data(Data.TYPE_INT, getId());
     }
 }

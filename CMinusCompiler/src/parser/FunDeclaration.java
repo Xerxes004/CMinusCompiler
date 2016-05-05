@@ -17,11 +17,11 @@ package parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import lowlevel.BasicBlock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lowlevel.CodeItem;
 import lowlevel.FuncParam;
 import lowlevel.Function;
-import lowlevel.Operation;
 
 public class FunDeclaration extends Declaration
 {
@@ -121,9 +121,29 @@ public class FunDeclaration extends Declaration
     }
     
     @Override
-    public CodeItem genCode()
+    public CodeItem genCode(ArrayList<String> globals)
     {
         Function function = null;
+        
+        String id = getId();
+        if (!globals.contains(id))
+        {
+            globals.add(id);
+        }
+        else
+        {
+            try
+            {
+                throw new CodeGenerationException("Duplicate global found: " + id);
+            }
+            catch (CodeGenerationException ex)
+            {
+                Logger.getLogger(
+                    FunDeclaration.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+                System.exit(1);
+            }
+        }
         
         if (this.hasParams())
         {
@@ -147,13 +167,16 @@ public class FunDeclaration extends Declaration
         function.getTable().putAll(makeSymbolTable(compoundStmt, function));
         function.createBlock0();
         function.setCurrBlock(function.getFirstBlock());
-        compoundStmt.genCode(function);
+        compoundStmt.genCode(function, globals);
         
         return function;
     }
     
     // TODO: need to add globals
-    private HashMap<String, Integer> makeSymbolTable(Statement compoundStmt, Function function)
+    private HashMap<String, Integer> makeSymbolTable(
+        Statement compoundStmt, 
+        Function function
+    )
     {
         ArrayList<String> localVars = 
                 ((CompoundStatement)compoundStmt).getLocalVars();

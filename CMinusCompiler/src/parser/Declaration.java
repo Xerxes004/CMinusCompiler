@@ -14,6 +14,7 @@
 
 package parser;
 
+import java.util.ArrayList;
 import lowlevel.CodeItem;
 
 public abstract class Declaration 
@@ -21,13 +22,13 @@ public abstract class Declaration
     public Declaration (String ID)
     {
         this.returnType = -1;
-        this.ID = ID;
+        this.id = ID;
     }
     
     public Declaration(int returnType, String ID)
     {
         this.returnType = returnType;
-        this.ID = ID;
+        this.id = ID;
     }
     
     public static final int DECL_TYPE_VAR = 0;
@@ -37,16 +38,16 @@ public abstract class Declaration
     
     private final int returnType;
     
-    private final String ID;
+    private final String id;
     
 
     
     public String getId()
     {
-        return this.ID;
+        return this.id;
     }
     
     public abstract void printMe(String spaces);
     public abstract int getDeclType();
-    public abstract CodeItem genCode();
+    public abstract CodeItem genCode(ArrayList<String> globals);
 }

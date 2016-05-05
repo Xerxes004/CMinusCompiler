@@ -14,8 +14,8 @@
 
 package parser;
 
+import java.util.ArrayList;
 import lowlevel.Function;
-import lowlevel.Operation;
 
 public class IterationStatement extends Statement{
     public IterationStatement(Expression inputExpr, Statement inputStmt) {
@@ -42,7 +42,7 @@ public class IterationStatement extends Statement{
     }
     
     @Override
-    public void genCode(Function function)
+    public void genCode(Function function, ArrayList<String> globals)
     {
     }
     

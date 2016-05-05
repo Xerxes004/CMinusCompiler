@@ -13,6 +13,7 @@
 
 package parser;
 
+import java.util.ArrayList;
 import lowlevel.Function;
 import lowlevel.Operand;
 import lowlevel.Operation;
@@ -79,8 +80,9 @@ public class BinaryExpression
     }    
 
     @Override
-    public void genCode(Function function)
+    public void genCode(Function function, ArrayList<String> globals)
     {
+        // MOVE TO HELPER FUNC
         Operation.OperationType opType;
         
         switch(this.op) {
@@ -140,8 +142,8 @@ public class BinaryExpression
         currentBlock.insertOperBefore(temp, newOp);
         
         this.leftSide.setIsLeftSide(true);
-        this.leftSide.genCode(function);
-        this.rightSide.genCode(function);
+        this.leftSide.genCode(function, globals);
+        this.rightSide.genCode(function, globals);
         
         currentBlock.setLastOper(temp);
     }

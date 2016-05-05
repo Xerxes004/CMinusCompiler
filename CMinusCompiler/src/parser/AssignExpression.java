@@ -14,9 +14,9 @@
 
 package parser;
 
+import java.util.ArrayList;
 import lowlevel.BasicBlock;
 import lowlevel.Function;
-import lowlevel.Operand;
 import lowlevel.Operation;
 
 public class AssignExpression extends Expression
@@ -65,7 +65,7 @@ public class AssignExpression extends Expression
     }
     
     @Override
-    public void genCode(Function function)
+    public void genCode(Function function, ArrayList<String> globals)
     {
         BasicBlock currBlock = function.getCurrBlock();
         Operation currOp = currBlock.getLastOper();
@@ -78,8 +78,8 @@ public class AssignExpression extends Expression
         currBlock.insertOperAfter(currOp, nextOper);
         
         var.setIsDest(true);
-        var.genCode(function);
+        var.genCode(function, globals);
         expression.setIsLeftSide(true);
-        expression.genCode(function);
+        expression.genCode(function, globals);
     }
 }

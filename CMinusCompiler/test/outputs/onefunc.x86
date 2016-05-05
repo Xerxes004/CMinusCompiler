@@ -1,8 +1,27 @@
+(DATA  y)
 (FUNCTION  main  [(int a)]
   (BB 2
-    (OPER 4 Mov [(r 1)]  [])
-    (OPER 6 Mov [(r 2)]  [(m EDI)])
-    (OPER 5 Mov [(r 1)]  [(r 1)])
+    (OPER 10 Mov [(m EAX)]  [(i 2)])
+    (OPER 11 Mov [(r 7)]  [(i 3)])
+    (OPER 8 Mul [(m EAX)(m EDX)]  [(m EAX)(r 7)])
+    (OPER 12 Mov [(r 6)]  [(m EAX)])
+    (OPER 9 Mov [(r 2)]  [(m EDI)])
+    (OPER 13 Mov [(m EDX)]  [(i 0)])
+    (OPER 14 Mov [(m EAX)]  [(r 6)])
+    (OPER 15 Mov [(r 8)]  [(i 4)])
+    (OPER 7 Div [(m EAX)(m EDX)]  [(m EAX)(r 8)(m EDX)])
+    (OPER 16 Mov [(r 5)]  [(m EAX)])
+    (OPER 17 Mov [(r 4)]  [(i 1)])
+    (OPER 6 Add_I [(r 4)]  [(r 4)(r 5)])
+    (OPER 19 Mov [(r 3)]  [(i 0)])
+    (OPER 18 Cmp [(m Flags)]  [(r 4)(i 0)])
+    (OPER 20 BLE []  [(bb 4)(m Flags)])
+  )
+  (BB 3
+    (OPER 21 Mov [(r 3)]  [(i 1)])
+  )
+  (BB 4
+    (OPER 4 Mov [(r 1)]  [(r 3)])
   )
   (BB 1
     (OPER 2 Return []  [(r 1)])

@@ -13,6 +13,7 @@
 
 package parser;
 
+import java.util.ArrayList;
 import lowlevel.Function;
 
 public abstract class Statement{
@@ -25,6 +26,6 @@ public abstract class Statement{
     public abstract String toString();
     
     public abstract void printMe(String spaces);
-    public abstract void genCode(Function function);
+    public abstract void genCode(Function function, ArrayList<String> globals);
     public abstract StatementType getStatementType();
 }

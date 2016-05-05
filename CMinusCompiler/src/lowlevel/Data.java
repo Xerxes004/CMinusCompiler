@@ -99,7 +99,7 @@ public class Data
         System.out.println(" [" + arraySize + "] )");
       }
       else {
-        System.out.println(" )");
+        System.out.println(")");
       }
     }
     else {

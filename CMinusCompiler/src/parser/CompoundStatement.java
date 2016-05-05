@@ -16,9 +16,6 @@
 package parser;
 
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import lowlevel.Operation;
 import lowlevel.Function;
 
 public class CompoundStatement
@@ -82,11 +79,11 @@ public class CompoundStatement
     }
     
     @Override
-    public void genCode(Function function)
+    public void genCode(Function function, ArrayList<String> globals)
     {
         for (Statement statement : statementList)
         {
-            statement.genCode(function);
+            statement.genCode(function, globals);
         }
     }
     

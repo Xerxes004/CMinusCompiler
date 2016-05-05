@@ -14,10 +14,11 @@
 
 package parser;
 
+import java.util.ArrayList;
 import lowlevel.Function;
-import lowlevel.Operation;
 
-public class SelectionStatement extends Statement {
+public class SelectionStatement 
+    extends Statement {
 
     public SelectionStatement(
             Expression input, Statement inputIf, Statement inputElse) {
@@ -53,7 +54,7 @@ public class SelectionStatement extends Statement {
     }
     
     @Override
-    public void genCode(Function function)
+    public void genCode(Function function, ArrayList<String> globals)
     {
     }
     

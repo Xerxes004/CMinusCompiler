@@ -14,6 +14,7 @@
 
 package parser;
 
+import java.util.ArrayList;
 import lowlevel.Function;
 import lowlevel.Operand;
 
@@ -32,7 +33,7 @@ public abstract class Expression
     private boolean isLeftSide;
     
     public abstract void printMe(String spaces);
-    public abstract void genCode(Function function);
+    public abstract void genCode(Function function, ArrayList<String> globals);
     public abstract ExpressionType getExpressionType();
     
     public boolean isDest()

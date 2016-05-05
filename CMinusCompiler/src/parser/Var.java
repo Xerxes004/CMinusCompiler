@@ -14,6 +14,7 @@
 
 package parser;
 
+import java.util.ArrayList;
 import lowlevel.Function;
 import lowlevel.Operand;
 import lowlevel.Operation;
@@ -80,7 +81,7 @@ public class Var
     }
     
     @Override
-    public void genCode(Function function)
+    public void genCode(Function function, ArrayList<String> globals)
     {
         //get the curblock
         //get lastop
@@ -109,6 +110,5 @@ public class Var
         }
         
         this.setIsDest(false);
-        //this.setIsLeftSide(false);
     }
 }
