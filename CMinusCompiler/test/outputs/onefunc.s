@@ -23,4 +23,9 @@ main_bb2:
 	addl	%EAX, %EDI
 	movl	%EDI, y(%RIP)
 main_bb1:
+	movl	y(%RIP), %EAX
+	movl	y(%RIP), %EDI
+	imull	%EDI, %EAX
+	movl	%ESI, %EDI
+	addl	%EAX, %EDI
 	ret

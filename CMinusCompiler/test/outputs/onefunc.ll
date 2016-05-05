@@ -11,6 +11,13 @@
     (OPER 14 Load [(r 10)]  [(s y)])
     (OPER 13 Add_I [(r 9)]  [(r 1)(r 10)])
     (OPER 11 Store []  [(r 9)(s y)])
+    (OPER 17 Add_I [(r 12)]  [(i 10)(r 1)])
+    (OPER 18 Load [(r 13)]  [(s y)])
+    (OPER 16 Add_I [(r 11)]  [(r 12)(r 13)])
+    (OPER 15 Mov [(r 2)]  [(r 11)])
+    (OPER 19 Jmp [(bb 3)]  [])
+  )
+  (BB 3
   )
   (BB 1
     (OPER 1 Func_Exit []  [])

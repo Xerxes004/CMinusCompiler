@@ -6,5 +6,7 @@ int main(int a)
     x = 1 + 2 * 3 / 4 + 1;
     y = 1;
     y = x + y;
+    a = 10 + x + y;
+    main (a);
     return x;
 }

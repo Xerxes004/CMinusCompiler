@@ -14,6 +14,10 @@
   )
   (BB 1
     (OPER 1 Func_Exit []  [])
-    (OPER 2 Return []  [(r 1)])
+    (OPER 17 Load [(r 13)]  [(s y)])
+    (OPER 18 Load [(r 14)]  [(s y)])
+    (OPER 16 Mul_I [(r 12)]  [(r 13)(r 14)])
+    (OPER 15 Add_I [(r 11)]  [(r 1)(r 12)])
+    (OPER 2 Return []  [(r 11)])
   )
 )
