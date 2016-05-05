@@ -7,5 +7,6 @@
 main:
 main_bb2:
 main_bb3:
+	movl	$1, %EAX
 main_bb1:
 	ret

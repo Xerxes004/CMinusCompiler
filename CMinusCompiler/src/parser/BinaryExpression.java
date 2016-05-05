@@ -108,6 +108,9 @@ public class BinaryExpression
             case PLUS: 
                 opType = Operation.OperationType.ADD_I;
                 break;
+            case MINUS:
+                opType = Operation.OperationType.SUB_I;
+                break;
             case MULTIPLY:
                 opType = Operation.OperationType.MUL_I;
                 break;
@@ -125,7 +128,13 @@ public class BinaryExpression
         
         this.leftSide.genCode(function, globals);
         
+        
         BasicBlock currentBlock = function.getCurrBlock();
+        
+        currentBlock.appendOper(
+            new Operation(opType, function.getCurrBlock())
+        );
+        
         Operation lastOp = currentBlock.getLastOper();
         
         for (int i = 0; i < Operation.MAX_SRC_OPERANDS; i++)
@@ -138,7 +147,7 @@ public class BinaryExpression
         }
         
         lastOp.setDestOperand(0, destination);
-        lastOp.setType(opType);
+        //lastOp.setType(opType);
         
         this.rightSide.genCode(function, globals);
     }
