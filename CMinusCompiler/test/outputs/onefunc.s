@@ -14,11 +14,13 @@ main_bb2:
 	idivl	%EDI, %EAX
 	movl	$1, %EDI
 	addl	%EAX, %EDI
-	movl	$0, %EAX
-	cmpl	$0, %EDI
-	jle	main_bb4
-main_bb3:
-	movl	$1, %EAX
-main_bb4:
+	movl	%EDI, %EAX
+	addl	$1, %EAX
+	movl	%EAX, %ESI
+	movl	$1, y(%RIP)
+	movl	y(%RIP), %EAX
+	movl	%ESI, %EDI
+	addl	%EAX, %EDI
+	movl	%EDI, y(%RIP)
 main_bb1:
 	ret

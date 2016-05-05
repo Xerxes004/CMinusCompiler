@@ -92,7 +92,7 @@ public class VarDeclaration extends Declaration
         
         if (!globals.contains(id))
         {
-            globals.add(getId());
+            globals.add(id);
         }
         else
         {

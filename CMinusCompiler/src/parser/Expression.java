@@ -16,8 +16,10 @@ package parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import lowlevel.BasicBlock;
 import lowlevel.Function;
 import lowlevel.Operand;
+import lowlevel.Operation;
 
 public abstract class Expression 
 {
@@ -75,10 +77,38 @@ public abstract class Expression
         }
         else if (globals.contains(id))
         {
-            return new Operand(
+            BasicBlock currBlock = function.getCurrBlock();
+            Operation lastOp = currBlock.getLastOper();
+            
+            Operation globalOp = new Operation(
+                Operation.OperationType.LOAD_I,
+                currBlock
+            );
+            
+            Operand globalLoadDest = new Operand(
+                Operand.OperandType.REGISTER,
+                function.getNewRegNum()
+            );
+            
+            Operand globalLoadVar = new Operand(
                 Operand.OperandType.STRING,
                 id
             );
+            
+            if (isDest)
+            {
+                lastOp.setType(Operation.OperationType.STORE_I);
+                //lastOp.setSrcOperand(0, globalLoadVar);
+                lastOp.setSrcOperand(1, globalLoadVar);
+            }
+            else
+            {
+                globalOp.setDestOperand(0, globalLoadDest);
+                globalOp.setSrcOperand(0, globalLoadVar);
+                currBlock.insertOperBefore(lastOp, globalOp);
+            }
+            
+            return globalLoadDest;
         }
         else
         {

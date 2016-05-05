@@ -87,13 +87,15 @@ public class Var
         //get the curblock
         //get lastop
         Operation lastOp = function.getCurrBlock().getLastOper();
-        
         Operand op = getVariable(function, globals, id);
         
         //add self to operand
         if (isDest())
         {
-            lastOp.setDestOperand(0, op);
+            if (lastOp.getType() != Operation.OperationType.STORE_I)
+            {
+                lastOp.setDestOperand(0, op);
+            }
         }
         else
         {

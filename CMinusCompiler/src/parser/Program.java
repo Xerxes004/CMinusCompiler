@@ -52,11 +52,11 @@ public class Program
         
         CodeItem head = null;
         CodeItem tail = null;
-        
+        ArrayList<String> globals = new ArrayList<>();
+            
         // build a linked list of top-level CodeItems (Datas and Functions)
         for (Declaration decl : declarations)
         {
-            ArrayList<String> globals = new ArrayList<>();
             if (head == null || tail == null)
             {
                 head = decl.genCode(globals);
