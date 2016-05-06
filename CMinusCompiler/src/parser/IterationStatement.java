@@ -55,8 +55,6 @@ public class IterationStatement extends Statement{
         
         expr.genCode(function, globals);
         
-        Operation lastOp = currentBlock.getLastOper();
-
         Operation branch = new Operation(
                 Operation.OperationType.BEQ,
                 currentBlock
@@ -67,7 +65,7 @@ public class IterationStatement extends Statement{
                 postBlock.getBlockNum()
         );
         
-        branch.setSrcOperand(0, lastOp.getDestOperand(0));
+        branch.setSrcOperand(0, new Operand(Operand.OperandType.REGISTER, expr.getRegNum()));
         branch.setSrcOperand(1, new Operand(Operand.OperandType.INTEGER, 0));
         branch.setSrcOperand(2, postTarget);
         
@@ -80,7 +78,7 @@ public class IterationStatement extends Statement{
         stmt.genCode(function, globals);
         
         Operation branchLoop = new Operation(
-                Operation.OperationType.BEQ,
+                Operation.OperationType.BNE,
                 currentBlock
         );
         
@@ -91,17 +89,12 @@ public class IterationStatement extends Statement{
         
         expr.genCode(function, globals);
         
-        lastOp = currentBlock.getLastOper();
-        
-        branchLoop.setSrcOperand(0, lastOp.getDestOperand(0));
-        branchLoop.setSrcOperand(1, new Operand(Operand.OperandType.INTEGER, 1));
+        branchLoop.setSrcOperand(0, new Operand(Operand.OperandType.REGISTER, expr.getRegNum()));
+        branchLoop.setSrcOperand(1, new Operand(Operand.OperandType.INTEGER, 0));
         branchLoop.setSrcOperand(2, loopTarget);
         
         currentBlock.appendOper(branchLoop);
-        
-        currentBlock = function.getCurrBlock();
-        function.appendToCurrentBlock(currentBlock);
-        
+        function.appendBlock(postBlock);
     }
     
     @Override

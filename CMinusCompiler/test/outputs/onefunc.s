@@ -3,16 +3,20 @@
 
 .text
 	.align 4
-.globl  call
-call:
-call_bb2:
-call_bb3:
-call_bb1:
-	ret
 .globl  main
 main:
 main_bb2:
-	pushq	%R15
 main_bb3:
-	call	call
-	movl	%R15D, %EAX
+	movl	$0, %EAX
+	movl	%EAX, %EDI
+	movl	$2, %EAX
+	cmpl	%EAX, %EDI
+	je	main_bb1
+main_bb4:
+	movl	$1, %EAX
+	addl	%EAX, %EDI
+	movl	$2, %EAX
+	cmpl	%EAX, %EDI
+	jne	main_bb4
+main_bb1:
+	ret

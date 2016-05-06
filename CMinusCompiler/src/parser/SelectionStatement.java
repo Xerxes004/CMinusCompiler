@@ -117,7 +117,7 @@ public class SelectionStatement
                 jumpPostToElse.setSrcOperand(0, 
                     new Operand(Operand.OperandType.BLOCK, elseBlock.getBlockNum()));
                 function.getCurrBlock().appendOper(jumpPostToElse);
-            }r
+            }
             else
             {
                 // ADD JUMP TO POST BLOCK
@@ -136,7 +136,6 @@ public class SelectionStatement
             
             function.appendUnconnectedBlock(elseBlock);
         }
-        
         function.setCurrBlock(postBlock);
     }
     
