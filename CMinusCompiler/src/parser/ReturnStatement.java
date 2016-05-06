@@ -51,10 +51,11 @@ public class ReturnStatement extends Statement
     public void genCode(Function function, ArrayList<String> globals) 
         throws CodeGenerationException
     {
+        BasicBlock returnBlock = function.getReturnBlock();
+        function.appendBlock(returnBlock);
+            
         if (expressionStatement != null)
         {
-            BasicBlock returnBlock = function.getReturnBlock();
-            function.appendToCurrentBlock(returnBlock);
             //function.setCurrBlock(returnBlock);
             // NEED TO ADD CODE TO MAKE SURE THIS GENCODE STORES ITS
             // RESULT IN THE RetReg BEFORE RETURN
