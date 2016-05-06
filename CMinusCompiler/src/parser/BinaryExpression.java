@@ -122,6 +122,7 @@ public class BinaryExpression
         }
         
         int regNum = function.getNewRegNum();
+        
         Operand destination = new Operand(
             Operand.OperandType.REGISTER, 
             regNum
@@ -129,26 +130,19 @@ public class BinaryExpression
         
         setRegNum(regNum);
         
-        
-        
         BasicBlock currentBlock = function.getCurrBlock();
         Operation currOp = new Operation(
                     opType, 
                     function.getCurrBlock()
                 );
-        currentBlock.appendOper(currOp);
-        
-//        Operation currOp = currentBlock.getLastOper();
         
         this.leftSide.genCode(function, globals);
         this.rightSide.genCode(function, globals);
         
+        currentBlock.appendOper(currOp);
+        
         currOp.setDestOperand(0, destination);
         currOp.setSrcOperand(0, new Operand(Operand.OperandType.REGISTER, leftSide.getRegNum()));
         currOp.setSrcOperand(1, new Operand(Operand.OperandType.REGISTER, rightSide.getRegNum()));
-        
-        //Operation nextOper = new Operation(, currentBlock);
-        //currentBlock.appendOper(nextOper);
- 
     }
 }

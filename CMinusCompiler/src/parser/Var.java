@@ -86,12 +86,26 @@ public class Var
     {
         // if in local table
         // annotate self with table's reg
-        
+        if (function.getTable().containsKey(id))
+        {
+            setRegNum((int)function.getTable().get(id));
+        }
         // else if in global
-        // make load
+        
+        else if (globals.contains(id))
+        {
+            // make load
             // dest is newreg (and annotate)
             // src0 varname
-        // else exception
-
+            Operation load = new Operation(Operation.OperationType.LOAD_I, function.getCurrBlock());
+            int newReg = function.getNewRegNum();
+            setRegNum(newReg);
+            load.setDestOperand(0, new Operand(Operand.OperandType.REGISTER, newReg));
+            load.setSrcOperand(0, new Operand(Operand.OperandType.STRING, id));
+        }
+        else
+        {
+            throw new CodeGenerationException("Symbol not found in table: " + id);
+        }
     }
 }

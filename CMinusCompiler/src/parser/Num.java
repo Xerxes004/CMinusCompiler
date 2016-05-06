@@ -55,13 +55,6 @@ public class Num
     @Override
     public void genCode(Function function, ArrayList<String> globals)
     {
-        // GET CURR BLOCK
-        // GET LAST OPERATION
-        // IF I'M A DESTINATION, SET MYSELF AS A DEST OPERAND
-        // IF I'M NOT, SET MYSELF AS A SRC OPERAND
-        // ADD MYSELF TO THE LAST OPERATION
-        //Operation lastOp = function.getCurrBlock().getLastOper();
-             
         BasicBlock curr = function.getCurrBlock();
         Operation moveOper = new Operation(Operation.OperationType.ASSIGN, curr);
         Operand operand = new Operand(Operand.OperandType.INTEGER, value);

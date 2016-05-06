@@ -55,11 +55,12 @@ public class ReturnStatement extends Statement
         {
             BasicBlock returnBlock = function.getReturnBlock();
             function.appendToCurrentBlock(returnBlock);
-            function.setCurrBlock(returnBlock);
+            //function.setCurrBlock(returnBlock);
             // NEED TO ADD CODE TO MAKE SURE THIS GENCODE STORES ITS
             // RESULT IN THE RetReg BEFORE RETURN
             //Operation temp = function.getCurrBlock().getPrevBlock().getLastOper();
             expressionStatement.genCode(function, globals);
+            //Operation
         }
     }
     

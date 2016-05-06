@@ -14,6 +14,7 @@
 package parser;
 
 import java.util.ArrayList;
+import lowlevel.Attribute;
 import lowlevel.BasicBlock;
 import lowlevel.Function;
 import lowlevel.Operand;
@@ -89,28 +90,47 @@ public class Call
     
     //TODO
     @Override
-    public void genCode(Function function, ArrayList<String> globals)
+    public void genCode(Function function, ArrayList<String> globals) 
+        throws CodeGenerationException
     {
+        BasicBlock currBlock = function.getCurrBlock();
         // for each param
         // codeGen param
-        // pass param reg - attribute on pass with PARAMNUM
+        int i = 0;
+        if (args != null)
+        {
+            Operation pass = null;
+            for (Expression e : args)
+            {
+                e.genCode(function, globals);
+                // pass param reg - attribute on pass with PARAMNUM
+                pass = new Operation(Operation.OperationType.PASS, currBlock);
+                pass.setSrcOperand(0, new Operand(Operand.OperandType.REGISTER, e.getRegNum()));
+                currBlock.appendOper(pass);
+                i++;
+            }
+        }
         // make CALL oper  src0 name
+        Operation call = new Operation(Operation.OperationType.CALL, currBlock);
+        call.setSrcOperand(0, new Operand(Operand.OperandType.STRING, id));
+        call.addAttribute(new Attribute("numParams", Integer.toString(i)));
+        currBlock.appendOper(call);
+        
+        Operation assign = new Operation(Operation.OperationType.ASSIGN, currBlock);
+        
+        int newReg = function.getNewRegNum();
+        
+        assign.setSrcOperand(0, 
+            new Operand(Operand.OperandType.REGISTER, 
+            newReg
+            )
+        );
+        
         // Regnew = RETREG  (ASSIGN OPER)
         // annotate yourself with Regnew
-        
-        
-//        Operand op = new Operand(
-//                Operand.OperandType.BLOCK,
-//                newBlock.getBlockNum()
-//            );
-//        
-//        Operation jmpOperation = new Operation(
-//                Operation.OperationType.JMP,
-//                newBlock
-//            );
-//        
-//        jmpOperation.setDestOperand(0, op);
-//        function.getCurrBlock().appendOper(jmpOperation);
-//        function.setCurrBlock(newBlock);
+        assign.setDestOperand(0, new Operand(Operand.OperandType.MACRO, "RetReg"));
+        assign.setSrcOperand(0, new Operand(Operand.OperandType.REGISTER, newReg));
+        currBlock.appendOper(assign);
+        setRegNum(newReg);        
     }
 }
