@@ -1,4 +1,4 @@
-void test(void){
+void main(void){
   int a;
   int b;
   a = 0;

@@ -1,4 +1,4 @@
-(FUNCTION  test  []
+(FUNCTION  main  []
   (BB 2
     (OPER 3 Func_Entry []  [])
   )
