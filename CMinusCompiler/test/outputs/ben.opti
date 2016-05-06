@@ -1,0 +1,97 @@
+(FUNCTION  test  []
+  (BB 2
+    (OPER 3 Func_Entry []  [])
+  )
+  (BB 3
+    (OPER 4 Mov [(r 3)]  [(i 0)])
+    (OPER 5 Mov [(r 1)]  [(r 3)])
+    (OPER 6 Mov [(r 4)]  [(i 1)])
+    (OPER 7 Mov [(r 2)]  [(r 4)])
+    (OPER 8 Mov [(r 5)]  [(i 0)])
+    (OPER 9 Mov [(r 2)]  [(r 5)])
+    (OPER 10 Mov [(r 1)]  [(r 0)])
+    (OPER 11 GT [(r 6)]  [(r 1)(r 2)])
+    (OPER 12 BEQ []  [(r 6)(i 0)(bb 5)])
+  )
+  (BB 4
+    (OPER 14 Mov [(r 8)]  [(i 1)])
+    (OPER 13 Sub_I [(r 7)]  [(r 2)(r 8)])
+    (OPER 15 Mov [(r 2)]  [(r 7)])
+  )
+  (BB 6
+    (OPER 45 EQ [(r 26)]  [(r 1)(r 2)])
+    (OPER 46 BEQ []  [(r 26)(i 0)(bb 16)])
+  )
+  (BB 14
+    (OPER 47 EQ [(r 27)]  [(r 1)(r 2)])
+    (OPER 48 BEQ []  [(r 27)(i 0)(bb 16)])
+  )
+  (BB 17
+    (OPER 49 EQ [(r 28)]  [(r 1)(r 2)])
+    (OPER 50 BEQ []  [(r 28)(i 0)(bb 20)])
+  )
+  (BB 19
+    (OPER 52 Mov [(r 30)]  [(i 1)])
+    (OPER 51 Sub_I [(r 29)]  [(r 2)(r 30)])
+    (OPER 53 Mov [(r 1)]  [(r 29)])
+    (OPER 55 EQ [(r 31)]  [(r 1)(r 2)])
+    (OPER 54 BNE []  [(r 31)(i 0)(bb 19)])
+  )
+  (BB 20
+    (OPER 57 EQ [(r 32)]  [(r 1)(r 2)])
+    (OPER 56 BNE []  [(r 32)(i 0)(bb 17)])
+  )
+  (BB 16
+    (OPER 58 Mov [(r 33)]  [(i 3)])
+    (OPER 59 Mov [(r 2)]  [(r 33)])
+  )
+  (BB 1
+    (OPER 1 Func_Exit []  [])
+    (OPER 2 Return []  [(m RetReg)])
+  )
+  (BB 10
+    (OPER 29 Mov [(r 17)]  [(i 1)])
+    (OPER 30 Mov [(r 2)]  [(r 17)])
+    (OPER 32 Mov [(r 19)]  [(i 1)])
+    (OPER 31 EQ [(r 18)]  [(r 2)(r 19)])
+    (OPER 33 BEQ []  [(r 18)(i 0)(bb 11)])
+  )
+  (BB 12
+    (OPER 35 Mov [(r 21)]  [(i 2)])
+    (OPER 34 Add_I [(r 20)]  [(r 2)(r 21)])
+    (OPER 36 Mov [(r 2)]  [(r 20)])
+    (OPER 39 Mov [(r 23)]  [(i 1)])
+    (OPER 38 EQ [(r 22)]  [(r 2)(r 23)])
+    (OPER 37 BNE []  [(r 22)(i 0)(bb 12)])
+  )
+  (BB 13
+    (OPER 40 Jmp []  [(bb 11)])
+  )
+  (BB 5
+    (OPER 16 Mov [(r 9)]  [(i 2)])
+    (OPER 17 Mov [(r 2)]  [(r 9)])
+    (OPER 19 Mov [(r 11)]  [(i 2)])
+    (OPER 18 EQ [(r 10)]  [(r 2)(r 11)])
+    (OPER 20 BEQ []  [(r 10)(i 0)(bb 6)])
+  )
+  (BB 7
+    (OPER 21 Mov [(r 12)]  [(i 2)])
+    (OPER 22 Mov [(r 2)]  [(r 12)])
+    (OPER 24 Mov [(r 14)]  [(i 2)])
+    (OPER 23 EQ [(r 13)]  [(r 2)(r 14)])
+    (OPER 25 BEQ []  [(r 13)(i 0)(bb 10)])
+  )
+  (BB 9
+    (OPER 27 Mov [(r 16)]  [(i 1)])
+    (OPER 26 Add_I [(r 15)]  [(r 2)(r 16)])
+    (OPER 28 Mov [(r 2)]  [(r 15)])
+  )
+  (BB 11
+    (OPER 43 Mov [(r 25)]  [(i 2)])
+    (OPER 42 EQ [(r 24)]  [(r 2)(r 25)])
+    (OPER 41 BNE []  [(r 24)(i 0)(bb 7)])
+  )
+  (BB 8
+    (OPER 44 Jmp []  [(bb 6)])
+  )
+)

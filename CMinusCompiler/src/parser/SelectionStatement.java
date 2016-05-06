@@ -64,8 +64,6 @@ public class SelectionStatement
         BasicBlock elseBlock = new BasicBlock(function);
         BasicBlock postBlock = new BasicBlock(function);
         
-        BasicBlock currentBlock = function.getCurrBlock();
-        
         expr.genCode(function, globals);
         
         Operation beq = new Operation(
@@ -82,16 +80,24 @@ public class SelectionStatement
                 new Operand(Operand.OperandType.INTEGER, 0)
         );
 
-        Operand elseTarget = new Operand(
-                Operand.OperandType.BLOCK,
-                elseBlock.getBlockNum()
-        );
-        
-        beq.setSrcOperand(2, elseTarget);
+        Operand branchTarget = null;
+        if (elsePart != null)
+        {
+            branchTarget = new Operand(
+                    Operand.OperandType.BLOCK,
+                    elseBlock.getBlockNum()
+            );
+        }
+        else
+        {
+            branchTarget = new Operand(
+                    Operand.OperandType.BLOCK,
+                    postBlock.getBlockNum()
+            );
+        }
+        beq.setSrcOperand(2, branchTarget);
         
         function.getCurrBlock().appendOper(beq);
-        
-        expr.genCode(function, globals);
         
         function.appendToCurrentBlock(thenBlock);
         function.setCurrBlock(thenBlock);
@@ -100,14 +106,12 @@ public class SelectionStatement
         
         function.appendToCurrentBlock(postBlock);
         
-        function.setCurrBlock(elseBlock);
-        
         if (elsePart != null)
         {
+            function.setCurrBlock(elseBlock);
             elsePart.genCode(function, globals);
-            
-            if (function.getCurrBlock().getLastOper().getType() == 
-                    Operation.OperationType.RETURN)
+            Operation lastOp = function.getCurrBlock().getLastOper();
+            if (lastOp != null && lastOp.getType() ==  Operation.OperationType.RETURN)
             {
                 // ADD JUMP POST TO ELSE
                 Operation jumpPostToElse = new Operation(
@@ -125,17 +129,16 @@ public class SelectionStatement
                     Operation.OperationType.JMP,
                     function.getCurrBlock()
                 );
-                
+
                 jumpToPost.setSrcOperand(
                     0, 
-                    new Operand(Operand.OperandType.BLOCK, postBlock.getBlockNum()
-                    )
+                    new Operand(Operand.OperandType.BLOCK, postBlock.getBlockNum())
                 );
                 function.getCurrBlock().appendOper(jumpToPost);
             }
-            
             function.appendUnconnectedBlock(elseBlock);
         }
+        
         function.setCurrBlock(postBlock);
     }
     

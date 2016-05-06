@@ -1,0 +1,56 @@
+(FUNCTION  gcd  [(int u) (int v)]
+  (BB 2
+    (OPER 19 Mov [(r 1)]  [(m EDI)])
+    (OPER 20 Mov [(r 2)]  [(m ESI)])
+  )
+  (BB 3
+    (OPER 5 Mov [(r 4)]  [(i 0)])
+    (OPER 21 Cmp [(m Flags)]  [(r 2)(r 4)])
+    (OPER 22 BEQ []  [(bb 5)(m Flags)])
+  )
+  (BB 4
+    (OPER 7 Mov [(m EAX)]  [(r 1)])
+  )
+  (BB 1
+    (OPER 2 Return []  [(m EAX)])
+  )
+  (BB 5
+    (OPER 23 Mov [(m EDI)]  [(r 2)])
+    (OPER 24 Mov [(m EDX)]  [(i 0)])
+    (OPER 25 Mov [(m EAX)]  [(r 1)])
+    (OPER 12 Div [(m EAX)(m EDX)]  [(m EAX)(r 2)(m EDX)])
+    (OPER 26 Mov [(r 7)]  [(m EAX)])
+    (OPER 27 Mov [(m EAX)]  [(r 7)])
+    (OPER 11 Mul [(m EAX)(m EDX)]  [(m EAX)(r 2)])
+    (OPER 28 Mov [(r 6)]  [(m EAX)])
+    (OPER 29 Mov [(r 5)]  [(r 1)])
+    (OPER 10 Sub_I [(r 5)]  [(r 5)(r 6)])
+    (OPER 30 Mov [(m ESI)]  [(r 5)])
+    (OPER 14 JSR []  [(s gcd)])
+    (OPER 15 Mov [(m EAX)]  [(r 8)])
+    (OPER 16 Mov [(m EAX)]  [(r 8)])
+    (OPER 18 Jmp []  [(bb 1)])
+  )
+)
+(FUNCTION  main  []
+  (BB 2
+  )
+  (BB 3
+    (OPER 4 JSR []  [(s input)])
+    (OPER 5 Mov [(m EAX)]  [(r 3)])
+    (OPER 6 Mov [(r 1)]  [(r 3)])
+    (OPER 7 JSR []  [(s input)])
+    (OPER 8 Mov [(m EAX)]  [(r 4)])
+    (OPER 9 Mov [(r 2)]  [(r 4)])
+    (OPER 17 Mov [(m EDI)]  [(r 1)])
+    (OPER 18 Mov [(m ESI)]  [(r 2)])
+    (OPER 12 JSR []  [(s gcd)])
+    (OPER 13 Mov [(m EAX)]  [(r 5)])
+    (OPER 19 Mov [(m EDI)]  [(r 5)])
+    (OPER 15 JSR []  [(s output)])
+    (OPER 16 Mov [(m EAX)]  [(r 6)])
+  )
+  (BB 1
+    (OPER 2 Return []  [(m EAX)])
+  )
+)

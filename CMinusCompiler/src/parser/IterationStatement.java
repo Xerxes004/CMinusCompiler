@@ -73,7 +73,6 @@ public class IterationStatement extends Statement{
         
         function.appendToCurrentBlock(thenBlock);
         function.setCurrBlock(thenBlock);
-        currentBlock = function.getCurrBlock();
         
         stmt.genCode(function, globals);
         
@@ -93,8 +92,10 @@ public class IterationStatement extends Statement{
         branchLoop.setSrcOperand(1, new Operand(Operand.OperandType.INTEGER, 0));
         branchLoop.setSrcOperand(2, loopTarget);
         
+        currentBlock = function.getCurrBlock();
         currentBlock.appendOper(branchLoop);
-        function.appendBlock(postBlock);
+        function.appendToCurrentBlock(postBlock);
+        function.setCurrBlock(postBlock);
     }
     
     @Override

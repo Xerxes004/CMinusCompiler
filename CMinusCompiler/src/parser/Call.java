@@ -105,9 +105,9 @@ public class Call
                 e.genCode(function, globals);
                 // pass param reg - attribute on pass with PARAMNUM
                 pass = new Operation(Operation.OperationType.PASS, currBlock);
+                pass.addAttribute(new Attribute("PARAM_NUM", Integer.toString(i++)));
                 pass.setSrcOperand(0, new Operand(Operand.OperandType.REGISTER, e.getRegNum()));
                 currBlock.appendOper(pass);
-                i++;
             }
         }
         // make CALL oper  src0 name

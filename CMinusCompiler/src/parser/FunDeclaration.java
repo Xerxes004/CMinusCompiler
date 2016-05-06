@@ -171,8 +171,13 @@ public class FunDeclaration extends Declaration
         function.createBlock0();
         function.appendBlock(new BasicBlock(function));
         function.setCurrBlock(function.getLastBlock());
+        
         compoundStmt.genCode(function, globals);
         
+        BasicBlock returnBlock = function.getReturnBlock();
+        BasicBlock firstUncon = function.getFirstUnconnectedBlock();
+        function.appendBlock(returnBlock);
+        if (firstUncon != null) function.appendBlock(firstUncon);
         return function;
     }
     

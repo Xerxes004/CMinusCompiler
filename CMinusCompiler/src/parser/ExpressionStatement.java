@@ -26,6 +26,11 @@ public class ExpressionStatement extends Statement{
     public String toString() {
         return this.expr.toString();
     }
+    
+    public Expression getExpr()
+    {
+        return expr;
+    }
 
     @Override
     public void printMe(String spaces) {

@@ -16,24 +16,25 @@ package parser;
 import java.util.ArrayList;
 import lowlevel.BasicBlock;
 import lowlevel.Function;
+import lowlevel.Operand;
 import lowlevel.Operation;
 
 public class ReturnStatement extends Statement
 {
     public ReturnStatement(Statement expressionStatement) 
     {
-        this.expressionStatement = expressionStatement;
+        this.exprStmt = expressionStatement;
     }
     
-    private final Statement expressionStatement;
+    private final Statement exprStmt;
     
     public boolean hasExpression()
     {
-        return expressionStatement != null;
+        return exprStmt != null;
     }
     
     public String toString() {
-        return this.expressionStatement.toString();
+        return this.exprStmt.toString();
     }
 
     @Override
@@ -42,7 +43,7 @@ public class ReturnStatement extends Statement
         spaces += "    ";
         System.out.println(spaces + "return");
         if(this.hasExpression()) {
-            this.expressionStatement.printMe(spaces);
+            this.exprStmt.printMe(spaces);
         }
         System.out.println(spaces + ";");
     }
@@ -51,18 +52,42 @@ public class ReturnStatement extends Statement
     public void genCode(Function function, ArrayList<String> globals) 
         throws CodeGenerationException
     {
-        BasicBlock returnBlock = function.getReturnBlock();
-        function.appendBlock(returnBlock);
-            
-        if (expressionStatement != null)
+        BasicBlock currBlock = function.getCurrBlock();
+        if (exprStmt != null)
         {
             //function.setCurrBlock(returnBlock);
             // NEED TO ADD CODE TO MAKE SURE THIS GENCODE STORES ITS
             // RESULT IN THE RetReg BEFORE RETURN
             //Operation temp = function.getCurrBlock().getPrevBlock().getLastOper();
-            expressionStatement.genCode(function, globals);
-            //Operation
+            exprStmt.genCode(function, globals);
+            Operation assign = new Operation(
+                    Operation.OperationType.ASSIGN, 
+                    function.getCurrBlock()
+            );
+            assign.setDestOperand(
+                    0, 
+                    new Operand(Operand.OperandType.MACRO, "RetReg")
+            );
+            assign.setSrcOperand(
+                    0, 
+                    new Operand(
+                            Operand.OperandType.REGISTER, 
+                            ((ExpressionStatement)exprStmt).getExpr().getRegNum()
+                    )
+            );
+            currBlock.appendOper(assign);
         }
+        Operation jumpToReturn = new Operation(
+                Operation.OperationType.JMP,
+                currBlock
+        );
+        jumpToReturn.setSrcOperand(
+                0, 
+                new Operand(
+                        Operand.OperandType.BLOCK, 
+                        function.getReturnBlock().getBlockNum()
+                )
+        );
     }
     
     @Override
